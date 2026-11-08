@@ -1,0 +1,146 @@
+"""Orchestrates the agents: plan → collect → extract → cluster → assess → skeptic panel → score."""
+
+from __future__ import annotations
+
+import logging
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
+
+from .agents import LLM, Analyst, Clusterer, Extractor, Planner, SkepticPanel
+from .config import Config
+from .models import Problem, ThemeReport, opportunity_score
+from .sources import Source
+from .store import Store
+
+log = logging.getLogger("radar.pipeline")
+
+
+class Pipeline:
+    def __init__(self, cfg: Config, llm: LLM, sources: list[Source], store: Store):
+        self.cfg, self.llm, self.sources, self.store = cfg, llm, sources, store
+        segs = [t.name for t in cfg.themes] or ["general"]
+        self.planner = Planner(llm, cfg.model_default, cfg.planner_effort)
+        self.extractor = Extractor(llm, cfg.model_extractor, cfg.extractor_effort, segs)
+        self.clusterer = Clusterer(llm, cfg.model_default, cfg.clusterer_effort)
+        self.analyst = Analyst(llm, cfg.model_default, cfg.analyst_effort)
+        self.skeptics = SkepticPanel(llm, cfg.model_default, cfg.skeptic_effort, cfg.skeptics_per_theme)
+        self.stats: dict = {}
+
+    # ---------------- stages ----------------
+    def plan(self) -> dict[str, list[str]]:
+        def one(t):
+            try:
+                return t.name, self.planner.plan(t.name, t.seed)
+            except Exception as e:
+                log.warning("planner failed for %s: %s", t.name, e)
+                return t.name, [t.seed[:60]]
+        with ThreadPoolExecutor(8) as ex:
+            plan = dict(ex.map(one, self.cfg.themes))
+        self.stats["queries"] = sum(len(v) for v in plan.values())
+        return plan
+
+    def collect(self, plan: dict[str, list[str]], run_id: str, now: datetime) -> int:
+        since = now - timedelta(days=self.cfg.lookback_days)
+        seeds = {t.name: t.seed for t in self.cfg.themes}
+
+        def run_source(src: Source):
+            posts = []
+            for theme, queries in plan.items():
+                # The web agent is expensive: one research task per theme, keyword sources get every query.
+                qs = [seeds.get(theme, queries[0])] if src.name == "web" else queries
+                for q in qs:
+                    posts.extend(src.safe_search(q, since, self.cfg.max_posts_per_query))
+            return src.name, posts
+
+        per_source = {}
+        total_new = 0
+        with ThreadPoolExecutor(len(self.sources) or 1) as ex:
+            for name, posts in ex.map(run_source, self.sources):
+                fresh = self.store.add_posts(posts, run_id)
+                per_source[name] = {"fetched": len(posts), "new": len(fresh)}
+                total_new += len(fresh)
+        self.stats["sources"] = per_source
+        log.info("collected: %s", per_source)
+        return total_new
+
+    def extract(self, run_id: str) -> list[Problem]:
+        pending = self.store.count_unextracted()
+        posts = self.store.unextracted_posts(self.cfg.max_posts_total)
+        if pending > len(posts):
+            log.warning("cap: extracting %d of %d pending posts (max_posts_total); rest wait for next run",
+                        len(posts), pending)
+        problems = self.extractor.extract(posts)
+        self.store.add_problems(problems, run_id)
+        self.store.mark_extracted([p.uid for p in posts], run_id)
+        self.stats["posts_extracted"] = len(posts)
+        self.stats["problems_new"] = len(problems)
+        return problems
+
+    def corpus(self, now: datetime) -> list[tuple[Problem, dict]]:
+        """All stored problems within the lookback window, with post metadata."""
+        since = now - timedelta(days=self.cfg.lookback_days)
+        out = []
+        for _, pr in self.store.problems():
+            if pr.intensity < self.cfg.min_intensity:
+                continue
+            post = self.store.post(pr.post_uid)
+            if not post:
+                continue
+            if post.created_at and post.created_at.replace(tzinfo=post.created_at.tzinfo or timezone.utc) < since:
+                continue
+            out.append((pr, {"url": post.url, "source": post.source, "date": post.created_at.date().isoformat() if post.created_at else "",
+                             "engagement": post.engagement, "author": post.author}))
+        return out
+
+    def analyse(self, corpus: list[tuple[Problem, dict]], now: datetime) -> list[ThemeReport]:
+        if not corpus:
+            log.warning("no problems in corpus; nothing to analyse")
+            return []
+        problems = [p for p, _ in corpus]
+        themes = self.clusterer.cluster(problems)
+        self.stats["themes"] = len(themes)
+        recent_cut = (now - timedelta(days=30)).date().isoformat()
+
+        def one(theme):
+            ev = []
+            for i in theme.problem_indexes:
+                p, meta = corpus[i]
+                ev.append({**meta, "quote": p.quote, "problem": p.problem, "persona": p.persona,
+                           "intensity": p.intensity, "wtp_signal": p.wtp_signal, "workaround": p.workaround,
+                           "first_person": p.first_person})
+            ev.sort(key=lambda e: (e["intensity"], e["engagement"]), reverse=True)
+            ev_text = "\n".join(
+                f"- [{e['source']} {e['date']}] {e['persona']}: \"{e['quote'][:400]}\" ({e['url']})"
+                + (f" WTP: {e['wtp_signal']}" if e["wtp_signal"] else "")
+                for e in ev[:25]
+            )
+            rep = ThemeReport(theme=theme, evidence=ev)
+            try:
+                rep.assessment = self.analyst.assess(theme, ev_text)
+            except Exception as e:
+                log.warning("analyst failed for %s: %s", theme.id, e)
+            rep.verdicts = self.skeptics.judge(theme, ev_text, rep.assessment)
+            if rep.verdicts:
+                rep.survives = sum(v.survives for v in rep.verdicts) * 2 > len(rep.verdicts)
+            if rep.assessment:
+                rep.opportunity_score = opportunity_score(rep.assessment.scores, len({e["url"] for e in ev}))
+            rep.evidence = [{**e, "recent": e["date"] >= recent_cut} for e in ev]
+            return rep
+
+        with ThreadPoolExecutor(4) as ex:
+            reports = list(ex.map(one, themes))
+        reports.sort(key=lambda r: (r.survives, r.opportunity_score), reverse=True)
+        self.stats["themes_surviving"] = sum(r.survives for r in reports)
+        return reports
+
+    # ---------------- entrypoint ----------------
+    def run(self, now: datetime | None = None, collect: bool = True) -> tuple[str, list[ThemeReport]]:
+        now = now or datetime.now(timezone.utc)
+        run_id = now.strftime("%Y%m%dT%H%M%SZ")
+        self.store.start_run(run_id, now.isoformat())
+        if collect:
+            self.collect(self.plan(), run_id, now)
+        self.extract(run_id)
+        reports = self.analyse(self.corpus(now), now)
+        self.stats["llm_usage"] = dict(self.llm.usage)
+        return run_id, reports

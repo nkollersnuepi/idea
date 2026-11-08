@@ -1,0 +1,90 @@
+# Agentic Transition Problem Radar — configuration
+# Every key is optional; defaults live in radar/config.py.
+
+[run]
+lookback_days = 120          # only keep posts newer than this
+max_posts_per_query = 25     # per source, per query
+max_posts_total = 1500       # hard cap before extraction (logged if hit)
+min_intensity = 2            # drop extracted problems below this pain level
+db_path = "radar.db"
+report_dir = "reports"
+
+[models]
+# Default for every agent. Override per stage below if you want cheaper bulk extraction.
+default = "claude-opus-5-5"
+extractor = "claude-opus-5-5"
+extractor_effort = "low"
+planner_effort = "medium"
+clusterer_effort = "high"
+analyst_effort = "high"
+skeptic_effort = "high"
+skeptics_per_theme = 3       # independent refuters; theme dies if a majority refute
+
+[sources]
+enabled = ["hackernews", "reddit", "github", "stackexchange", "bluesky", "web"]
+reddit_subreddits = [
+  "LocalLLaMA", "ClaudeAI", "ChatGPTCoding", "cursor", "AI_Agents", "LangChain",
+  "devops", "sysadmin", "ExperiencedDevs", "cscareerquestions", "programming",
+  "SaaS", "smallbusiness", "Entrepreneur", "startups", "msp", "cybersecurity",
+  "sales", "marketing", "accounting", "legaladvice", "n8n", "automation",
+]
+stackexchange_sites = ["stackoverflow", "softwareengineering", "security"]
+github_query_suffix = "is:issue created:>{since}"
+web_searches_per_theme = 4   # Claude web_search calls for X, LinkedIn, forums, blogs
+
+# Themes seed the planner. Each becomes a set of complaint-shaped queries.
+[[themes]]
+name = "coding-agents"
+seed = "Developers using coding agents: review burden, broken code in production, cost blowups, context limits, multi-agent coordination"
+
+[[themes]]
+name = "agent-reliability"
+seed = "Engineers building agents: evals, non-determinism, observability, debugging long runs, memory, tool-calling failures, regressions across model upgrades"
+
+[[themes]]
+name = "mcp-and-tools"
+seed = "MCP servers and tool ecosystems: OAuth for agents, tool sprawl, MCP security, prompt injection via tools, enterprise gateways"
+
+[[themes]]
+name = "agent-security-identity"
+seed = "Agent identity, delegated credentials, least privilege, prompt injection incidents, data exfiltration, audit logs, CISOs blocking agents"
+
+[[themes]]
+name = "enterprise-adoption"
+seed = "Pilot-to-production gap, ROI proof, governance, agent sprawl, integration with SAP/Salesforce/ServiceNow, shadow AI"
+
+[[themes]]
+name = "agents-on-the-web"
+seed = "Browser and computer-use agents: sites blocking bots, CAPTCHAs, websites not agent-readable, publishers losing traffic to agents"
+
+[[themes]]
+name = "agent-commerce"
+seed = "Agents buying things: payments for agents, fraud, merchants and agent traffic, checkout, liability, KYC for agents"
+
+[[themes]]
+name = "smb-operators"
+seed = "Small businesses adopting agents: setup complexity, agents taking wrong actions, AI receptionists failing, integration with their tools"
+
+[[themes]]
+name = "knowledge-work"
+seed = "Support, sales, finance, legal, recruiting teams: AI slop, verification burden, AI SDR spam, managing agents, hiring fraud"
+
+[[themes]]
+name = "cost-and-infra"
+seed = "Token bills exploding, rate limits, latency, cost attribution per agent, seat vs outcome pricing"
+
+[[themes]]
+name = "data-and-context"
+seed = "RAG quality, permission-aware retrieval, APIs and docs not designed for agents, stale knowledge"
+
+[[themes]]
+name = "regulated-liability"
+seed = "Healthcare, finance, insurance, legal: compliance, accountability for agent errors, audit trails, insuring AI agents"
+
+[[themes]]
+name = "labor-transition"
+seed = "Junior workers displaced, freelancers competing with agents, cleaning up vibe-coded apps, reskilling"
+
+[[themes]]
+name = "agent-to-agent"
+seed = "Agents talking to agents: A2A protocols, trust and reputation between agents, agent spam and abuse"
