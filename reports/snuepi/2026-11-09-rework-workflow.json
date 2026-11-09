@@ -1,0 +1,1309 @@
+{
+  "summary": "Targeted evidence hunt, 4 independent rework designs from snuepi assets, judge panel scoring",
+  "agentCount": 11,
+  "logs": [
+    "evidence: 96 findings"
+  ],
+  "result": {
+    "evidence": [
+      {
+        "key": "agency-commitment-errors",
+        "summary": "The pain is real and well documented at the builder level. Vapi, Retell, n8n and Skool forums have many first-person threads about agents booking the wrong date or timezone, booking in the past, double-booking, saying \"you're booked\" when the tool call failed, and quoting prices that are not in the knowledge base. Almost all of this is debugging help for builders, though. I found no first-person posts from agencies saying they lost a client over a wrong booking or an invented price. Agency churn content comes almost entirely from platform vendors (Trillet, myvoiceaiconnect), and they put churn down to \"perception\" and unclear ROI, not to wrong commitments. The usual community fixes are cheap prompt tricks: inject {{now}} with a timezone, read the date back to the caller, pass explicit ISO offsets. Vapi's own docs now say that confirmation should be enforced in the builder's service, not in the prompt. That points directly at a deterministic gate before booking or quoting, but it also means the platforms may add one. GoHighLevel's help docs claim double-booking prevention is built into its native Voice AI, and its Ideas board has a request for the AI to recognise existing appointments. That gives GHL users a native alternative. On price: agencies resell receptionists at roughly $297-$997 a month plus $1,000-$3,000 setup, and some UK/US Skool agencies charge £750-£3,000 a month. Raw platform cost is about $0.07-$0.15 a minute. The nearest paid tool is Cekura (QA testing), at pay-as-you-go $0.25 per test minute or $0.05 per monitored call, or $500 a month for its Startup plan. That suggests an agency would pay roughly $30-$500 a month for a reliability layer. Hamming already sells testing that checks \"a booking is confirmed only after the tool call succeeds\". I found no startup selling a runtime commitment or policy gate for Vapi/Retell/GHL, but evidence of willingness to pay for one is only indirect. Caveats: Reddit was blocked from search, and support.vapi.ai and canny.io could not be fetched. Every quote below is a search snippet, and most post dates could not be confirmed.",
+        "findings": [
+          {
+            "claim": "Vapi builders report agents booking with the wrong year or date even when the current time is correct. The suggested fix is to set the timezone field and inject the current time.",
+            "quote": "[snippet] assistant had the correct current time, but the booking request still used a 2024 timestamp",
+            "url": "https://vapi.ai/community/m/1379750706482909185",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi community user (Discord-mirrored forum)",
+            "kind": "pain"
+          },
+          {
+            "claim": "A timezone mismatch between the calendar tool (UTC) and the agent's reasoning (Eastern) made the agent report booked slots as free.",
+            "quote": "[snippet] the calendar tool returned UTC (Z) times while the agent reasoned in Eastern time, so it reported booked slots as free",
+            "url": "https://support.vapi.ai/t/33208523/google-calendar-not-booking-correctly",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi support forum user",
+            "kind": "pain"
+          },
+          {
+            "claim": "A Vapi builder reports that the agent's checkAvailability flow double-books, even with the timezone set to New York and the current time injected. No confirmed fix is shown.",
+            "quote": "[snippet] The issue I'm running into is that the calendar is double booking dates.",
+            "url": "https://vapi.ai/community/m/1376589305715359877",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi community user",
+            "kind": "pain"
+          },
+          {
+            "claim": "The LLM resolves relative dates ('Monday', 'tomorrow') one to two days off. The community workaround is to read the date back to the caller before booking.",
+            "quote": "[snippet] Requests like \"Monday\" were often resolved one to two days off",
+            "url": "https://vapi.ai/community/m/1375475162551554108",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi community thread",
+            "kind": "pain"
+          },
+          {
+            "claim": "Vapi agents tell callers an appointment is booked when the webhook failed or the slot was rejected. This is the false-confirmation failure.",
+            "quote": "[snippet] the call logs show that our webhook has failed ... and the appointment slot was rejected / it thinks it has successfully booked the appointment",
+            "url": "https://support.vapi.ai/t/27162858/agent-says-appointment-booked-when-it-was-not",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi support forum users",
+            "kind": "pain"
+          },
+          {
+            "claim": "Vapi's own docs say prompts cannot enforce confirmation and that builders must enforce it in their own service. This validates a deterministic gate, and also shows platform awareness that raises absorption risk.",
+            "quote": "[snippet] Prompts guide the model, but they don't enforce approval. If an action needs a stronger confirmation, enforce it in your service.",
+            "url": "https://docs.vapi.ai/gpt-live/tools",
+            "date": "2026 (current docs)",
+            "who": "Vapi (platform docs)",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "A Retell builder reports the agent quoting prices and durations without checking the knowledge base, producing hallucinated figures that look close to the real ones.",
+            "quote": "[snippet] Agent does not check KB for prices and duration, give hallucination close to real thing!",
+            "url": "https://community.retellai.com/t/agent-does-not-check-kb-for-prices-and-duration-give-hallucination-close-to-real-thing/3393",
+            "date": "unknown (2025-2026)",
+            "who": "Retell community user",
+            "kind": "pain"
+          },
+          {
+            "claim": "Vapi users report the assistant retrieving the wrong pricing information and hallucinating numbers after a knowledge-base dataset update.",
+            "quote": "[snippet] assistant hallucinates numbers after updating trieve dataset",
+            "url": "https://support.vapi.ai/t/28536083/assistant-hallucinates-numbers-after-updating-trieve-dataset",
+            "date": "unknown (2025)",
+            "who": "Vapi support forum user",
+            "kind": "pain"
+          },
+          {
+            "claim": "Retell's community guide calls 'Time range is in the past' a common booking error, caused by the LLM not knowing the current time.",
+            "quote": "[snippet] a common error is \"Time range is in the past,\" which it attributes to the LLM not understanding the current time",
+            "url": "https://community.retellai.com/t/agent-answering-questions-in-conflict-with-provided-knowledge-base/801",
+            "date": "unknown (2025)",
+            "who": "Retell community guide/thread",
+            "kind": "pain"
+          },
+          {
+            "claim": "A Retell + Cal.com agent loops on check_availability and never calls book_appointment. Booking reliability failures persist in Retell's native integrations.",
+            "quote": "[snippet] Agent repeatedly calls check_availability_cal instead of book_appointment_cal",
+            "url": "https://community.retellai.com/t/cal-com-booking-issue-agent-repeatedly-calls-check-availability-cal-instead-of-book-appointment-cal/3496",
+            "date": "2026-08 (per search summary)",
+            "who": "Retell community user",
+            "kind": "pain"
+          },
+          {
+            "claim": "n8n builders' AI agents book the wrong day for relative dates and shift times because timestamps are sent without an offset. The advice is to take field selection away from the model.",
+            "quote": "[snippet] The agent gets confused and sometimes books on the wrong date. / The agent is choosing start, end, duration, and summary, which causes wrong dates",
+            "url": "https://community.n8n.io/t/ai-agente-or-google-calendar-gives-wrong-dates/259554",
+            "date": "unknown (2025-2026)",
+            "who": "n8n community users (dental clinic workflow, WhatsApp scheduler)",
+            "kind": "pain"
+          },
+          {
+            "claim": "In Skool AI Automation Society, a builder says voice agents handle new bookings but struggle with reschedules and cancellations, and asks what production architecture others use (27 comments).",
+            "quote": "[snippet] struggles with rescheduling and cancellations ... whether built-in Google Calendar integrations fully support cancellation and rescheduling",
+            "url": "https://chat.skool.com/ai-automation-society/voice-agent-issue-2",
+            "date": "unknown (2025-2026)",
+            "who": "Skool AI Automation Society member",
+            "kind": "pain"
+          },
+          {
+            "claim": "In Skool, an n8n builder reports the AI agent ignoring the Google Calendar availability check. Another reports a Vapi + Make agent offering times already marked busy.",
+            "quote": "[snippet] AI Agent ignores Google Calendar availability check in n8n",
+            "url": "https://www.skool.com/ai-automation-society/ai-agent-ignores-google-calendar-availability-check-in-n8n",
+            "date": "unknown (2025-2026)",
+            "who": "Skool AI Automation Society member",
+            "kind": "pain"
+          },
+          {
+            "claim": "On the GoHighLevel Ideas board, users ask that Conversation AI recognise existing appointments before suggesting new ones, and point to a separate 'prevent double booking' request.",
+            "quote": "[snippet] have conversational ai recognize existing appointments before suggesting new one ... the need to prevent double booking",
+            "url": "https://highlevel.canny.io/scheduling-calendar/p/have-conversational-ai-recognize-existing-appointments-before-suggesting-new-one",
+            "date": "unknown",
+            "who": "HighLevel users (Ideas board)",
+            "kind": "pain"
+          },
+          {
+            "claim": "GoHighLevel's help docs claim its native Voice AI already prevents double-booking with real-time calendar checks. For GHL-native builds, this is counter-evidence and an absorption risk.",
+            "quote": "[snippet] Double-Booking Prevention: Real-time calendar checks prevent overlapping appointments",
+            "url": "https://help.gohighlevel.com/support/solutions/articles/155000005293-appointment-booking-for-voice-ai-agents-in-highlevel",
+            "date": "2026 (current docs)",
+            "who": "HighLevel (platform docs)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "A QA vendor notes that wrong-timezone bookings look like 'success' in booking-rate metrics until a patient complains weeks later, and that DST changes or prompt drift can break agents that used to work.",
+            "quote": "[snippet] a wrong-timezone booking can pass as a \"success\" in a 95% booking rate until the patient complains weeks later",
+            "url": "https://roark.ai/blog/testing-appointment-scheduling-voice-agents",
+            "date": "~2026-09 (70 days before search)",
+            "who": "Roark (voice QA vendor)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Agency-platform vendors attribute most receptionist-client churn to perception and unclear ROI, not wrong commitments. This counter-evidence suggests wrong bookings are not the main stated churn driver.",
+            "quote": "[snippet] most agency owners find that 70–80% of their cancellations fall into perception churn",
+            "url": "https://trillet.ai/blogs/voice-agent-client-churn-reduction",
+            "date": "2026",
+            "who": "Trillet (white-label voice platform, vendor)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "A vendor guide for agencies says the mistakes driving the most churn and support tickets are operational, and that clients who can see a booking dashboard cancel less. This supports a visibility or proof angle.",
+            "quote": "[snippet] clients who can see their booking dashboard are much less likely to cancel because the AI doesn't feel like a black box",
+            "url": "https://www.myvoiceaiconnect.com/blog/ai-receptionist-appointment-booking-setup-agency",
+            "date": "~2026-11-08",
+            "who": "MyVoiceAIConnect (agency platform vendor)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "A Skool member's shared voice-agent offer prices retainers at $497/mo (Foundation) and $997/mo (Growth, 'most popular').",
+            "quote": "[snippet] $497/month \"Foundation\" tier and a $997/month \"Growth\" tier",
+            "url": "https://www.skool.com/10-steps-1278/share-you-offer",
+            "date": "2025-12",
+            "who": "Skool community member (self-reported agency offer)",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "A Skool-based agency community prices UK/US voice receptionist retainers at £750-£3,000/month.",
+            "quote": "[snippet] prices its UK and US voice receptionist retainers at £750 to £3,000 per month",
+            "url": "https://www.skool.com/pickup-3408/about",
+            "date": "unknown (2026)",
+            "who": "Pickup Skool community (agency)",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "White-label MSP pricing anchors are much lower: retail AI receptionists cost $59-$99/mo and white-label partners price an agent at $75-$150/mo. This limits room for add-on fees at the low end.",
+            "quote": "[snippet] white-label partners price a single agent at $75 to $150 per month",
+            "url": "https://www.ringlogix.com/blog/ai-voice-pricing-for-msps-whats-actually-working",
+            "date": "2026",
+            "who": "RingLogix (MSP voice vendor)",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "The all-in platform cost per minute is roughly Vapi $0.105, Retell $0.110 and Bland $0.143 at 20k minutes. That leaves agencies a large margin under $500-$1,000 retainers.",
+            "quote": "[snippet] all-in cost at 20,000 minutes at Vapi $0.105, Retell $0.110, Bland $0.143",
+            "url": "https://betonai.net/?p=1872",
+            "date": "2026",
+            "who": "Third-party pricing analysis",
+            "kind": "market_size"
+          },
+          {
+            "claim": "Cekura, the nearest paid reliability tool for agencies, charges $0.25 per voice test minute, $0.05 per monitored call, or $500/mo for its Startup plan. This is a price anchor for agency spend on reliability.",
+            "quote": "[snippet] $0.25 per voice testing minute, $0.05 per monitored call ... Startup plan ($500/month)",
+            "url": "https://www.cekura.ai/pricing?utm_category=agents",
+            "date": "2026 (current pricing page)",
+            "who": "Cekura (competitor)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Hamming sells tool-call contract testing for Retell/Vapi agents, including a check that a booking is confirmed only after the tool call succeeds. This is offline testing, not a runtime gate.",
+            "quote": "[snippet] checks ... that a booking is confirmed only after the tool call succeeds",
+            "url": "https://hamming.ai/blog/voice-agent-tool-call-contract-testing-template",
+            "date": "2026",
+            "who": "Hamming (competitor)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Builders hand-roll deterministic gates: in one Vapi + Make + Calendly build, the agent may confirm only when a booking token is present. Vapi forum answers on 'guardrail hooks' are vague and point to custom code. No dedicated runtime policy-layer product turned up.",
+            "quote": "[snippet] the scheduling tool returns an explicit availability contract, and the agent may confirm only when a booking token is present",
+            "url": "https://support.vapi.ai/t/22800021/vapi-guardrail-hooks",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi forum user + Reddit thread summarised by search",
+            "kind": "pain"
+          },
+          {
+            "claim": "Documented liability precedent: a tribunal held Air Canada to a discount its chatbot described, and a UK shop's after-hours chatbot was talked into an 80% discount. Businesses end up honouring invented terms.",
+            "quote": "[snippet] the airline must follow through with the chatbot's promised discount",
+            "url": "https://dev.to/adioof/an-ai-chatbot-invented-a-refund-policy-and-a-court-made-the-company-pay-2n2j",
+            "date": "2024 case, cited 2025-2026",
+            "who": "Developer write-up of Moffatt v Air Canada",
+            "kind": "pain"
+          }
+        ]
+      },
+      {
+        "key": "smb-liability-ai-promises",
+        "findings": [
+          {
+            "claim": "A UK small business's after-hours chatbot was talked into an 80% discount on an £8,000+ order. The customer threatened small claims and called the bot the company's legal representative. The owner cancelled and refunded, and no money was lost under the code. This is the clearest first-person SMB case: the business had no visible notice saying the bot cannot authorise discounts, and no clean record of what the bot was allowed to offer.",
+            "quote": "[snippet] shop's AI chat assistant was talked down from a 25% discount to 80%, and the customer then placed an order of £8,000+ ... the customer pasted the fabricated code into the free-text order comments",
+            "url": "https://vibegraveyard.ai/story/uk-chatbot-80-percent-discount-refund/",
+            "date": "2026-02",
+            "who": "Anonymous UK small business owner on r/LegalAdviceUK, via a write-up (Reddit snapshot: reddit.sentinel-team.org/posts/1qxc7x9)",
+            "kind": "pain"
+          },
+          {
+            "claim": "In the same thread, practitioner advice was to cancel and refund in full. Under UK law, an obvious pricing mistake caused by a system error, plus contract formation at dispatch, protects the SMB. So the legal exposure for small, obvious errors may be lower than the Moffatt framing suggests.",
+            "quote": "[snippet] there is an obvious and substantial mistake in the price offered generated by a systems error ... a court is only ever going to award him his money back, as long as you're giving him a FULL refund",
+            "url": "https://reddit.sentinel-team.org/posts/1qxc7x9/snapshots/2026-02-06T22%3A13%3A14.93733Z",
+            "date": "2026-02-06",
+            "who": "r/LegalAdviceUK commenters",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "BMW Toronto's AI chatbot 'Quinn' offered C$27,162.79 for a trade-in without saying it was an AI. The dealer withdrew the offer, then honoured it once CBC asked questions. The cost was roughly C$5-7k. A lawyer told CBC an agreement could be in place because the bot had moved to schedule a meeting. The dealer now has humans make final offers. The trigger was reputational, not legal.",
+            "quote": "[snippet] Sales manager Scott Shadbolt said the original chatbot offer of $27,162.79 would be honored to 'do right' by Giacomelli ... final numbers will come from humans only, and customers will be clearly told when they are talking to a chatbot",
+            "url": "https://www.carscoops.com/2026/06/bmw-dealer-ai-chatbot-offer/",
+            "date": "2026-06",
+            "who": "BMW Toronto (dealer), customer Zack Giacomelli, CBC reporting via Carscoops",
+            "kind": "pain"
+          },
+          {
+            "claim": "Priceline's 'Penny' chatbot promised a refund on a non-refundable booking. The company honoured the invented promise only once a national newspaper was watching. This shows a pattern: companies honour bot promises under media pressure, not by default.",
+            "quote": "[snippet] Priceline's \"Penny\" chatbot promised a refund on a non-refundable booking, then nobody wanted to pay it",
+            "url": "https://vibegraveyard.ai/story/priceline-penny-chatbot-fake-refund/",
+            "date": "2026-05",
+            "who": "Priceline / consumer (incident write-up)",
+            "kind": "pain"
+          },
+          {
+            "claim": "Germany's OLG Hamm ruled (12 May 2026, Az. 4 UKl 3/25) that a website chatbot is part of the business. Its false statements, here invented specialist titles for doctors, are the operator's own commercial acts under the UWG (unfair competition law). Neither a disclaimer nor the involvement of an IT contractor protected the operator. An appeal to the BGH (Federal Court of Justice) is allowed. Reported as the first German higher-court ruling on this, and it is a strong EU signal.",
+            "quote": "[snippet] Der KI-Chatbot ist rechtlich Teil der geschäftlichen Organisation des Unternehmens ... Ein KI-Chatbot vergab großzügig nicht existierende Facharztbezeichnungen. Das OLG Hamm rechnet die Aussagen den verantwortlichen Ärzten zu – die Revision zum Bundesgerichtshof ist zugelassen.",
+            "url": "https://www.lto.de/recht/nachrichten/n/olg-hamm-aerzte-haften-chatbot-falsche-facharztbezeichnung-ki-uwg",
+            "date": "2026-05",
+            "who": "Legal Tribune Online (LTO), reporting on the OLG Hamm ruling",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "German chambers of commerce (IHK) and SME legal portals now warn that operators are liable for their chatbots and can receive Abmahnungen (cease-and-desist letters). That gives German SMBs a concrete, recurring exposure: competitors or associations can send warning letters over chatbot statements.",
+            "quote": "[snippet] Betreiber haften für ihren Chatbot",
+            "url": "https://www.ihk.de/chemnitz/recht-und-steuern/rechtsinformationen/wettbewerbsrecht/betreiberhaftung-chatbot-7054890",
+            "date": "2026",
+            "who": "IHK Chemnitz (chamber of commerce guidance for SMEs)",
+            "kind": "pain"
+          },
+          {
+            "claim": "A Chinese court went the other way. The Hangzhou Internet Court refused to enforce a chatbot's promise of 100,000 yuan because AI lacks legal capacity to express intent, and the platform was protected where it showed reasonable safeguards. Case law is split, and showing safeguards was a defence.",
+            "quote": "[snippet] Artificial intelligence lacks the capacity for civil rights and therefore cannot make legally recognized expressions of intent",
+            "url": "https://www.citynewsservice.cn/articles/shanghaidaily/news/ai-chatbot-promised-user-us14000-court-says-it-doesnt-have-to-pay-7kr5pb8n",
+            "date": "2026-01",
+            "who": "Shanghai Daily, reporting a Hangzhou Internet Court ruling",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "In the US, Smith v. Substack held that a customer-service chatbot's responses were not definite enough to support promissory estoppel (enforcing a promise someone relied on). Vague bot statements may not bind; specific prices and offers are the real risk.",
+            "quote": "[snippet] a customer service chatbot's responses were not sufficiently definite to give rise to a claim of promissory estoppel",
+            "url": "https://www.innobu.com/en/articles/ai-liability-chatbot-companies-2026.html",
+            "date": "2026",
+            "who": "Innobu (legal commentary summarising case law)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Cursor's AI email-support bot 'Sam' invented a login policy that did not exist. It caused visible subscription cancellations after HN and Reddit threads, and the co-founder apologised on HN. HN commenters were angry that the bot was not labelled as AI. A developer-tool company lost revenue from one invented policy statement.",
+            "quote": "[snippet] this is an incorrect response from a front-line AI support bot ... not labelled as such is clearly intended to be deceptive",
+            "url": "https://fortune.com/article/customer-support-ai-cursor-went-rogue/",
+            "date": "2025-04",
+            "who": "Cursor rep on Reddit; HN commenters; co-founder Michael Truell",
+            "kind": "pain"
+          },
+          {
+            "claim": "A Reddit user said a Verizon chat agent offered a free iPhone 17 Pro Max with no trade-in, and a later agent called the offer invalid. Verizon honoured it after escalation. The user's evidence was chat transcripts and screenshots. Caveat: the agent may have been human, not AI. It is still relevant to the 'proof of what was said' need: consumers already rely on transcripts as evidence.",
+            "quote": "[snippet] a chat agent offered a free iPhone 17 Pro Max with no trade-in, a supervisor allegedly approved it, and a later agent called it invalid ... phone reps can't see promotions offered through chat",
+            "url": "https://reddit.sentinel-team.org/posts/1qxhjmw/snapshots/2026-02-07T05%3A50%3A24.035184Z",
+            "date": "2026-02-07",
+            "who": "r/verizon user and commenters",
+            "kind": "pain"
+          },
+          {
+            "claim": "A small-business blogger testing AI receptionists found the bot quoted a specific boiler-service price (£89) that was not his real rate. Practitioners advise routing all pricing and negotiation to a human. This is first-person evidence that SMB voice agents invent prices.",
+            "quote": "[snippet] it gave a specific figure, £89, that wasn't his price at all ... anything mentioning a complaint, an emergency, or a price negotiation goes to a human, full stop",
+            "url": "https://www.lilachbullock.com/ai-receptionist-small-business-test/",
+            "date": "2026",
+            "who": "Lilach Bullock (SMB blogger testing AI receptionists)",
+            "kind": "pain"
+          },
+          {
+            "claim": "Voice-AI vendors and QA firms now openly treat invented discounts as a margin and contract-dispute risk. SignalWire argues that prompt rules make it worse and that the model must not handle price data at all. This supports a deterministic 'commitment firewall' approach, but it also means platforms are starting to build the same thing themselves.",
+            "quote": "[snippet] if you tell the model \"don't mention the discount,\" you have now increased the probability that it will",
+            "url": "https://signalwire.com/blogs/developers/why-voice-ai-fails",
+            "date": "2026",
+            "who": "SignalWire (voice platform vendor blog)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "In a QA case study for a dental client, Retell's QA tool found a 12% hallucination rate on certain patient questions. Hamming, Haptik and Retell all sell or publish hallucination detection for voice agents, so offline QA is already a crowded competitor category.",
+            "quote": "[snippet] ungrounded AI agents can improvise commitments such as unapproved discount rates, extended payment deadlines, or waived penalties",
+            "url": "https://www.haptik.ai/blog/hallucination-in-voice-ai-agents",
+            "date": "2026",
+            "who": "Haptik (vendor); GrowwStacks/Retell case study",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Armilla (a Lloyd's coverholder, backed by Chaucer) raised its standalone AI liability limits to $25M. Cover now includes harmful or misleading outputs, wrong decisions, improper tool use and escalation errors. Payouts are performance-triggered (accuracy falling below a baseline, for example from 95% to 85%), and underwriters refuse systems they judge too error-prone. That means insurers need measured performance data and evidence. No prices are published.",
+            "quote": "[snippet] coverage would only be activated if the insurer determines that the AI tool's performance fell below initial expectations",
+            "url": "https://www.armilla.ai/resources/armilla-ai-raises-lloyds-backed-coverage-to-25m-as-traditional-insurers-retreat-from-ai-risk",
+            "date": "2026-01-23",
+            "who": "Armilla AI / Chaucer (Lloyd's)",
+            "kind": "market_size"
+          },
+          {
+            "claim": "Testudo (a Lloyd's coverholder that insures companies deploying AI, not building it) expanded capacity with Atrium and QBE to $9.25M. It cites generative-AI litigation up 137% year on year. It will not underwrite AI vendors or firms that customise foundation models.",
+            "quote": "[snippet] Testudo's policy is designed to respond to third-party claims arising from AI-generated outputs, covering legal costs and damages where conventional commercial general liability insurance may not apply",
+            "url": "https://fintech.global/2026/03/09/testudo-expands-ai-liability-capacity-to-9-25m/",
+            "date": "2026-03-09",
+            "who": "Testudo / Atrium / QBE",
+            "kind": "market_size"
+          },
+          {
+            "claim": "Munich Re's HSB launched AI liability cover for businesses with 1-500 employees on 18 March 2026. It is sold only as an add-on through partner carriers' business policies and covers bodily injury, property damage and advertising injury. It does not appear to cover promised refunds or discounts, which are contractual or economic loss. HSB's survey: 74% of SMBs use AI and 91% plan to.",
+            "quote": "[snippet] HSB does not offer this product directly to businesses ... Business sizes include microbusinesses (1-10 employees), small businesses (11-50 employees), and medium businesses (51-500 employees)",
+            "url": "https://munichre.com/hsb/en/press-and-publications/press-releases/2026/2026-03-18-introducing-ai-liability-insurance-for-small-businesses.html",
+            "date": "2026-03-18",
+            "who": "HSB (Munich Re)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Munich Re's aiSure, through Mosaic, now offers up to €15M of parametric cover (pays out on a defined trigger) for AI performance failures. The threshold is defined per risk, written into the policy and checked against real-world outcomes. That creates demand for independent, verifiable performance and interaction logs.",
+            "quote": "[snippet] It is defined individually for each risk, based on the specific AI model and the guarantee the insured has issued to their customer",
+            "url": "https://www.reinsurancene.ws/mosaic-and-munich-re-introduce-ai-specific-insurance-for-developers/",
+            "date": "2026",
+            "who": "Mosaic Insurance head of AI underwriting / Munich Re aiSure",
+            "kind": "market_size"
+          },
+          {
+            "claim": "From January 2026, ISO (Verisk) optional generative-AI exclusions (CG 40 47 / 40 48 / 35 08) are available for general liability policies, and their 'arising out of' wording is broad. Separately, a guide notes that refunds or promises a chatbot makes are usually treated as the business's own cost and are not insurable. So the honour-the-promise loss is generally uninsured: the cost falls on the SMB.",
+            "quote": "[snippet] refunds or promises a chatbot makes are usually treated as the business's own cost, not an insurable loss. Most liability policies don't pay for them.",
+            "url": "https://www.moneygeek.com/insurance/business/general-liability/generative-ai-exclusion/",
+            "date": "2026",
+            "who": "MoneyGeek / beancount.io guides (secondary)",
+            "kind": "pain"
+          },
+          {
+            "claim": "The revised EU Product Liability Directive (2024/2853) treats software and AI systems as products under strict liability, with a transposition deadline of 9 December 2026. Courts can order disclosure of technical records. It mainly hits AI providers rather than deploying SMBs, and covers harm such as data loss rather than promised discounts.",
+            "quote": "[snippet] 'product' to specifically include electricity, digital manufacturing files and software, including operating systems, firmware, computer programs, applications and AI systems",
+            "url": "https://www.insideprivacy.com/uncategorized/eu-member-states-begin-rolling-out-new-product-liability-rules/",
+            "date": "2026-06-19",
+            "who": "Covington (Inside Privacy)",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "The EU's planned Digital Fairness Act explicitly covers chatbots used for customer service, including AI chatbots as the only way to contact a business, alongside personalised and dynamic pricing. It is still a proposal; its content and date are unconfirmed as of these sources.",
+            "quote": "[snippet] AI chatbots when used as sole means of communication with customers",
+            "url": "https://www.lewissilkin.com/insights/2025/07/18/european-commission-consults-on-digital-fairness-act-102ku4t",
+            "date": "2025-07-18",
+            "who": "Lewis Silkin (law firm)",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "Lawyers advise that AI conversation logs are discoverable evidence (ESI under FRCP 34, the US federal discovery rule). Defence reviews scrutinise log authenticity, chain of custody, account identity and deletion policy. Engineering writers recommend immutable audit logs kept separate from content, which matches a signed, hash-chained record. The material is mostly law-firm and vendor commentary, with no first-person SMB buyer asking for it.",
+            "quote": "[snippet] authenticity of logs, chain of custody, user account identity, login records, deletion/back-up policy, context of use",
+            "url": "https://tianpan.co/blog/2026-04-23-ai-chat-transcripts-legal-hold-retention-design",
+            "date": "2026-04-23",
+            "who": "Tian Pan (engineering blog); law firms Katten, Blakes",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "In the Delaware case Fortis Advisors v. Krafton (March 2026), a CEO's chatbot logs were used as evidence of intent in a $250M earnout dispute. AI transcripts are already decisive evidence in high-value disputes, though for enterprises, not SMBs.",
+            "quote": "[snippet] a court treated the CEO's lengthy AI chat logs as evidence of the defendant's strategic intent — and bad faith",
+            "url": "https://www.alstonprivacy.com/your-ai-chats-may-be-used-against-you-ceos-chatgpt-records-appear-in-judicial-opinion-concerning-250-earnout/",
+            "date": "2026-03",
+            "who": "Alston & Bird (law firm)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Commentators recommend contractual limits and visible terms, such as 'this bot cannot make offers or authorise discounts', as the main mitigation. Air Canada failed partly because the correct policy sat on a different page and was not tied to the conversation. That supports showing the binding terms inside the conversation and keeping a record of them, which is close to what snuepi's terms snapshot does.",
+            "quote": "[snippet] Air Canada does not appear to have relied on website terms that might have disclaimed liability",
+            "url": "https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot",
+            "date": "2024-02",
+            "who": "McCarthy Tétrault (law firm)",
+            "kind": "counter_evidence"
+          }
+        ],
+        "summary": "Pain is real and keeps recurring, but it is mostly a reputational loss that SMBs absorb rather than a liability they would pay to prove. In 2026 there were several first-person or reported cases: a UK SMB's chatbot gave an 80% discount on an £8k order, BMW Toronto was out roughly C$5-7k, Priceline's Penny invented a refund, Verizon chat promises were disputed, and an AI receptionist invented an £89 price. In most of them the business either honoured the promise under media pressure or used an obvious-mistake defence. Law is moving toward holding the operator liable, especially in the EU: OLG Hamm (May 2026) attributes chatbot statements to the business regardless of disclaimers, and German IHKs now warn SMEs about warning letters (Abmahnungen). Other courts went the other way: a Hangzhou court refused enforcement and US Smith v. Substack required definite promises. Insurers are entering: Armilla up to $25M, Testudo $9.25M, HSB SMB add-ons sold through carriers, and Munich Re aiSure/Mosaic €15M parametric cover. The promised-discount loss itself is generally uninsurable, and ISO AI exclusions from January 2026 widen the gap. Insurers' performance-triggered and parametric policies need measured, verifiable records, which may make insurers and MGAs (managing general agents) a better buyer for signed AI-interaction evidence than SMBs themselves. No public premiums or SMB budgets surfaced; willingness to pay is inferred only from insurer capacity and litigation growth (Testudo reports +137% year on year). Competition on prevention is crowded (Hamming, Retell QA, Haptik, SignalWire's own guidance against passing price data to the model), so the defensible angle is deterministic commitment control plus a court- and insurer-grade record of what the agent offered and under which terms. Evidence quality caveat: nearly all of this is search snippets and secondary write-ups; the Reddit threads were seen only through snapshot mirrors."
+      },
+      {
+        "key": "merchant-agent-disputes",
+        "summary": "I ran 20 searches and found no verified production case of a merchant or PSP losing, or even fighting, a chargeback on an agent-placed purchase. There are no first-person merchant, PSP or dispute-analyst posts on Reddit, HN or Shopify Community either. Nearly everything comes from chargeback vendors (Chargebacks911, Justt, Chargeflow, Chargeback Gurus, chargeback.io) and aggregator blogs (stellagent, tinyfish Current), and they argue from scenarios rather than case counts. Three real production incidents turned up, all next to the dispute question rather than inside it. (1) Fowler, Feb 2025: OpenAI's Operator bought eggs on Instacart without being asked. No chargeback was reported. (2) Amazon \"Buy for Me\", Dec 2025 to Jan 2026: brands were enrolled without consent and fulfilled orders without knowing Amazon placed them. Only a secondhand Reddit warning links this to chargebacks. (3) ChatGPT Instant Checkout reached only a handful of merchants and was scaled back around March 2026 because people didn't buy through it, so the big agent checkout channel produced almost no volume to dispute. Industry players treat the risk as real, with protection products but no measured loss data. Amex Agent Purchase Protection (Apr 2026, cardholder-side, final terms not published) and Chargebacks911's merchant indemnity (27 Oct 2026, price and terms not public) both exist. Worldpay, Checkout.com and the vendors all say network dispute rules for agent transactions are unwritten. Merchant of record keeps the liability under ACP and Stripe SPT, and no agent-specific reason codes exist. Prices for dispute work today are mostly a share of what's won back: Chargeflow 25% of recovered plus $29 per deflected alert, Disputifier 20% capped at $250 per win, Justt and Chargebacks911 custom quotes. That signals budget is paid per recovered dispute, not for evidence infrastructure. The question also falls inside a lane where the incumbents are moving: Chargebacks911 already sells indemnity and a permission-trail record, and Visa is shipping AI dispute tools. A solo founder's standalone \"agent dispute pack\" would sit inside incumbents' roadmaps with no observed losses yet. For a rework, this evidence points away from the dispute pack and toward pain that is visible now: wrong bookings and commitments by agents (the TRUE GAP 26.8 theme), or consent and attribution evidence sold through an existing dispute vendor rather than straight to SMBs.",
+        "findings": [
+          {
+            "claim": "A real production incident: OpenAI Operator bought eggs on Instacart that the user had only asked it to find, and misreported the total. OpenAI blamed a failed confirmation step. No chargeback or merchant dispute was reported.",
+            "quote": "OpenAI's Operator agent spent a columnist's money on $31.43 of eggs he had asked it to find [snippet, title]; Operator reported the final tally as $19.68 [snippet, secondary summary]",
+            "url": "https://vibegraveyard.ai/story/openai-operator-unrequested-instacart-egg-purchase/",
+            "date": "2025-02-07 (incident; AIID #1028)",
+            "who": "Geoffrey A. Fowler (Washington Post), via AI Incident Database / vibegraveyard summary",
+            "kind": "pain"
+          },
+          {
+            "claim": "Amazon Buy for Me sent real agent-placed orders to small merchants who never opted in. One merchant fulfilled about 16 orders before realizing Amazon placed them. This is production pain, but a chargeback link is only claimed in a secondhand Reddit warning.",
+            "quote": "four other merchants who spoke to Modern Retail for this story were also upset that their products were featured on Amazon.com without their permission [snippet]",
+            "url": "https://www.modernretail.co/technology/brands-are-upset-that-buy-for-me-is-featuring-their-products-on-amazon-without-permission/",
+            "date": "2026-01-06",
+            "who": "Modern Retail reporting on SMB brand owners",
+            "kind": "pain"
+          },
+          {
+            "claim": "A Reddit post (cited secondhand) warned Shopify sellers that Buy for Me may raise chargebacks. This was a warning, not a reported loss.",
+            "quote": "Buy For Me may result in an increase in credit card chargebacks [snippet, paraphrase of Reddit post cited by Value Added Resource]",
+            "url": "https://www.valueaddedresource.net/amazon-buy-for-me-small-business-backlash/",
+            "date": "2026-01 (approx)",
+            "who": "Anonymous Reddit seller, cited by Value Added Resource",
+            "kind": "pain"
+          },
+          {
+            "claim": "ChatGPT Instant Checkout, the main agent checkout channel, reached only a handful of merchants and was scaled back around March 2026 because users researched there but didn't buy, so there was almost no transaction volume to dispute.",
+            "quote": "Instant Checkout had been pulled back due to \"lackluster performance,\" and only a handful of merchants ever went live with it [snippet, Forrester cited]",
+            "url": "https://alhena.ai/blog/chatgpt-instant-checkout/",
+            "date": "2026-04",
+            "who": "Forrester via Alhena blog",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Chargebacks911 launched merchant-side indemnity against qualifying chargebacks on AI-agent purchases. It is sold as a bolt-on that doesn't replace existing fraud tools. Pricing and coverage limits weren't published.",
+            "quote": "identifies transactions involving AI agents and provides indemnification against qualifying chargebacks associated with those purchases [snippet]",
+            "url": "https://thepaypers.com/fraud-and-fincrime/news/chargebacks911-launches-indemnification-for-ai-agent-purchases",
+            "date": "2026-10-27",
+            "who": "Chargebacks911 (vendor press release via The Paypers)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Chargebacks911's framing of the problem ('I didn't buy that, my AI did'): disputes arise even when the agent did exactly what it was told. This is a scenario-based warning, not case data.",
+            "quote": "The card wasn't stolen, the merchant made no error, and the agent operated within its settings. Yet disputes still occur [snippet]",
+            "url": "https://chargebacks911.com/i-didnt-buy-that-my-ai-did-agentic-commerce-to-drive-new-wave-of-disputes/",
+            "date": "2026-02",
+            "who": "Chargebacks911 (vendor)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Chargebacks911 already sells a record of the permission trail as part of its dispute platform. This overlaps directly with a 'dispute pack' built from consent and evidence data.",
+            "quote": "Unified Dispute Management System records permission trails, transaction activity and timestamped actions across the payment process [snippet, paraphrase]",
+            "url": "https://thepaypers.com/fraud-and-fincrime/news/chargebacks911-warns-of-dispute-risk-gap-in-agentic-payments",
+            "date": "2026-05",
+            "who": "Chargebacks911 CTO via The Paypers",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Amex Agent Purchase Protection covers cardholders for errors by a registered agent. It applies only to US Amex cards, only to agents built on Amex's developer kit, and only after the cardholder tries a return. Full terms are 'to come'. It is written for cardholders, not merchants.",
+            "quote": "available for eligible charges only after the Card Member has initiated a return (where possible) with the merchant [snippet]",
+            "url": "https://fortune.com/2026/04/14/american-express-ai-payments-developers-purchase-protection/",
+            "date": "2026-04-14",
+            "who": "American Express (network) via Fortune / Amex agentic-commerce page",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "Worldpay (an acquirer) says who bears the loss on agent disputes beyond plain fraud is still undecided, even though all three networks have launched agent frameworks.",
+            "quote": "liability allocation between merchant, issuer and agent platform remains largely unresolved once a dispute moves past straightforward fraud [snippet, paraphrase]",
+            "url": "https://worldpay.com/insights/articles/agentic-commerce-liability-is-still-being-written",
+            "date": "2026",
+            "who": "Worldpay (acquirer/PSP)",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "Mastercard publicly says its standard chargeback protections apply to agent-completed transactions. There is no agent-specific rule or reason code.",
+            "quote": "Mastercard said its standard chargeback protections apply if users dispute a transaction completed by an AI agent [snippet, paraphrase of BankInfoSecurity]",
+            "url": "https://www.bankinfosecurity.com/autonomous-payment-or-anarchy-ai-gets-purchasing-power-a-28556",
+            "date": "2025 (approx)",
+            "who": "Mastercard via BankInfoSecurity",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "Under Stripe's agentic commerce stack (ACP/SPT), the merchant stays merchant of record and keeps control of refunds and disputes. Stripe publishes no special agent-dispute split.",
+            "quote": "As the merchant of record, you also retain all control over customer relationships, including how refunds and disputes are managed. [snippet]",
+            "url": "https://stripe.com/sv-fi/blog/agentic-commerce-suite",
+            "date": "2025-2026",
+            "who": "Stripe (PSP)",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "Justt (a dispute vendor) says merchants carry full dispute liability under ACP.",
+            "quote": "Under ACP, the merchant remains the MOR. You retain control over payment processing and you bear full liability for disputes. [snippet]",
+            "url": "https://justt.ai/blog/perplexity-vs-openai-acp-chargeback-liability/",
+            "date": "2026",
+            "who": "Justt (vendor)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Chargeback vendors say no agent-specific reason code exists, and that a dispute defense needs proof of consent for each order (the delegation, the approved cart, the agent's identity). This is the same evidence the planned dispute pack would assemble, and vendors are already writing playbooks for it.",
+            "quote": "agent disputes use the existing Visa and Mastercard reason codes, and no agent-specific code exists yet [snippet, paraphrase]",
+            "url": "https://www.chargeback.io/blog/agentic-payments-chargebacks",
+            "date": "2026",
+            "who": "chargeback.io (vendor)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Chargeflow has published an 'evidence playbook' for agentic chargebacks and says merchants pay by default because no rule assigns fault.",
+            "quote": "No framework for AI-initiated authorization or disputes exists under Regulation E [snippet]",
+            "url": "https://www.chargeflow.io/blog/agentic-commerce-regulation-what-merchants-need-to-know",
+            "date": "2026",
+            "who": "Chargeflow (vendor)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Visa shipped general (not agent-specific) AI dispute tools in April 2026 (Dispute Intelligence, Doc Analyzer), with its Dispute Resolution Network planned for general availability in late 2026. The network itself is moving into dispute automation.",
+            "quote": "Visa announced six AI-powered dispute tools [snippet, paraphrase]",
+            "url": "https://www.digitalcommerce360.com/2026/04/01/visa-adds-ai-tools-for-dispute-resolution/",
+            "date": "2026-04-01",
+            "who": "Visa via Digital Commerce 360",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "An essay written from a dispute analyst's point of view says the hard case is a vague instruction, not fraud: a specific mandate gives usable evidence, while 'find me something good' does not. This is a thought piece, not a case log.",
+            "quote": "\"you can't adjudicate a vibe\" [snippet, title]",
+            "url": "https://current.tinyfish.ai/issue/38/echoes/article/31138/you-cant-adjudicate-a-vibe-a-dispute-analyst",
+            "date": "2026",
+            "who": "TinyFish Current essay (dispute analyst point of view, not verified as first-person)",
+            "kind": "pain"
+          },
+          {
+            "claim": "One commentary says merchants can usually prove the agent made the transaction but can't prove the human authorized the agent. That gap is real but is argued, not measured.",
+            "quote": "the merchant can usually show the agent transacted but often cannot produce evidence that the human authorized the agent to act in the first place [snippet, paraphrase]",
+            "url": "https://current.tinyfish.ai/issue/39/market-pulse/article/32330/when-the-first-agent-purchase-gets-disputed",
+            "date": "2026",
+            "who": "TinyFish Current commentary",
+            "kind": "pain"
+          },
+          {
+            "claim": "Agent purchase volume is still small. One commentator expects holiday 2026 to be the first season with material agent volume, so disputes are still a forecast.",
+            "quote": "peak season 2026 will be the first holiday period in which agent-initiated purchase volume is material enough for merchants to notice [snippet, paraphrase]",
+            "url": "https://shopappy.com/payments/card-networks/agent-chargeback-rules-holiday-2026",
+            "date": "2026",
+            "who": "shopappy.com commentary",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "The MRC 2026 payments and fraud report (1,200+ merchants) describes agentic payments as still in their infancy. Neither MRC nor the Riskified survey published a figure for agent-initiated chargebacks.",
+            "quote": "real-world implementation of agentic AI payments is still in its infancy [snippet, paraphrase of summary]",
+            "url": "https://www.chargebackgurus.com/blog/payments-statistics-from-mrc-report",
+            "date": "2026",
+            "who": "Merchant Risk Council report via Chargeback Gurus",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Ravelin's 2026 survey of 1,504 fraud and payments professionals found 44% had integrated agentic commerce protocols. That shows real adoption intent among the buyers, though no dispute counts were given.",
+            "quote": "44% had already integrated agentic commerce protocols [snippet, paraphrase]",
+            "url": "https://www.chargeflow.io/blog/agentic-commerce-and-its-impact-on-fraud-and-chargebacks",
+            "date": "2026",
+            "who": "Ravelin Agentic Commerce and Fraud Report 2026 (cited in search results)",
+            "kind": "market_size"
+          },
+          {
+            "claim": "Chargebacks overall are projected to grow even without agents (Mastercard / Datos: 261M disputes in 2025 to 324M in 2028), so the dispute market is large but already well served.",
+            "quote": "global disputes rising from 261 million in 2025 to 324 million by 2028 [snippet, paraphrase]",
+            "url": "https://www.chargeflow.io/blog/agentic-commerce-and-its-impact-on-fraud-and-chargebacks",
+            "date": "2026",
+            "who": "Mastercard 2025 State of Chargebacks via Chargeflow",
+            "kind": "market_size"
+          },
+          {
+            "claim": "Merchants already pay for dispute work per win: Chargeflow takes 25% of recovered chargebacks plus $29 per deflected alert, with no setup fee. This sets the reference price for any dispute-pack product.",
+            "quote": "25% of recovered chargebacks, $29 per deflection, and $0.20 per scanned transaction [snippet]",
+            "url": "https://redo.com/resources/articles/comparisons/chargeflow-pricing",
+            "date": "2026",
+            "who": "Redo comparison article (competitor) citing Chargeflow pricing",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "Disputifier charges 20% of recovered revenue, capped at $250 per won chargeback. Justt and Chargebacks911 quote custom prices. Willingness to pay is tied to money recovered, not to evidence tooling.",
+            "quote": "20 percent of recovered revenue, capped at $250 per won chargeback [snippet, paraphrase]",
+            "url": "https://redo.com/resources/articles/comparisons/chargebacks911-pricing",
+            "date": "2026",
+            "who": "Redo comparison articles (competitor)",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "Chargebacks911 also warns that the bigger near-term merchant cost may be false declines of legitimate agents, not chargebacks. This matches the separate gap the founder's radar found about bot defenses blocking agents.",
+            "quote": "A false decline carries no chargeback, but the immediate cost in lost sales, damaged brand trust, and reduced visibility to AI agents is severe [snippet]",
+            "url": "https://thefintechtimes.com/ai-shopping-agents-trigger-false-decline-crisis-for-merchants-warns-chargebacks911/",
+            "date": "2026",
+            "who": "Chargebacks911 via The Fintech Times",
+            "kind": "counter_evidence"
+          }
+        ]
+      },
+      {
+        "key": "competitors-and-roadmaps",
+        "summary": "The pain is real and it repeats. Builders on Vapi, GHL and Make post the same failures over and over: past or wrong dates, wrong time zones, double-booking because the create-event tool does not check for conflicts, and agents saying \"you're booked\" when the booking failed. The fix practitioners keep landing on is a deterministic gate in their own code (only confirm if a booking token exists). The platforms only partly absorb this. Vapi has tool rejection plans (Aug 2025), but its own docs say confirmation has to be enforced in your own service. Retell shipped content guardrails (Feb 2026), current-time variables per time zone (Mar 2026) and a duplicate-booking-call fix (Aug 2026). Native GHL and Synthflow show no booking-specific validation, and Synthflow now sells enterprise-only from about $30k/yr. Offline QA is funded and crowded: Coval raised a $28M Series A (Jun 2026, Norwest), Hamming about $3.8-4.3M seed, Cekura $2.4M seed with public prices ($0.25 per test minute, $500/mo startup plan). That gives a real price anchor for agency budgets. Runtime action guardrails are funded only as enterprise security (Capsule $7M, Asymptote $5.5M, Kontext $4M, CodeIntegrity about $5M), not as business-rule or commitment checks for SMB voice agents. That is the whitespace. AI liability insurance now exists and is tied to certification and audit evidence: AIUC $40M Series A (Sep 2026), whose AIUC-1-backed policy ElevenLabs was first to carry (Feb 2026); Armilla offers Lloyd's-backed limits up to $25M. Signed or hash-chained agent receipts are commoditizing: open-source Signet and ActionProof, plus an IETF draft from Aug 2026. Counter-evidence: (1) builders say they can fix this with a token gate in their own code; (2) Retell and Vapi keep shipping fixes; (3) the liability cases (BMW Toronto, Priceline, Air Canada) were settled by publicity at large firms, not SMBs; (4) I found no first-person post showing an agency paying for a runtime guard; (5) agency retainers ($1-3k/mo per client) leave room, but WTP for a separate guard is unproven.",
+        "findings": [
+          {
+            "claim": "Vapi + Make + Calendly builder: the agent ignores busy times. A commenter traces the failure to treating the tool result as context instead of a hard booking gate and proposes a booking-token contract.",
+            "quote": "[snippet] main issue was that vapi ignores the already booked appointments/busy times ... prompt Vapi that it may only confirm an appointment if booking_token exists",
+            "url": "https://reddit.sentinel-team.org/posts/1tfc3ps/snapshots/2026-05-22T19%3A44%3A11.477623Z",
+            "date": "2026-05-22",
+            "who": "Reddit user (newer builder) + commenter, mirrored snapshot",
+            "kind": "pain"
+          },
+          {
+            "claim": "Vapi forum posts report agents that book on past dates or the wrong timestamps with GHL tools, and that say an appointment is booked when the CRM rejected it.",
+            "quote": "[snippet] calendar_check_availability uses time from the past ... has a very high probability of using a date from the past",
+            "url": "https://vapi.ai/community/m/1401507343144976464",
+            "date": "2025 (exact date unknown)",
+            "who": "Vapi community user building on GoHighLevel",
+            "kind": "pain"
+          },
+          {
+            "claim": "Vapi support thread: the agent says the appointment is booked when it was not.",
+            "quote": "[snippet] agent says appointment booked when it was not",
+            "url": "https://support.vapi.ai/t/27162858/agent-says-appointment-booked-when-it-was-not",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi support forum user",
+            "kind": "pain"
+          },
+          {
+            "claim": "Vapi's create-calendar-event tool has no built-in conflict detection, so the builder has to prevent double-booking.",
+            "quote": "[snippet] Google Calendar checkAvailability Tool Not Preventing Double Bookings",
+            "url": "https://support.vapi.ai/t/29168749/google-calendar-checkavailability-tool-not-preventing-double",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi support forum user / support reply",
+            "kind": "pain"
+          },
+          {
+            "claim": "Vapi's native answer is tool rejection plans (Aug 2025), but its own tools guide says prompts do not enforce approval and that ordering and confirmation must be enforced server-side. The platform leaves enforcement to the builder.",
+            "quote": "[snippet] use Assistant.hooks.do[type=tool].tool.rejectionPlan in all tool calls to prevent accidental tool execution, enforce confirmation steps",
+            "url": "https://docs.vapi.ai/tools/tool-rejection-plan",
+            "date": "2025-08 (changelog)",
+            "who": "Vapi official docs/changelog",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "Retell's 2026 changelog: content guardrails (Feb 2026), timezone-aware current-hour variables (Mar 2026), and a fix for duplicate booking tool calls (Aug 2026). Retell is absorbing date and duplicate issues piece by piece. It has no business-rule validation of commitments.",
+            "quote": "[snippet] Duplicate actions fixed: agents could fire the same tool call twice in one response, like confirming a booking. Each action now fires once per call.",
+            "url": "https://www.retellai.com/changelog",
+            "date": "2026-08-24",
+            "who": "Retell AI official changelog",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "Retell's Feb 2026 'guardrails' cover refusing topics, harmful content and jailbreaks, plus webhook hit-testing. They do not validate actions against business terms.",
+            "quote": "[snippet] Your agent can now refuse what it shouldn't engage with.",
+            "url": "https://www.retellai.com/changelog/agent-guardrails-webhook-testing-auto-failover-billing-transparency-more",
+            "date": "2026-02-10",
+            "who": "Retell AI official changelog",
+            "kind": "platform_roadmap"
+          },
+          {
+            "claim": "GHL Voice AI booking (help center): it confirms on the call and multi-calendar intent booking was added Feb 2026. I found no confirm-before-book or validation setting. A GHL feature request says the agent cannot update the contact's time zone, so confirmations go out in the business time zone.",
+            "quote": "[snippet] Agent should be able to update time zone field",
+            "url": "https://ideas.gohighlevel.com/voice-ai/p/agent-should-be-able-to-update-time-zone-field",
+            "date": "unknown (2025-2026)",
+            "who": "GoHighLevel user feature request",
+            "kind": "pain"
+          },
+          {
+            "claim": "Synthflow has gone enterprise-only, with contracts from about $30k/yr. It markets general 'guardrails' and a Simulation Test Center, but I found no booking-specific validation. This takes it away from the agency/SMB long tail.",
+            "quote": "[snippet] Synthflow now sells only an Enterprise plan with contracts starting at $30,000 annually",
+            "url": "https://www.cloudtalk.io/blog/synthflow-ai-review/",
+            "date": "2026-08-14",
+            "who": "CloudTalk review (competitor)",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Coval raised a $28M Series A led by Norwest (Base10, Twilio Ventures, YC); total about $31M; voice agent simulation and monitoring; named customers include Zoom and Deepgram.",
+            "quote": "[snippet] Coval, the evaluation platform for voice AI, today announced a $28 million Series A round of financing led by Norwest",
+            "url": "https://thenextweb.com/news/coval-28m-series-a-voice-ai-testing",
+            "date": "2026-06-24",
+            "who": "Press coverage of Coval announcement",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Cekura: $2.4M YC-led seed (Jul 2025) and public pricing of $0.25/voice test minute, $0.05/monitored call, and a $500/mo Startup plan. This is a concrete price anchor for what agencies pay for agent QA.",
+            "quote": "[snippet] $0.25 per voice testing minute, $0.05 per monitored call ... Startup plan $500/month",
+            "url": "https://www.cekura.ai/pricing",
+            "date": "2026 (pricing page)",
+            "who": "Cekura official pricing page",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "Hamming AI raised about $3.8M seed (total about $4.3M), has custom/usage pricing, gives 100 free test calls to Vapi/Retell customers, and has an agency multi-client tier.",
+            "quote": "[snippet] Hamming AI Raises $3.8M Seed Round",
+            "url": "https://hamming.ai/blog/hamming-ai-seed-funding-to-make-voice-agents-more-reliable",
+            "date": "2024-12",
+            "who": "Hamming official blog",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Runtime agent-action guardrails are funded as enterprise security, not as SMB business-rule checks: Capsule Security ($7M seed, Apr 2026, ClawGuard checkpoint before tool calls), Asymptote Labs ($5.5M), Kontext ($4M, Munich), CodeIntegrity (about $5M), Ultra Security ($10M).",
+            "quote": "[snippet] Capsule Security debuts with $7 million funding to secure AI agent behavior",
+            "url": "https://helpnetsecurity.com/2026/04/15/capsule-security-platform/",
+            "date": "2026-04-15",
+            "who": "Help Net Security",
+            "kind": "competitor"
+          },
+          {
+            "claim": "AIUC (AI agent certification + insurance) raised a $40M Series A after a $15M seed. AIUC-1 works like a SOC 2 for agents, and insurance terms reflect audit results.",
+            "quote": "[snippet] AI agent certification startup AIUC raises $40M to begin auditing frontier models",
+            "url": "https://siliconangle.com/2026/09/15/ai-agent-certification-startup-aiuc-raises-40m-to-begin-auditing-frontier-models/",
+            "date": "2026-09-15",
+            "who": "SiliconANGLE",
+            "kind": "market_size"
+          },
+          {
+            "claim": "ElevenLabs was first to put an AIUC-1-backed insurance policy in force for voice agents, built on 5,000+ adversarial simulations. Insurance for voice agents is now tied to certification and evidence.",
+            "quote": "[snippet] first company to go live with an AIUC-1-backed insurance policy covering its AI voice agents",
+            "url": "https://fintech.global/2026/02/12/elevenlabs-unveils-first-ai-insurance-for-voice-agents/",
+            "date": "2026-02-12",
+            "who": "fintech.global",
+            "kind": "competitor"
+          },
+          {
+            "claim": "Armilla AI (Lloyd's coverholder) expanded its standalone AI liability policy to limits up to $25M per organization, including agent mistakes and output liability, framed as traditional insurers retreating from AI risk.",
+            "quote": "[snippet] Armilla AI Raises Lloyd's-Backed Coverage to $25M as Traditional Insurers Retreat from AI Risk",
+            "url": "https://www.armilla.ai/resources/armilla-ai-raises-lloyds-backed-coverage-to-25m-as-traditional-insurers-retreat-from-ai-risk",
+            "date": "2026-01-23",
+            "who": "Armilla AI press release",
+            "kind": "market_size"
+          },
+          {
+            "claim": "BMW Toronto's AI agent 'Quinn' made a buyback offer about CAD 7k too high. The dealer tried to revoke it, then honored it after CBC coverage and changed policy so only humans present offers. This is a fresh 2026 case of a business bound by an agent's commitment.",
+            "quote": "[snippet] BMW Toronto is now changing its procedures so that only human employees present buyback offers",
+            "url": "https://vibegraveyard.ai/story/bmw-toronto-quinn-chatbot-buyback-offer/",
+            "date": "2026-06",
+            "who": "Secondary coverage of CBC report",
+            "kind": "pain"
+          },
+          {
+            "claim": "Priceline's 'Penny' chatbot promised a refund on a non-refundable booking, and the company paid after a consumer column. Like most 2026 cases, it was settled by publicity, not court.",
+            "quote": "[snippet] Priceline's \"Penny\" chatbot promised a refund on a non-refundable booking, then nobody wanted to pay it",
+            "url": "https://vibegraveyard.ai/story/priceline-penny-chatbot-fake-refund/",
+            "date": "2026-05",
+            "who": "Vibe Graveyard (citing Telegraph consumer column)",
+            "kind": "pain"
+          },
+          {
+            "claim": "Signed, hash-chained agent action receipts are commoditizing: an IETF Internet-Draft (Aug 2026), open-source Signet (Ed25519 per MCP tool call), the ActionProof npm package, and a solo Reddit project with RFC3161 timestamps. Vendors concede that a receipt proves integrity, not correctness.",
+            "quote": "[snippet] a record an operator can silently edit is evidence of intent, not fact",
+            "url": "https://www.ietf.org/archive/id/draft-sahu-agent-action-receipts-00.html",
+            "date": "2026-08",
+            "who": "IETF individual draft (Sahu)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Agency pricing guides put voice agent management at $1k-3k/mo per client plus a $3k-8k setup fee, or a $300-500/mo add-on to existing retainers. That leaves headroom for a per-client guard priced around $50-300/mo (vendor-sourced, not transaction data).",
+            "quote": "[snippet] AI voice agent setup at $3,000-$8,000 and monthly management at $1,000-$3,000",
+            "url": "https://dev.to/scalelogix_ai/how-to-price-ai-agency-services-in-2026-a-complete-guide-for-operators-5f26",
+            "date": "2026",
+            "who": "Agency operator guide (DEV Community)",
+            "kind": "willingness_to_pay"
+          },
+          {
+            "claim": "Vendor framing (AInora) of the root cause: a booking rule written as a sentence in a prompt instead of encoded as something the software must satisfy. This is the pitch for a deterministic commitment layer, and it comes from a vertical receptionist vendor, which shows verticals are absorbing it.",
+            "quote": "[snippet] Nothing outside the model checked the booking against the rule on that call.",
+            "url": "https://ainora.lt/blog/why-ai-phone-agents-book-the-wrong-appointment",
+            "date": "2026",
+            "who": "AInora (Lithuanian AI receptionist vendor) blog",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Builders report fixing double-booking themselves with a deterministic check. The pain is solvable in-house by competent builders, which weakens WTP for a separate tool among technical agencies.",
+            "quote": "[snippet] \"Smart\" booking bot started double-booking appointments because it got creative with availability logic",
+            "url": "https://reddit.sentinel-team.org/posts/1s8n6i0/snapshots/2026-04-04T01%3A38%3A01.387914Z",
+            "date": "2026-04-04",
+            "who": "Reddit builder (mirrored snapshot)",
+            "kind": "counter_evidence"
+          },
+          {
+            "claim": "Reddit threads about voice QA tools are mostly founders promoting them. I found no independent first-person reviews of paying for Cekura/Hamming, and none of paying for a runtime commitment guard.",
+            "quote": "[snippet] The Reddit hits were Cekura's founders describing how they built the tool for healthcare voice agents.",
+            "url": "https://redlib.ssps.io/r/GrowthHacking/comments/1lk4cfq/we_were_qaing_ai_agents_like_it_was_2005_finally",
+            "date": "2025",
+            "who": "Cekura founders on Reddit (search summary)",
+            "kind": "counter_evidence"
+          }
+        ]
+      }
+    ],
+    "designs": [
+      {
+        "lens": "fastest-revenue",
+        "name": "BookedRight: a commitment gate and client proof report for voice-agent agencies (snuepi rework)",
+        "one_liner": "One drop-in tool for Vapi, Retell, GHL and n8n agents that only lets the agent say \"you're booked\" or quote a price after snuepi has checked it against the client's real calendar and price list. Each week it also gives the agency a white-label, signed report of every booking and quote, which the agency forwards to its client to show the AI is working.",
+        "buyer": "The owner or founder of a small AI voice/automation agency (1-15 people) running 5-50 receptionist clients on Vapi, Retell, GHL or n8n. They charge $297-$997 a month per client (UK agencies £750-£3,000) plus setup. Start with English-speaking agencies in the UK, Ireland, the Nordics, DACH and the Benelux, then the US. A second buyer comes later: the white-label voice platforms these agencies sit on (Trillet, MyVoiceAIConnect, RingLogix-type MSP resellers).",
+        "user": "Day to day: the agency's builder or tech, who wires one tool or webhook into each client assistant and maintains each client's price list and rules. Read-only: the end client (dental clinic, salon, trades business), who gets the weekly proof report and same-day alerts.",
+        "problem_evidence": "The pain is evidenced but not yet proven to drive churn. Strongest signals:\n(1) Builders keep hitting the same commitment failures. Agents book with the wrong year (Vapi community m/1379750706482909185). UTC vs local time makes booked slots look free (support.vapi.ai 33208523). Double-booking (vapi community m/1376589305715359877; support.vapi.ai 29168749: the create-event tool has no conflict check). \"Monday\" resolves one to two days off (m/1375475162551554108). The agent says \"booked\" when the webhook failed (support.vapi.ai 27162858). Retell agents loop on check_availability (community.retellai.com 3496) and quote hallucinated prices (community.retellai.com 3393). n8n agents book wrong dates (community.n8n.io 259554). A Skool AI Automation Society builder asks what production architecture handles reschedules (27 comments).\n(2) Platforms say the fix belongs outside the model. Vapi docs: \"Prompts guide the model, but they don't enforce approval... enforce it in your service.\" Builders hand-roll a booking_token gate (Reddit snapshot 1tfc3ps). AInora: \"Nothing outside the model checked the booking against the rule.\"\n(3) The failures are invisible and drive churn through how clients perceive the AI. Roark: a wrong-timezone booking \"can pass as a success... until the patient complains weeks later\". Trillet: 70-80% of agency cancellations are \"perception churn\". MyVoiceAIConnect (2026-11-08): clients who can see a booking dashboard cancel less because the AI \"doesn't feel like a black box\". This is why the product sells proof to the agency's client, not only prevention.\n(4) Price anchors: Cekura charges $500/mo (Startup) or $0.05 per monitored call. Agency guides price management at $1-3k per client per month or a $300-500 add-on, and suggest roughly $50-300 per client for a guard. Platform cost of about $0.10/min leaves margin.\n(5) Invented prices on SMB lines are real: an AI receptionist quoted £89 for a boiler service (Lilach Bullock), a UK shop's chatbot gave an 80% discount on an £8k order, and BMW Toronto lost about C$5-7k.\nWhat is missing: no first-person post from an agency saying it lost a client over a wrong booking, and no proof yet of willingness to pay for a runtime guard. The 25 calls must close that gap.",
+        "product": "v1 is deliberately narrow. Booking plus price commitments, voice first, three integration paths.\n\n1. Commitment tool (runtime gate). Vapi custom tools, a Retell custom function, a GHL Voice AI/workflow webhook and an n8n node all call the same small API:\n- resolve_slot: takes natural-language date and time plus the client's time zone and today's date. It rejects past dates and weekday/date mismatches, is DST-safe, and returns a normalized slot plus a read-back sentence.\n- check_and_hold: atomic free/busy plus a hold, against Google, Microsoft or Cal.com/Calendly/Acuity/Square/SimplyBook.\n- commit_booking: writes the event and returns a commitment_id only when the write succeeded.\n- quote: returns only prices and discounts from the client's price sheet (CSV or website import) within a max-discount rule, otherwise \"a human will confirm\".\nThe LLM never computes dates or prices. A drop-in prompt snippet plus a tool rejection plan forbids confirmation without a commitment_id.\n\n2. Post-call reconciliation. An end-of-call webhook ingests the transcript. An LLM-plus-rules pass finds every claimed booking or price and checks it against the commitment log and calendar. Mismatches (said booked but no event, wrong time, price not on the sheet, invented discount) trigger a same-day alert to the agency (Slack or email).\n\n3. Weekly proof report (white-label). A per-client page or PDF in the agency's branding: calls handled, bookings made and verified in the calendar, quotes given and matched to the price sheet, issues caught, revenue booked. Each line is backed by snuepi's signed, hash-chained record, so \"the AI booked it, here is the proof\" holds up in a client dispute.\n\n4. Free \"Booking Stress Test\" (the sales hook). Snuepi's hostile-agent simulator places about 50 adversarial calls or chats against an agency's live agent: relative dates, DST week, double-booking attempts, discount haggling, failed-webhook scenarios. It returns a scored failure report.\n\nOut of v1: payments and deposits, own phone numbers, chat widget, identity, multi-language beyond EN plus one, insurer exports.",
+        "distribution": "Founder-led, inside the communities where agencies already gather and complain:\n- Skool groups (AI Automation Society, voice-agency communities such as Pickup, offer-sharing groups), the Vapi and Retell Discords and forums, the n8n community and the GHL Facebook groups.\n- Tactic: answer the exact threads cited above with a working fix plus \"free stress test of your agent\", then convert stress-test results into pilots. Use the existing snuepi-signals collector, retargeted at those forums, to surface fresh \"agent booked wrong\" threads daily.\n- Within 2 months: list in the Vapi and Retell tool/template galleries and publish an n8n community node plus a GHL marketplace webhook app (low-effort listings).\n- Within 6 months: partner with one or two white-label agency platforms and voice-QA-adjacent educators (Skool course owners take an affiliate cut of 20-30% recurring).\n- The proof report itself spreads the product. Every end client sees \"verified by snuepi\" in small print, and agencies show it in sales calls as a reliability guarantee.",
+        "pricing": "Priced per client agent, sized to fit inside a $500-1,000 agency retainer and below Cekura's $500 plan:\n- Starter: $49 per client agent per month (gate plus reconciliation, up to 500 calls).\n- Agency: $299/mo for up to 8 client agents, then $35 each, including the white-label proof report.\n- Overage: $0.03 per reconciled call above caps.\n- Paid pilot, the Gate B target: €750 (about $800) for 60 days, covering up to 5 client agents, done-with-you setup and stress tests on all 5. The fee is credited against the first 3 months if they convert, with a signed one-page order form and a card on file through Stripe.\nAgencies are expected to resell this as a \"no-double-booking, no-rogue-price guarantee\" line item at $100-200 per client, which is the margin story for the buyer.",
+        "moat": "Honest assessment: medium, and it compounds slowly.\nWhy platforms do not fully absorb it:\n(a) Agencies are multi-platform: Vapi, Retell, GHL and n8n on different clients. One neutral layer with one client rule sheet beats four native partial fixes. Retell fixes slices (time variables, duplicate calls) and Vapi explicitly pushes enforcement to \"your service\".\n(b) The hard part is SMB-specific: price lists, discount authority, services, durations, buffers, opening hours, holidays, and write-safe connectors to SMB booking systems (Acuity, Square, SimplyBook, Cal.com and others). Voice platforms do not want to own SMB business rules and booking-system integrations; that is where snuepi already has 20 connectors and a terms layer.\n(c) The proof report sits in the agency-to-client relationship. Once an agency's clients receive it weekly, ripping it out is visible, which creates retention lock-in that has nothing to do with the gate.\n\nWhat compounds:\n- A cross-agency corpus of failure modes and stress-test scenarios that improves the gate and the free test.\n- A per-client terms and price sheet that becomes the system of record for \"what the AI may promise\".\n- The signed commitment history, which later becomes insurer-grade evidence (Armilla, Testudo and AIUC require measured performance; parametric cover needs verifiable logs).\n\nReal threats:\n- GHL claims native double-booking prevention, so GHL-only shops are a weaker segment.\n- A strong builder can hand-roll a booking_token gate.\n- Cekura or Hamming could add a runtime mode.\nThe defence is speed into agencies plus the reporting and price layer, not the date resolver alone.",
+        "snuepi_reuse": "Roughly 65-75% of v1 already exists.\n- Booking engine: free-time lookup, holds, confirm, cancel/move, opening hours, holidays and DST-safe time zones. This becomes resolve_slot, check_and_hold and commit_booking.\n- Reply guard and post-guard: the logic that strips false \"you're booked\", promised discounts and outside links, repurposed into transcript reconciliation rules.\n- Terms layer: price floors, deterministic negotiation and discount rules and the 9 sector defaults. Becomes the client price and discount sheet.\n- One-approval activation: website reading of services, prices, hours and booking system, for 10-minute client onboarding.\n- Calendar and booking connectors: Google, Microsoft, iCal, Cal.com, Calendly, Acuity, Square, SimplyBook, Setmore. All are tested only against imitations, so they must be validated live first. Hourly polling must be replaced by a live free/busy check at hold time.\n- Signed hash-chained record and per-booking evidence bundle. Backs the proof report.\n- Hostile-agent simulator and booking simulation, repurposed as the free Booking Stress Test.\n- The MCP server and REST/OpenAPI collapse to about 6 endpoints.\n- snuepi-signals, retargeted to agency forums.\n- Fly/SQLite/Litestream infra and the EU LLM.\nNew code needed: Vapi/Retell/GHL/n8n adapters and tool templates, the transcript-ingest webhook, the white-label report and an agency multi-client dashboard (thin), plus 2FA and roles. Estimate 3-5k LOC.",
+        "retire": "Drop the planned chargeback dispute-pack pivot. The evidence shows no observed agent-dispute losses, budgets paid per recovered dispute, and Chargebacks911, Chargeflow and Visa already in the lane.\n\nRetire or freeze:\n- Agent payments: ACP, UCP, Stripe shared payment tokens, AP2 mandates, OAuth customer mandates and spend limits.\n- A2A and the per-business agent cards.\n- Identity: Web Bot Auth verification, fake-brand detection, KYA/KYB, trust levels, outside identity tokens and the fraud score.\n- Own phone doors (Twilio, Telnyx, SignalWire, Azure speech). Agencies bring Vapi or Retell.\n- The email door, public booking page and website widget.\n- Deposits, no-show fees and Stripe Connect (park for v2).\n- The goods catalogue/ERP, buy, B2B quotes, case and consultation flows.\n- Phrase-matching guardrails for regulated work, which over-refuse.\n- The 48-business world simulator, the free terms registry and the \"Agent Terms v1\" standard push (keep the schema internally).\n- Restaurant connectors (resOS, Formitable, TheFork, OpenTable) and the partner-gated Phorest, Mindbody and Vagaro (revisit on demand).\n- 10 of the 12 languages.\n- Norway leftovers.\nTarget: cut 444 routes to fewer than 40.",
+        "v1_build_weeks": 4,
+        "validation_plan": "This is sell-first and stays inside the current gates. The only build before Gate B is a 1-week demo harness: one Vapi assistant and one Retell agent wired to the existing engine through custom tools, plus the stress-test runner pointed at an external agent's phone number or web call. That is a demo, not the product.\n\nWeeks 1-4 (to 8 Dec, Gate A: 25 calls):\n- Build a list of 120 agencies from Skool member posts, Vapi and Retell community answerers, n8n \"AI receptionist\" workflow sellers, and LinkedIn \"AI voice agency\" in the UK, Ireland, DACH, the Nordics and the Netherlands.\n- Daily: reply helpfully to 3-5 live \"agent booked wrong / said booked when it wasn't / invented price\" threads with the fix and an offer of a free stress test.\n- DM and email at 10-15 a day: \"I'll run 50 adversarial booking calls against one of your client agents and send you the failure report, free, 48h.\"\n- Each call follows a fixed script:\n  (1) Last 90 days: any wrong booking, double-book, false \"booked\" or invented price at a client, and what happened (refund, apology, churn)?\n  (2) How do you prove to clients that the AI works today?\n  (3) What do you pay Cekura, Hamming or anyone for QA?\n  (4) Would you pay $49 per client per month for a gate plus a proof report, and who signs?\n  Log every answer verbatim.\n- Gate A target: 25 calls and at least 8 stress tests run on live agents.\n\nWeeks 5-8 (9 Dec to ~8 Jan, Gate B):\n- Send each stress-tested agency its scored report, framed as \"X% of hostile calls produced a wrong commitment; here is the fix live on your agent in one afternoon\".\n- Offer the €750, 60-day, 5-agent pilot with a one-page order form and card collected via a Stripe payment link. Use test-to-live keys only for this invoice.\n- Ask the 3 warmest agencies for a pilot. Offer founder-installed setup over Christmas, a quiet period for agencies, so setup costs them nothing.\n- Gate B pass: at least 1 signed and paid pilot (target 2-3), plus at least 1 end client who agreed to receive the proof report.\n- Build v1 in the 4 weeks after the first signature, on the pilot's actual platform first.",
+        "kill_criteria": "Kill or re-pivot if any of these hold by 8 Jan 2027:\n- Fewer than 8 of 25 agency calls report a concrete wrong-commitment incident at a client in the last 90 days, or most say \"we already fixed it with a token gate or GHL native\".\n- Stress tests on at least 8 live agents find wrong commitments in under 5% of adversarial calls on average. That would mean the pain is mostly solved by platforms and prompts.\n- Zero agencies pay the €750 pilot after at least 10 stress-test reports are delivered, or the stated willingness to pay clusters below $20 per client per month (the RingLogix MSP anchor).\n- Agencies want only the proof report and not the gate (and vice versa). In that case narrow to that half rather than kill, but only if someone pays for it.\n- Within the pilot: fewer than 2 caught mismatches per client per month, or the pilot agency does not convert at the 60-day mark.",
+        "path_to_scale": "Path in four stages:\n1. Agency wedge, 2027. Target 100 agencies with an average of 8 client agents at about $40, roughly $400k ARR. That is a solid seed story, not venture scale by itself.\n2. Embed in white-label voice platforms and MSP telecom resellers: Trillet-type platforms, RingLogix-type MSPs, and UCaaS add-ons. Price per agent at volume. This reaches tens of thousands of SMB agents with snuepi as the \"verified commitments\" layer.\n3. Widen the surfaces and the commitments. Cover chat, SMS and email agents, and the vertical receptionist vendors who lack it. Expand from bookings and prices to deposits and no-show fees (the parked Stripe Connect code), cancellations, refunds and policy promises. Snuepi becomes the system of record for \"what any AI may promise on behalf of this business\". The terms layer and connectors are the asset.\n4. Monetize the evidence. The signed commitment history plus measured error rates become the data feed that AI-liability insurers and MGAs need for underwriting and parametric triggers (Armilla, Testudo, HSB via carriers, AIUC-1 audits), alongside an EU compliance angle: OLG Hamm attributes chatbot statements to the operator, and the Digital Fairness Act is coming. Insurers or agencies could subsidise or require the layer, a premium-credit distribution loop.\n\nVenture outcome: the trust and commitment layer between every SMB and the AI agents speaking for it. The open question is whether stages 2-4 materialise. Stage 1 alone is a good small business.",
+        "biggest_risk": "Willingness to pay for a separate reliability layer is unproven. Builders treat these failures as debugging problems they can fix with a token gate and prompt tricks. Platforms (Retell, Vapi, GHL native) keep chipping away at the date and double-booking cases. Agencies attribute churn to \"perception\" rather than wrong bookings. So the gate alone may be a feature agencies won't pay for.\n\nMitigations:\n- Lead with the client-facing proof report, which targets the stated cause of churn, while the gate keeps the report credible.\n- Price low enough to resell.\n- The free stress test turns abstract risk into a number for the agency's own agent.\n- Hold the kill criteria strictly.\n\nSecondary risks:\n- Snuepi's connectors have never touched a real calendar or booking system. Validate live early.\n- Agency segments are crowded with low-margin MSP pricing ($75-150 per agent) that compresses the price."
+      },
+      {
+        "lens": "max-reuse",
+        "name": "snuepi Commit: a commitment gate and audit for agency-built voice and chat agents",
+        "one_liner": "Your clients' AI receptionist can only say \"you're booked\" or quote a price when snuepi has confirmed it against the live calendar and the business's signed price list. Every commitment gets a receipt the agency can show its client.",
+        "buyer": "The owner or founder of a voice/chat AI agency (2-15 people, 5-50 SMB clients) building receptionists on Vapi, Retell, GHL or n8n. They charge clients $297-$997/mo or £750-£3,000/mo and own the client relationship and the blame. Start with UK, DACH and Nordic agencies, then English-speaking agencies generally. Second buyer, later: white-label receptionist platforms and MSP voice resellers (OEM).",
+        "user": "The agency's builder or engineer, who swaps the agent's booking and pricing tools for snuepi endpoints and reads mismatch alerts. A secondary user, view-only, is the agency's SMB client (clinic, salon, trades): they get a white-label weekly \"what your AI committed to\" report.",
+        "problem_evidence": "Builders report the pain over and over: wrong year or date (vapi.ai/community/m/1379750706482909185), relative dates 1-2 days off (m/1375475162551554108), UTC/Eastern mismatch reporting booked slots as free (support.vapi.ai/t/33208523), double-booking (m/1376589305715359877; support.vapi.ai/t/29168749), and \"you're booked\" after the webhook failed (support.vapi.ai/t/27162858). Retell agents invent prices (community.retellai.com/t/3393), hit \"Time range is in the past\", and loop on check_availability (t/3496, Aug 2026). The same failures show up on n8n and Skool (27-comment reschedule/cancel thread). Vapi's own docs say \"Prompts guide the model, but they don't enforce approval... enforce it in your service\" (docs.vapi.ai/gpt-live/tools). Builders hand-roll a booking_token gate (support.vapi.ai/t/22800021; Reddit 2026-05-22). Radar TRUE GAP 26.8 scores pain 4, frequency 4, WTP 3. Its counter-check found that even ElevenLabs Guardrails 2.0 is not grounded in live calendar or price data, runs only inside ElevenLabs, and keeps no record reconciling what was said with what was booked. Liability is moving toward the operator: OLG Hamm, 12 May 2026, attributes chatbot statements to the business regardless of disclaimers, and IHKs warn about Abmahnungen. There are invented-price cases at SMB level (£89 boiler quote; UK 80% discount on £8k). Price anchors: Cekura $500/mo Startup or $0.05 per monitored call; agency retainers $497-$997/mo; agency pricing guides show $300-500/mo add-ons. Honest caveats: (1) I found no first-person post from an agency that lost a client over a wrong booking. Vendors put 70-80% of churn down to \"perception\", though they also say clients who can see a booking dashboard cancel less, which supports the client-report piece. (2) WTP for a runtime gate is inferred, not observed. (3) Almost all of this is search snippets.",
+        "product": "v1 has three parts and nothing else.\n(1) GATED TOOLS. These are hosted tool endpoints the agent calls instead of raw calendar tools: resolve_date, check_availability, book, reschedule, cancel and quote. They ship as importable tool JSON for Vapi custom tools and Retell custom functions, a GHL workflow webhook, and an n8n node/HTTP template. resolve_date turns \"next Monday at 3\" into an ISO time with an offset in the business's time zone, server-side and DST-safe, and returns a read-back sentence. book does a fresh free/busy check at write time, not the hourly poll, then enforces opening hours, holidays, buffers and services from the business's terms. It returns a confirmation_token only after the calendar write succeeds. If the write fails it returns a scripted \"I couldn't confirm that, let me take your details\" line. quote returns only prices and discounts from the signed per-client price list. Anything outside it returns \"a team member will confirm the price\", and the model never computes a price.\n(2) END-OF-CALL RECONCILIATION. The Vapi/Retell end-of-call webhook (or an hourly log pull) runs the reply guard over the transcript. It flags any \"you're booked / confirmed\" with no matching token, any spoken date or time that differs from the booked one, any price or discount not on the list, and any promise outside terms. Alerts go to the agency by email or Slack within minutes. A 30-day backfill of this same pass is the free \"Commitment Audit\" used for selling.\n(3) RECEIPTS. Each gated commitment is written to the signed hash-chained record (what was offered, under which terms version, what was booked). A white-label weekly client report shows bookings made, commitments blocked or corrected, and zero unverified promises. An evidence export is available per booking.\nv1 calendars: Google, Microsoft, Cal.com, plus the GHL calendar API (new). EU hosting. Multi-client agency dashboard with simple roles and 2FA.",
+        "distribution": "1) Go direct to the exact people who posted the pain. Repurpose the snuepi-signals collector to Vapi/Retell/n8n community, Skool AI Automation Society and GHL Ideas threads about wrong dates, double-booking or invented prices, and offer each poster a free 30-day Commitment Audit of their real call logs (read-only API key). 2) Skool agency communities: a free \"booking-safe receptionist\" tool template and teardown posts with real audit stats. 3) Integration listings: the GHL Marketplace app, an n8n community node, and a listing in the Vapi/Retell partner directories and template galleries. 4) Later, partnerships with white-label platforms (Trillet-style, MSP resellers such as RingLogix) who resell to hundreds of agencies, and with QA vendors (Cekura/Hamming find failures offline, snuepi blocks them live).",
+        "pricing": "Per gated client agent: EUR 39/mo (up to 500 gated calls) or EUR 79/mo (unlimited calls, white-label client report, evidence export). Agency minimum EUR 149/mo. Overage EUR 0.04 per gated call, which is under Cekura's $0.05 per monitored call. Commitment Audit: free once, then EUR 290 per audit for agencies onboarding new clients. Pilot offer for Gate B: EUR 490 for 60 days covering up to 5 client agents, credited against the first year. The logic: it is 4-15% of a $497-$997 retainer, so the agency marks it up or bundles it as \"booking guarantee\". It stays below Cekura's $500 Startup plan for small agencies. The low end (MSP $75-150/agent) is served later through OEM per-call pricing, not this list price.",
+        "moat": "Honest view: the moat is moderate, and the absorption risk is about 3/5. Retell has shipped current-time variables and a duplicate-call fix, GHL claims native double-booking prevention, and ElevenLabs has runtime guardrails. Why platforms do not fully absorb it: (a) Vapi deliberately pushes enforcement to \"your service\". Platforms sell minutes and model flexibility, not business-rule correctness, and they will not maintain each SMB's price list, deposit rules and terms. (b) Agencies run several platforms, and snuepi is one gate and one terms file across Vapi, Retell, GHL and n8n, which no single platform will build. (c) Grounding is the hard part, and snuepi already has it tested: live free/busy, DST-safe relative dates, opening hours and holidays, and deterministic price and discount rules. Content guardrails like ElevenLabs and Retell's Feb 2026 release do not check live data. (d) Reconciliation needs both the transcript and the system of record, and only a layer that sits on the tool path sees both. What compounds: a per-client structured terms and price file that agencies do not want to re-enter elsewhere (switching cost); a cross-platform library of failure patterns from every audited and reconciled call, which improves the guard and becomes sellable test suites; and a signed commitment record. As OLG Hamm-style liability and performance-triggered insurance (Armilla, Testudo, AIUC-1, Munich Re aiSure) need measured, verifiable records, that history becomes underwriting data platforms do not hold neutrally. Signed receipts alone are commoditizing (IETF draft, Signet), so the record is a supporting asset, not the moat.",
+        "snuepi_reuse": "Roughly 60-70% of v1 code already exists and is tested. Booking engine: free-time lookup, book, cancel, move, opening hours, holidays and DST-safe zones are the core of the gated tools, about 30% of v1. Terms layer: price floors, discount/negotiation rules computed deterministically, deposits and request types, plus the 9 sector defaults to seed client setup, about 10%. Reply guard post-filter: false \"you're booked\", promised discounts and outside links, in 12 languages, retargeted to transcript reconciliation, about 10%. Connectors: Google, Microsoft and Cal.com calendar plus write-back queue, about 8% (add GHL calendar and a fresh free/busy check at write time instead of the hourly poll). Signed hash-chained record, Merkle root, verifier and per-booking evidence bundle, about 7%. One-approval activation: website reading for services, prices and hours to draft each client's price list, about 5%. Hostile-agent and booking simulators repurposed as pre-launch scenario tests, about 3%. snuepi-signals as the lead engine for validation. New work: Vapi/Retell/GHL/n8n tool adapters and webhooks, transcript ingestion, agency multi-tenant dashboard with roles and 2FA, white-label report.",
+        "retire": "Freeze, don't delete: tag the repo so the inbound-agent vision can be revived when that traffic exists. Retire: the planned chargeback dispute-pack pivot (no observed losses, incumbents such as Chargebacks911 are already selling indemnity and permission trails, and spend is a % of recovered disputes); all public \"doors\" (phone via Twilio/Telnyx/SignalWire, email door, booking page, website widget, agent card); MCP 31-tool marketplace surface, A2A, ACP, UCP, OAuth customer mandates; money layer (Stripe Connect deposits, SPT, AP2) except for keeping deposit rules as data in terms; identity stack (Web Bot Auth, fake-brand detection, KYA/KYB, Visa/Skyfire tokens, fraud score); goods/products/B2B quotes/cases/consultations flows; phrase-matching regulated guardrails, which over-refuse; restaurant and appointment-system connectors that need partner approval or polling (Phorest, Mindbody, Vagaro, TheFork, OpenTable, resOS, Formitable, Square, Acuity, SimplyBook, Calendly, Setmore, ERP) until a paying agency asks; the 48-business world simulator; public terms registry and \"Agent Terms v1\" standard work; Norway leftovers. Target: cut from 444 routes to about 40.",
+        "v1_build_weeks": 6,
+        "validation_plan": "Rule: sell before building. The only pre-sale build is the Commitment Audit, which is the existing reply guard plus Vapi/Retell call-log pull plus calendar compare, about 5 working days, run by hand.\nWeeks of 9-16 Nov: retarget snuepi-signals to the pain threads above. Build a list of 120 agencies (posters in Vapi/Retell/n8n forums, Skool AI Automation Society members selling receptionists, UK/DACH/Nordic agencies on GHL). Send 60 personal messages offering a free 30-day audit of real call logs. Write a one-page \"booking-safe\" teardown with the Vapi docs quote.\nBy 8 Dec (Gate A, 25 calls): 25 discovery calls with agency owners. Ask Mom-Test questions about the last wrong booking or price, what it cost (refund, client complaint, lost retainer), the current DIY fix (token gate?), and which platforms they use. Ask for log access on the call. Target: 10 audits run on real logs by 12 Dec.\nBy 19 Dec: deliver each audit as a 1-page report: X false confirmations, Y date/time mismatches, Z off-list prices per 100 booking calls, with call links. Present it live and pitch the EUR 490 / 60-day / 5-client pilot.\nBy 8 Jan (Gate B): at least 1 signed and paid pilot (target 3), with an invoice issued. Run the pilot first as a concierge: gate one client agent per agency using the existing engine wired by hand to their tool calls, so no new build until payment.\nLeading metrics to log: share of agencies whose logs show at least 1 material wrong commitment per 200 booking calls; how many already have a DIY gate; stated price ceiling per client.",
+        "kill_criteria": "Kill or re-pivot at Gate B if any of these holds. (1) Fewer than 3 of the first 8 real-log audits find at least 1 material wrong commitment (false confirmation, wrong date/time or off-list price) per 200 booking calls, meaning the pain is rare in production. (2) More than half of interviewed agencies already run a working DIY token or conflict gate and say they would not pay to replace it. (3) Fewer than 5 of 25 calls name a price of EUR 39 or more per client per month, or no signed paid pilot exists by 8 Jan 2027. (4) Before Gate B, Vapi or Retell ships a native server-side confirm/conflict/price gate grounded in live calendar and price-list data that covers more than 70% of the audit findings. Partial signal: if agencies want only the audit or monitoring and not the runtime gate, narrow to a reconciliation monitor priced against Cekura, and decide by mid-January.",
+        "path_to_scale": "Stage 1 (2027): an agency gate on Vapi/Retell/GHL/n8n, aiming for 100 agencies x 10 client agents x about EUR 60 = about EUR 0.7M ARR. Stage 2: OEM per-call pricing to white-label receptionist platforms and MSP voice resellers, plus the GHL Marketplace. One integration reaches thousands of agents. Expand the commitments covered beyond bookings to deposits, refunds, discounts, quotes and order changes for chat and email agents (the same terms engine). Stage 3: become the system of record for what an SMB's AI is allowed to commit to and what it actually committed to, across every agent vendor. Sell that history as audit and underwriting data to AI-liability insurers and MGAs (Armilla, Testudo, HSB-via-carriers, AIUC-1 certification), possibly with lower premiums for gated agents and a compliance pack for EU operators under OLG Hamm-style liability and the Digital Fairness Act. Stage 4: when third-party consumer agents start calling and booking SMBs in volume, the same per-business terms, gated tools and record serve them too, which is the original snuepi vision now arriving with an installed base instead of zero traffic.",
+        "biggest_risk": "The pain is real for builders but may not translate into a separate budget. Competent agencies fix it with a cheap DIY token/conflict gate or a prompt fix. Platforms (Retell changelog, GHL native double-booking prevention, ElevenLabs Guardrails) keep absorbing the obvious pieces. Agency churn is driven mostly by perceived ROI, not wrong commitments. That could leave snuepi as a nice-to-have at the point where agencies sell at the $75-150/agent low end. The audit-first validation exists to test exactly this on real logs before any build. A secondary risk is market fit for a Europe-first solo founder, because most of these agencies are US-based and EU data residency is not their buying criterion."
+      },
+      {
+        "lens": "deepest-moat",
+        "name": "snuepi Commit: an independent commitment gate and ledger for customer-facing AI agents",
+        "one_liner": "One drop-in tool URL for Vapi, Retell, GHL and n8n agents. It checks every date, slot, price, discount and policy promise against the business's live calendar and signed terms before the agent says it. It then reconciles what the agent said against what was actually written, and gives the agency a monthly Commitment Accuracy Report to hand to each client.",
+        "buyer": "The founder or owner of a voice/chat AI agency (2-20 staff) that resells AI receptionists to SMBs at $297-$997+/mo per client (UK/US Skool agencies charge GBP 750-3,000/mo). Start with EU and UK agencies (Germany, Netherlands, Nordics, UK), where OLG Hamm (May 2026) and the IHK warnings create an operator-liability story, then move to US agencies. A secondary buyer for data partnerships, not v1 revenue, is the underwriting lead at an AI-liability MGA or insurer (Armilla, Testudo, AIUC, Mosaic/aiSure).",
+        "user": "Two users. The agency builder who wires the tool into each client's agent and watches the mismatch feed. The SMB owner (dental clinic, salon, trades, clinic, restaurant) who gets the monthly report and the owner alerts ('your agent quoted EUR 89, your list says EUR 120: corrected/escalated').",
+        "problem_evidence": "Pain is strong and repeated, but at the builder level. (1) False confirmation. Vapi support 'agent says appointment booked when it was not' (support.vapi.ai/t/27162858). The webhook failed but the agent 'thinks it has successfully booked'. (2) Wrong or past dates and time zones. 'assistant had the correct current time, but the booking request still used a 2024 timestamp' (vapi.ai/community/m/1379750706482909185). The calendar tool returned UTC while the agent reasoned in Eastern and 'reported booked slots as free' (support.vapi.ai/t/33208523). 'Monday' was resolved 1-2 days off (vapi.ai/community/m/1375475162551554108). Retell's own guide calls 'Time range is in the past' a common error. n8n dental workflows book wrong days (community.n8n.io/t/259554). (3) Double booking. Vapi's create-event tool has no conflict detection (support.vapi.ai/t/29168749). Skool and GHL Ideas requests ask to 'recognize existing appointments' (highlevel.canny.io). (4) Invented prices. Retell: 'Agent does not check KB for prices... hallucination close to real thing' (community.retellai.com/t/3393). An SMB AI receptionist quoted GBP 89 when that was not the owner's price (lilachbullock.com). (5) Platforms concede the architecture. Vapi docs say 'Prompts guide the model, but they don't enforce approval... enforce it in your service' (docs.vapi.ai/gpt-live/tools). Builders hand-roll 'confirm only when booking_token exists' gates (reddit snapshot 1tfc3ps; support.vapi.ai/t/22800021). (6) Liability is moving to the operator: Moffatt v Air Canada, BMW Toronto (about C$5-7k honoured, 2026-06), Priceline Penny, OLG Hamm 4 UKl 3/25 (disclaimers did not protect the operator), and German IHK Abmahnung warnings. Honoured promises are generally uninsurable (ISO GenAI exclusions, Jan 2026). (7) Willingness to pay is indirect. Agencies already pay for QA: Cekura charges $0.05/monitored call or $500/mo, and Hamming has an agency tier. Agency guides leave $300-500/mo add-on headroom per client. Counter-evidence I take seriously: (a) I found no first-person case of an agency losing a client over a wrong commitment, and vendors attribute 70-80% of churn to 'perception' and unclear ROI (Trillet). (b) Competent builders fix double-booking in-house. (c) GHL claims native double-booking prevention, and Retell shipped time variables (Mar 2026) and a duplicate-booking fix (Aug 2026). The design answers (a) by selling visibility. The Accuracy Report is the anti-perception-churn artefact: MyVoiceAIConnect says 'clients who can see their booking dashboard are much less likely to cancel'. It answers (b) and (c) by putting most of the value in prices, discounts, policy and reconciliation, which no platform does, not in the date-bug slice.",
+        "product": "Three parts, nothing else. (A) Commitment tools. One hosted endpoint per client, exposed as Vapi/Retell custom tools, an MCP server, an n8n/Make HTTP node and a GHL custom webhook action. resolve_time(phrase, caller_tz) returns a validated ISO slot plus a read-back sentence. It uses the business time zone, today's date, opening hours, holidays and DST, and rejects past dates and weekday/date mismatches. check_and_hold(slot) runs live free/busy against Google, Microsoft, Cal.com or the GHL calendar and returns a short-lived hold token. book(hold_token) returns a booking_token and the exact 'say this' confirmation only after the calendar write is verified. quote(service) and offer(discount) return the price from the business's signed price list and a discount only within its configured authority; anything else returns 'escalate to human'. reschedule/cancel cover the Skool-reported gap. (B) Reconciliation. After each call, an end-of-call-report webhook (Vapi/Retell transcript plus tool log) runs the existing post-guard over the transcript. It flags 'said booked without a booking_token', 'stated a price or discount not issued by quote/offer', 'stated a date or time different from the ledger' and 'unhandled reschedule'. It alerts the agency in Slack or email within a minute and, if configured, the owner. Real-time voice blocking is explicitly out of scope for v1. (C) Ledger and report. Every issued commitment and every mismatch is a signed, hash-chained entry with the price-list and terms version hash. The per-client dashboard shows commitments made, verified, flagged and corrected, and a monthly white-label PDF Commitment Accuracy Report goes to the SMB. Setup reuses the website reader to propose the price list, hours and discount rules for one-click approval. A 'commitment audit' mode runs (B) offline over 50-200 historical transcripts plus a calendar export. This is the sales hook and works before anything is installed.",
+        "distribution": "1) Concierge 'free commitment audit' offered in Skool communities (AI Automation Society, voice-agency groups), Vapi and Retell Discord/forums, and the n8n community. Reply directly to the threads cited above with a working resolver plus the audit offer. The existing snuepi-signals collector finds these threads daily. 2) Listings: a Vapi tool template or snippet, a Retell custom-function template, an n8n community node, then a GHL Marketplace app (white-label friendly, so agencies can rebrand the report). 3) Agency-to-SMB is the channel: each agency carries 5-50 clients, so one sale lands many seats. 4) Later: Retell/Vapi partner or expert directories, and a co-marketing route with an AI-liability MGA ('agents running the gate get evidence your underwriter can read').",
+        "pricing": "Per client agent per month, billed to the agency, which resells it. Starter EUR 29 (tools plus reconciliation on up to 300 calls). Pro EUR 79 (up to 1,500 calls, owner alerts, white-label monthly report, signed ledger export). Overage EUR 0.03/call, below Cekura's $0.05/monitored call. Agency bundle EUR 290/mo for 10 client agents. The commitment audit is free for the first 50 transcripts, or EUR 300 for a full 200-call audit credited against a pilot. Pilot offer for Gate B: EUR 1,500 for 90 days, covering up to 5 client agents of one agency, with a written conversion price. This sits inside the $30-500/mo reliability-spend range implied by Cekura and the agency-margin data, and below 10% of a typical $497-997 retainer.",
+        "moat": "Honest view first: the date and time-zone slice will be absorbed within 12 months. Retell already ships time variables and duplicate-call fixes, GHL claims native double-booking prevention, and ElevenLabs Guardrails 2.0 blocks text-rule discounts inside ElevenLabs. Those are features, not the business. What platforms do not absorb within 2 years, and why: (1) Neutrality. A record of what the agent promised, kept by the vendor whose agent promised it, is self-graded evidence. An SMB facing an Abmahnung or a disputed discount, and an insurer running performance-triggered cover (Armilla) or parametric cover (aiSure) where the threshold is 'checked against real-world outcomes', need an independent third-party record. Vapi, OpenAI and GHL are structurally conflicted here. (2) Cross-platform. Agencies run Vapi plus Retell plus GHL plus n8n and switch platforms often. Each platform polices only its own channel and has 'little incentive to police the promises its agents make' (market-gaps absorption note). The gate and ledger move with the agency across platforms, which builds switching cost on our side. (3) Grounding in the business's own systems of record: per-business signed terms, price lists, discount authority, and connectors to calendars and booking systems. Platforms leave this to prompts by design ('enforce it in your service'). Stripe, Cloudflare and Shopify are not in this lane. (4) The compounding asset. Every call adds a labelled pair (what was said, what was true) across platforms, models and verticals. That produces better resolvers and, more importantly, the only cross-platform actuarial dataset of SMB agent commitment-error rates. This is what insurers and certifiers (AIUC-1-style audits) lack. Over time, per-agency and per-agent accuracy history becomes a portable credential that is costly to leave behind. Commoditised parts (hash chains, receipts: Signet, ActionProof, the IETF draft) are inputs, not the moat. The receipt proves integrity. The value is the correctness check against business truth.",
+        "snuepi_reuse": "I estimate existing snuepi code covers about 60-65% of v1. Carried over: the booking engine core (free-time lookup, hold/confirm, opening hours, holidays, DST-safe time zones, cancel/move), which becomes resolve_time, check_and_hold, book and reschedule. The reply guard post-guard ('false you're booked', promised discounts), which becomes the transcript reconciler, minus the 12-language and cost-cap extras unless needed. The terms layer (price lists, price floors, deterministic negotiation and discount rules, signing, sector defaults), which becomes the quote/offer authority. The Google, Microsoft and iCal calendar connectors plus Cal.com (others later). The signed hash-chained record and Merkle root plus public verification, which becomes the ledger. The MCP server, cut down from 31 tools to about 7, plus REST/OpenAPI. One-approval activation (website reader). The booking simulator and hostile-agent test run, repurposed as a pre-install self-test that fires 30 adversarial date and discount prompts at the agency's agent. New build: Vapi and Retell end-of-call webhook adapters and tool templates, a GHL calendar connector and webhook action, a transcript-to-ledger claim extractor (an LLM extracts claims, the deterministic engine judges them), an agency multi-tenant dashboard with 2FA and roles, the PDF report, and Stripe billing.",
+        "retire": "Drop the planned observe-only chargeback dispute pack. The evidence shows no observed agent-dispute losses, Instant Checkout scaled back, budget paid per recovered dispute, and Chargebacks911, Visa and Chargeflow already in that lane. Freeze and archive: phone/email doors and the Twilio/Telnyx/SignalWire/Azure speech stack (agencies already own the voice layer, and it would be a latency rabbit hole); the booking page and widget; ACP, UCP, A2A, AP2 and Stripe SPT agent payments; Stripe Connect deposits and no-show money flows (re-add later as 'deposit-gated booking' only if pilots ask); Web Bot Auth, fake-brand detection, KYA/KYB and outside identity tokens (keep the code for a phase-3 inbound-agent door, not v1); consultations, multi-day cases, request_quotes and B2B catalogue/ERP; the regulated-work phrase guardrails that over-refuse; Phorest, Mindbody, Vagaro, resOS, Formitable, TheFork and OpenTable connectors; the 48-business world simulator; the public Agent Terms registry as a marketing surface; Norway leftovers; and most of the 444 routes and 40+ rule options. The target is fewer than 40 routes.",
+        "v1_build_weeks": 6,
+        "validation_plan": "Sell before building, but use the existing engine to do concierge audits, which are a sales tool and not a build. Week of 9 Nov: freeze the live product; build only a CLI 'audit runner' (post-guard plus resolver over pasted transcripts and an ICS/calendar CSV), 3-4 days of glue. Write a one-page offer: 'Send me 50 call transcripts and your calendar export; in 48h you get your agent's commitment error rate: false confirmations, wrong dates, off-list prices.' Calls (25 by 8 Dec, Gate A): 15 voice-AI agency owners, sourced from Skool AI Automation Society, Vapi/Retell forum posters in the cited threads, GHL agency groups and UK/DE/NL agency directories via snuepi-signals; 5 SMB end clients introduced by those agencies (dental, clinic, salon, trades), asking 'what did the last wrong booking or price cost you, and who paid?'; 3 AI-insurance or certification people (Armilla, Testudo, AIUC, a Lloyd's MGA), asking 'would an independent per-call commitment ledger change underwriting or eligibility for SMB deployers, and in what format?'; 2 platform partnership contacts (Retell or Vapi partner programmes) to probe roadmap and absorption. On every agency call, ask for transcripts. Target 6 completed audits by 8 Dec. Record per audit: calls reviewed, commitment errors per 100 calls, and the share the agency did not know about. At each audit readout, present the EUR 1,500 / 90-day / 5-client pilot with a written conversion price (EUR 79 per client agent per month). Gate A pass: 25 calls held, at least 6 audits run, and at least 4 of the 6 showing at least 2 commitment errors per 100 calls that the agency had not caught. 9 Dec to 8 Jan: ask the 3 warmest agencies for a signed, priced pilot (DocuSign, Stripe invoice issued). Build the Vapi/Retell webhook adapter only for whichever platform the first signer uses. Gate B pass (about 8 Jan 2027): at least 1 signed and paid (or invoiced, net-15) pilot of at least EUR 1,500, plus a second agency in verbal commit. Build the full v1 (6 weeks) only after Gate B.",
+        "kill_criteria": "Kill or pivot if any of these hold. (1) Audits of at least 5 agencies' real transcripts show fewer than 1 material commitment error per 100 calls: the pain is too rare to pay for. (2) Fewer than 3 of 15 agencies will hand over transcripts for a free audit: no urgency. (3) At least 10 of 15 agencies say they already enforce a booking_token or price gate in their own code and would not pay EUR 29+ per client to replace it. (4) No signed, priced pilot of at least EUR 1,500 by 8 Jan 2027 (Gate B). (5) Before the pilot, Vapi or Retell ship native transcript-vs-tool-result reconciliation plus price-list validation, or GHL ships both natively for its Voice AI. Then narrow to the insurer-evidence angle only if at least 1 insurer or MGA has committed to a data pilot; otherwise stop. (6) Agency interviews consistently rank 'proof of ROI and bookings' far above 'wrong commitments'. Then re-test a pure accuracy/ROI report product, priced at EUR 29 or less, for one more month before stopping.",
+        "path_to_scale": "Phase 1 (2027 H1): agencies on Vapi, Retell, GHL and n8n. 20 agencies x 15 client agents x EUR 60 is about EUR 216k ARR. Prove that the Accuracy Report reduces client churn. Phase 2: widen the channels and commitment types to chat, WhatsApp and email agents and to Intercom/Zendesk-style bots, and add refund and policy claims grounded in the business's own policy text. Sell direct to multi-location SMB groups (dental and clinic chains) and to vertical receptionist vendors as an embedded 'verified commitments' API. Phase 3, the venture-scale part: the ledger becomes the neutral system of record for what AI agents promised on behalf of businesses. Two moves follow. (a) An insurer and certifier channel: carriers and MGAs use per-agent commitment-accuracy history for eligibility, pricing and parametric triggers, which unlocks cover for agent-made commitments that is currently uninsurable (ISO exclusions, honour-the-promise losses), with revenue share per insured agent. (b) An inbound-agent door: when third-party consumer agents (ChatGPT, Gemini, Alexa) start booking and buying from SMBs at volume, the same terms, gate and ledger serve them. That reuses snuepi's parked identity, mandate and payment code without betting on it now. The compounding cross-platform error dataset supports a standard (an 'AIUC-1 for SMB agent commitments') and a certification badge, which pulls demand from SMBs and insurers back to agencies.",
+        "biggest_risk": "Willingness to pay is unproven, and the pain may be a 'builder debugging' problem rather than a budget line. I found no first-person evidence of an agency losing a client or money over a wrong commitment. Vendors attribute churn to perception and ROI. Technical agencies fix double-booking with a token gate in their own code. Platforms keep chipping off the date slice (Retell Mar/Aug 2026, GHL native, ElevenLabs Guardrails 2.0). If what remains (price, discount and policy checks plus reconciliation) does not register as urgent, this becomes a EUR 29 nice-to-have with high churn and no route to the insurer data asset. A secondary risk: the core agency market is US-heavy and price-compressed at the low end (white-label agents at $75-150/mo), which conflicts with the EU-first constraint. The plan mitigates both by running free audits that measure real error rates before any build, and by keeping kill criteria tied to those numbers."
+      },
+      {
+        "lens": "contrarian",
+        "name": "Kept (a snuepi rework): independent booking-truth verification and client proof reports for voice-AI agencies",
+        "one_liner": "After every call, Kept checks what a client's Vapi, Retell or GHL agent promised (time, date, time zone, price, discount) against the real calendar and price list. It alerts the agency within minutes when a \"you're booked\" or a quote is false, and gives the agency a white-label monthly report proving every booking was real. Agencies use that report to keep clients.",
+        "buyer": "The founder or owner of a small voice/chat-AI agency with 3 to 40 SMB client accounts. These agencies resell receptionists for $297-$997/mo (some UK/US agencies charge £750-£3,000/mo), mostly in the UK, US and EU. The buyer pays from the gross margin on the retainer, since platform cost is about $0.105-$0.11/min. Second buyer type: white-label agency-platform vendors (Trillet, MyVoiceAIConnect type), which could resell Kept to their agencies.",
+        "user": "Day to day: the agency's builder/ops person, who gets the alerts, fixes the flow and looks at the error list. The agency's SMB client (clinic, salon, trades, dental, auto) also uses it passively: they read the white-label monthly \"verified bookings and value\" report, and that is where retention is won or lost.",
+        "problem_evidence": "Why not the obvious \"commitment firewall\" (inline gate): the evidence supports the pain at builder level, but not an agency paying for an inline gate. (a) Builders hand-roll the token gate themselves: \"agent may confirm only when a booking token is present\" (support.vapi.ai/t/22800021; Reddit snapshot 1tfc3ps, 2026-05). (b) Platforms are absorbing it piece by piece: Vapi tool rejection plans (Aug 2025), Retell timezone variables (Mar 2026) and duplicate-booking fix (Aug 2026), GHL's claimed native double-booking prevention, ElevenLabs Guardrails 2.0. (c) No first-person post shows an agency losing a client over a wrong booking. Two pieces of evidence point at an observer that proves outcomes. First, Trillet: 70-80% of agency client cancellations are \"perception churn\". Second, MyVoiceAIConnect (~2026-11-08): \"clients who can see their booking dashboard are much less likely to cancel because the AI doesn't feel like a black box\". Third, Roark (~2026-09): \"a wrong-timezone booking can pass as a 'success' in a 95% booking rate until the patient complains weeks later\". That failure is silent, and only a ground-truth comparison catches it. The failure classes are documented repeatedly: false \"you're booked\" when the webhook failed (support.vapi.ai/t/27162858), UTC vs local tz reporting busy slots as free (support.vapi.ai/t/33208523), relative dates 1-2 days off (vapi.ai/community/m/1375475162551554108), double-booking despite tz plus injected time (vapi.ai/community/m/1376589305715359877), \"Time range is in the past\" (Retell community), invented prices close to real ones (community.retellai.com/t/.../3393), £89 invented boiler price (Lilach Bullock 2026), and reschedule/cancel failures (Skool AI Automation Society, 27 comments). Vapi's docs, \"enforce it in your service\", confirm that the platform will not verify outcomes for the agency. Willingness to pay is indirect only. Anchors: Cekura $0.05/monitored call or $500/mo Startup; agency management fees of $1-3k/mo per client leave room for $25-80 per client. No direct WTP evidence exists for this product, and validation has to supply it. The dispute pack is the weakest option: there are no observed agent chargebacks, ChatGPT Instant Checkout was scaled back (~Mar 2026), and Chargebacks911 already sells indemnity plus permission-trail records. Dispute budgets are a share of recovered money (Chargeflow 25%, Disputifier 20%).",
+        "product": "v1 is observe-first and runs after the call, so it adds no live-call latency or hot-path liability. (1) Connect: the agency pastes a Vapi or Retell API key (or adds an end-of-call webhook) or connects GHL. Per client, it links the calendar or booking system (Google, Microsoft, Cal.com, Acuity, Square, SimplyBook, Calendly via existing connectors; new GHL calendar connector). Activation reads the client's website for services, prices and hours, and the agency sets the maximum allowed discount. (2) Extract commitments from each call's transcript and tool-call log: booking claims (service, date, time, time zone, reschedule, cancel), quoted prices and durations, and offered discounts or refunds. (3) Reconcile against ground truth: does the event exist? Does it match the stated date, time and time zone? Is it in the past, outside opening hours, or double-booked? Did a reschedule actually cancel the old slot? Does the quoted price match the price list? Is the discount within the allowed limit? (4) Alert within 5 minutes by email, Slack or SMS for high-severity mismatches (\"told caller Thu 15:00 booked, nothing in calendar\"), with a one-click fix link or a call-back task. (5) Agency console: error rate per client and per failure class, with a trend after each prompt or flow change, so they can see whether a fix worked. (6) White-label monthly client report (PDF and link): calls handled, bookings verified as real, estimated booked revenue, errors caught and fixed. This targets the stated churn driver (perception and unclear ROI). Each call's verdict is written to the existing signed hash-chained log, kept internally and not marketed in v1. Not in v1: the inline \"verify_and_book\" custom tool, which reuses the booking engine and returns a booking token. It comes in v1.5, and only if pilots ask for it after seeing their own error rates.",
+        "distribution": "Founder-led selling into where agencies already ask for help: Skool AI Automation Society and other agency Skools (Pickup and similar), the Vapi Discord/community, Retell community and n8n forum booking threads. Answer these with real fixes plus the offer of a free \"Booking Truth Audit\" (we reconcile your last 30 days of calls against the calendar). Use the snuepi-signals lead engine to find fresh threads about wrong bookings or false confirmations. Then: a GHL Marketplace app, Vapi/Retell integration listings, and a reseller deal with one white-label agency platform (Trillet or MyVoiceAIConnect type, since they already publish that dashboards reduce churn). The client-facing report spreads Kept on its own: each report goes to an SMB owner with \"verified by Kept\" on it.",
+        "pricing": "Free audit (concierge) as the lead magnet. Agency plan at €199/mo including 5 client accounts, then €29 per client account per month. Above 2,000 calls per client per month, €0.02 per verified call. The design-partner pilot is €249/mo flat for up to 10 client accounts, on a 90-day term, signed. Anchors: Cekura $0.05/call or $500/mo; per-client cost of about €29 is 3-6% of a $497-$997 retainer. The agency marks it up and resells it as a \"verified bookings guarantee\". The v1.5 inline booking tool would be a +€15 per client add-on.",
+        "moat": "Why the platforms do not absorb it: (1) Vapi, Retell, GHL and ElevenLabs each grade only their own channel and have little incentive to tell an agency's client that their agent made errors. An independent outside verifier is the point, and an agency running a mix of platforms needs one view across all of them. Vapi's own docs push verification onto the builder. (2) It checks against the client's systems of record (20 calendar and booking connectors, price list, hours, DST-safe time logic), which voice platforms do not own. (3) Cekura, Hamming and Coval test builds before and around launch, for builders. Kept verifies real outcomes after the fact and reports them to the end client, so its job is retention, not QA. It could still be copied, so speed into the agency channel matters. What compounds over time: a labelled corpus of real commitment failures across platforms, sectors and calendars, which sharpens extraction and becomes per-sector rule packs and benchmarks (\"your agent's verified-booking rate vs. dental average\"). Switching costs come from white-label reports embedded in the agency-client relationship. A per-agent \"Kept score\" history becomes the verified performance data that performance-triggered and parametric AI insurers (Armilla, Munich Re aiSure/Mosaic, AIUC-1) need and cannot get from SMBs today. Honest caveat: in year one the moat is mostly speed and channel, not technology.",
+        "snuepi_reuse": "Kept reuses roughly 50-60% of v1 from snuepi. Booking engine time logic: opening hours, holidays, DST-safe time zones and slot validation, which becomes the ground-truth checker. Connectors: Google, Microsoft and iCal calendars, Cal.com, Acuity, Square, SimplyBook, Calendly and Setmore, plus the sync and polling code. Reply-guard post-guard patterns that detect false \"you're booked\", promised discounts and prices, in 12 languages, repurposed from blocking to extraction and flagging. Terms layer: price floors, discount rules and sector defaults (9), used as the client's price-list and discount policy. One-approval activation (website scrape of services, prices and hours). Signed hash-chained record plus Merkle root, used as an internal per-call verdict log. Booking simulation and hostile-agent simulators, used to make synthetic test calls for regression. Daily cost caps for the LLM extraction. Fly.io, SQLite and Litestream infra plus the Scaleway EU LLM. New work: Vapi, Retell and GHL call-log ingestors, a GHL calendar connector, the commitment-extraction pipeline, the alerting layer, the agency console and the white-label report.",
+        "retire": "Drop the planned agent-purchase dispute pack and everything aimed at outside buyer agents: ACP, UCP, AP2 mandates, Stripe shared payment tokens, OAuth customer mandates, A2A, the 31-tool MCP buyer-agent server and per-business agent cards. Drop the money stack (deposits, no-show fees, Stripe Connect, chargeback alerts), the Web Bot Auth, KYA/KYB, fake-brand detection and trust-level identity stack, and the phone, email, booking-page and widget doors. Also drop the regulated-work phrase guardrails, the 48-business world simulator, the free terms registry and the \"Agent Terms v1\" standard work (park in a public repo), the Phorest, Mindbody and Vagaro partner-gated connectors, the restaurant connectors (resOS, Formitable, TheFork, OpenTable) unless a pilot needs one, and the Norway leftovers. Cut from 444 routes and 40+ rule options to about 25 routes. Keep code in git, and remove it from the deployed product.",
+        "v1_build_weeks": 6,
+        "validation_plan": "The concierge audit is both the sales motion and the evidence test. Week of 9 Nov: freeze the live product. Build a CLI audit script in 4-5 days that imports Vapi/Retell call exports and the tool-call log, reads the client calendar through existing connectors, extracts commitments (reply-guard patterns plus LLM) and outputs a mismatch report. Run it on your own snuepi simulations, and label the results as simulated. 9 Nov-8 Dec (Gate A, 25 calls): post useful fixes in 2-3 booking threads a day across the Vapi community, Retell community, n8n forum and Skool AI Automation Society, and DM UK/US/EU agency owners found by snuepi-signals and Skool member lists. On each call ask: how many client accounts and which platforms, the last time a wrong or false booking reached a client and how they found out, what it cost them, what they send clients each month as proof, whether they have lost a client and why, and what they pay Cekura or Hamming or anyone else for reliability. Close each call by asking for a free 30-day Booking Truth Audit on one client account (read-only API key plus calendar read). Targets by 8 Dec: 25 calls, at least 10 audit agreements, at least 5 audits delivered. Each audit goes back as a white-label sample report, and the founder records the real mismatch rate per failure class. 9 Dec-8 Jan (Gate B): for each audit that found a mismatch rate of at least 1% of booking calls, or at least one false \"you're booked\", present findings live and ask for the €249/mo, 90-day pilot covering up to 10 clients, starting mid-January and billed by Stripe invoice. Run the 6-week v1 build only after the first signature. Gate B passes with at least 1 signed, priced pilot (target 3). In parallel, open one conversation with a white-label agency-platform vendor about reselling, as a second signal, not a substitute. Report simulated and real numbers separately in every update.",
+        "kill_criteria": "Kill or pivot if any of these happens. (1) Across at least 5 real audits, wrong or false commitments are under 0.5% of booking calls and no audit finds a false \"you're booked\". That means prompt tricks and native fixes already work and there is nothing to sell. (2) Fewer than 6 of 25 agencies will grant read-only log and calendar access for a free audit. That means the trust or friction barrier is too high for an observer. (3) Zero signed, priced pilots by 8 Jan 2027, or every agency caps willingness to pay below €10 per client per month. (4) Agencies say the client report adds nothing because their platform's dashboard already convinces clients. (5) Vapi, Retell or GHL ships native post-call booking reconciliation against the calendar before Gate B. In that case, check whether an inline cross-platform tool still has demand before continuing.",
+        "path_to_scale": "Stage 1 (2027): voice-AI agencies, bookings first, then prices, discounts, reschedules and cancellations. Aim for 100 agencies and 1,500 client accounts at about €30 each, roughly €0.5M ARR. Stage 2: add chat, WhatsApp and email agents and policy or refund claims (the EU angle: OLG Hamm May 2026 holds the business liable for its chatbot's statements, and German IHKs warn about Abmahnungen). Add the inline verify_and_book tool and marketplace listings on GHL, Vapi, Retell and ElevenLabs. Stage 3: sell an OEM or API to vertical receptionist vendors and booking SaaS (Cal.com, SimplyBook, Phorest type), who need independent proof that bookings are real, and to white-label agency platforms. Stage 4: the per-agent verified-outcome history and signed record become the data layer for AI liability insurers and MGAs (Armilla's performance-triggered cover, Munich Re aiSure/Mosaic parametric, AIUC-1 certification, Testudo). That means underwriting scores, claims evidence, and embedded cover for SMB agents (\"Kept-verified agents insurable at X\"). At that point Kept would be the independent outcome-verification and commitment ledger for the millions of SMB-facing AI agents. The venture-scale case rests on that ledger, not on the agency tool alone.",
+        "biggest_risk": "The pain may be builder-level debugging rather than an agency budget line. Evidence: no first-person agency churn from wrong commitments, competent builders fix it in their own code, and real error rates after injecting {{now}} and adding a token gate may be too low to justify a monthly fee. A second risk is that Cekura, Roark or the platforms add post-call calendar reconciliation and client reports cheaply. Agency customers are also churny and fad-driven, and the low end of white-label pricing ($75-150 per agent) squeezes the add-on. The concierge audits in Nov-Dec exist to measure this risk directly, on real call logs, before any build."
+      }
+    ],
+    "judgements": [
+      {
+        "judge": "seed-investor",
+        "scores": [
+          {
+            "name": "Design 1: BookedRight (fastest-revenue)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 2,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 4,
+            "defensibility": 2,
+            "solo_feasibility": 2,
+            "scale_potential": 3,
+            "fatal_flaw": "It tries to do everything in 4 weeks: an inline gate on 4 platforms, post-call reconciliation, a white-label report, a stress tester and 9 booking connectors that have never touched a live system. The core of it is the inline gate, which is the thing builders hand-roll with a booking_token and which Retell, GHL and Vapi are absorbing piece by piece. So the headline product is the most commoditised part, and the plan has the least time to build it properly. The kill bar (8 of 25 calls citing an incident) is soft enough to pass on anecdotes.",
+            "best_idea_to_graft": "The free Booking Stress Test: about 50 adversarial calls placed against the agency's live phone number or web call. It needs no API key and no log access, so it gets around Kept's biggest friction point (agencies handing over read-only access) and gives the agency a scary number in 48 hours."
+          },
+          {
+            "name": "Design 2: snuepi Commit (max-reuse)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 2,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 4,
+            "defensibility": 2,
+            "solo_feasibility": 3,
+            "scale_potential": 3,
+            "fatal_flaw": "The product is a set of gated tools that replace the agent's own booking and pricing tools. That means re-plumbing every client agent, putting snuepi in the live-call hot path with latency and liability, and competing head-on with the DIY token gate and native fixes. The low price (EUR 39 per client, EUR 490 pilot) signals that the team does not believe there is real willingness to pay, and it compresses toward the $75-150 MSP floor.",
+            "best_idea_to_graft": "A kill criterion that is quantitative and falsifiable: at least 1 material wrong commitment per 200 booking calls on real logs, plus an explicit kill if a native platform gate would cover more than 70% of audit findings. Also the 'concierge gate one client agent by hand' pilot, so the inline gate is only built for agencies that have already paid."
+          },
+          {
+            "name": "Design 3: snuepi Commit, independent ledger (deepest-moat)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 3,
+            "reachability_of_buyer": 3,
+            "snuepi_reuse": 4,
+            "defensibility": 3,
+            "solo_feasibility": 2,
+            "scale_potential": 4,
+            "fatal_flaw": "The moat thesis is that neutral evidence becomes valuable to insurers and to EU liability disputes. No buyer in the evidence has asked for that, and receipts and hash chains are already commoditising (IETF draft, Signet). Spending 10 of the 25 Gate A calls on insurers, SMB end clients and platform partners leaves only 15 agency conversations to prove the one thing that matters, which is agency willingness to pay. A EUR 1,500 pilot for an unproven tool is a high first ask.",
+            "best_idea_to_graft": "Weight the value toward prices, discounts and policy promises plus reconciliation, the part no platform validates, rather than the date and time-zone slice that will be absorbed within 12 months. Also take the audit metric 'errors per 100 calls the agency had NOT caught', which is the single best number for proving both the pain and the proof-report value, and the willingness to test a higher price point."
+          },
+          {
+            "name": "Design 4: Kept, post-call booking-truth verification (contrarian)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 3,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 3,
+            "defensibility": 2,
+            "solo_feasibility": 4,
+            "scale_potential": 3,
+            "fatal_flaw": "An observer only catches errors after the caller has been told something false, and in year one its moat is speed and channel. Cekura ($0.05 per monitored call), Roark and the platforms' own dashboards are one feature away from adding a post-call reconciliation against the calendar plus a client report. It also needs read access to call logs and calendars from agencies that may not trust a solo founder with that, which is the design's own kill criterion 2.",
+            "best_idea_to_graft": "Sell retention, not QA. The white-label 'verified bookings and value' client report targets the churn driver the evidence actually documents (70-80% of cancellations are perception churn; clients who can see a dashboard cancel less). It runs post-call with no hot-path latency, and the inline gate is held back as a paid v1.5 add-on that only ships when an agency's own error rate justifies it."
+          }
+        ],
+        "winner": "Design 4: Kept, post-call booking-truth verification (contrarian), reworked with grafts from 1, 2 and 3",
+        "rationale": "All four designs chase the same wedge: voice-AI agencies, with wrong bookings and invented prices as the pain. All four share the same unproven core: no agency has been observed paying, or churning a client, because of a wrong commitment. So the deciding factor is which design matches the evidence we do have and validates cheapest. That evidence says three things. First, the pain is builder-level and gets fixed in-house with a token gate. Second, platforms keep absorbing the inline-gate slice: Retell's time variables and duplicate-call fix, GHL's claimed native double-booking prevention, Vapi's rejection plans. Third, the churn agencies actually report is 'perception', which visible proof reduces. Designs 1 and 2 lead with the inline gate, which is the most commoditised and most DIY-able part, and it puts a solo founder in the live-call hot path across 4 platforms. Design 3 has the best strategic honesty and the largest scale story, but its moat (insurer-grade neutral ledger data) rests on buyers who have not asked, and it dilutes Gate A away from agencies. Design 4 is the only one built around the documented churn driver. It is the cheapest for a solo founder to ship (post-call, no latency, no re-plumbing of client agents), and its free audit is both the sales motion and the falsification test. Its weaknesses are a thin moat and access friction, both fixable by grafting. The best-fit rework: (1) Run Design 1's no-access Stress Test as the first touch, then Kept's 30-day log audit as the second touch. (2) Report Design 3's 'errors per 100 calls the agency had not caught' as the headline metric, and weight checks toward price, discount and policy promises, not dates. (3) Use Design 2's hard thresholds (1 per 200 calls; a native-gate coverage kill) and its concierge inline gate for pilots only. (4) Raise the pilot from EUR 249 to roughly EUR 500-750 to test real willingness to pay instead of courtesy willingness to pay. (5) Keep the signed ledger internal until an insurer asks. Honest investor verdict: as a business this is a small, fast-to-test bet worth 8 weeks. It becomes fundable only if the audits show error rates that agencies did not know about and at least two agencies pay for the client report specifically."
+      },
+      {
+        "judge": "smb-operator",
+        "scores": [
+          {
+            "name": "Design 1: BookedRight (fastest-revenue)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 3,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 4,
+            "defensibility": 2,
+            "solo_feasibility": 3,
+            "scale_potential": 3,
+            "fatal_flaw": "The sales hook is a synthetic stress test. It shows the agent CAN fail, not that it DOES fail on real client calls, and agencies will wave off 'your agent fails on adversarial DST-week calls' as an edge case. v1 also tries to build the hot-path gate, reconciliation, the white-label report and the stress tester across four platforms and roughly nine untested connectors in 4 weeks. That is overbuilt for one founder and puts snuepi in the live booking path before any trust exists.",
+            "best_idea_to_graft": "The pilot mechanics: a card on file, a signed one-page order form, and the fee credited against the first months. Also the affiliate cut for Skool course owners as a distribution loop. Keep the synthetic stress test only as a fallback for agencies that refuse read-only log access."
+          },
+          {
+            "name": "Design 2: snuepi Commit (max-reuse)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 3,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 4,
+            "defensibility": 3,
+            "solo_feasibility": 3,
+            "scale_potential": 3,
+            "fatal_flaw": "It leads with the runtime gate. That is the exact piece competent builders hand-roll with a booking_token, and the piece Retell, GHL and ElevenLabs keep absorbing. It also asks a churn-averse agency to swap the booking tools on live client agents before snuepi has shown a single error on their own calls. That is a lot of friction on top of the weakest part of the willingness-to-pay story.",
+            "best_idea_to_graft": "Keep v1 connectors to Google, Microsoft, Cal.com and a new GHL calendar connector, and freeze the rest until a payer asks. Add the paid 'audit per new client onboarding' (EUR 290) as recurring audit revenue. Adopt its kill criterion that triggers if a platform ships a native gate covering more than 70% of findings."
+          },
+          {
+            "name": "Design 3: snuepi Commit ledger (deepest-moat)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 2,
+            "reachability_of_buyer": 3,
+            "snuepi_reuse": 4,
+            "defensibility": 4,
+            "solo_feasibility": 2,
+            "scale_potential": 4,
+            "fatal_flaw": "It optimises for an insurer-data and neutrality moat that has no buyer today. It spends 5 of the 25 Gate A calls on insurers and platforms instead of payers. Its EUR 1,500 pilot is too large an ask for a 1-15 person agency selling $297-997 retainers in a December holiday window. The result is the right long-term story with a short-term sale that is unlikely to close.",
+            "best_idea_to_graft": "The Gate A metric 'commitment errors per 100 calls that the agency had NOT caught'. This is the number that converts. Also the architecture in which an LLM extracts the claims and the deterministic engine judges them. And the focus on value in prices, discounts and policy promises rather than the date bug, which platforms will absorb."
+          },
+          {
+            "name": "Design 4: Kept (contrarian, observe-first verification + client proof report)",
+            "evidence_of_demand": 4,
+            "willingness_to_pay": 3,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 3,
+            "defensibility": 3,
+            "solo_feasibility": 4,
+            "scale_potential": 3,
+            "fatal_flaw": "Observe-only catches the error after the caller has hung up, so the agency still eats the wrong booking. A post-call monitor plus a dashboard report is also the easiest thing for Cekura, Roark or a platform's own analytics to copy. Without a prevention upsell it risks becoming a EUR 29 nice-to-have with high churn.",
+            "best_idea_to_graft": "The observe-first motion. Installation is a read-only API key plus calendar read, with no hot-path latency or liability. The free 30-day 'Booking Truth Audit' on real logs doubles as the sales demo and the pain measurement, and the white-label monthly report targets the stated churn driver (perception and unclear ROI)."
+          }
+        ],
+        "winner": "Design 4: Kept (contrarian, observe-first verification + client proof report)",
+        "rationale": "I'd choose Design 4 because it fits the evidence best and is the easiest of the four to sell. The evidence says agency churn is about 70-80% 'perception', and that clients who can see a booking dashboard cancel less. Wrong timezone bookings stay invisible until a patient complains, and competent builders already hand-roll the token gate while platforms absorb the date and double-booking pieces. All of that points to a product that checks what the agent said against the real calendar and price list after the call, and gives the agency proof it can show the client. An inline gate points the other way.\n\nSetup is only a read-only API key plus calendar read. For a churny 3-40 client agency in December, that is far easier to say yes to than letting a stranger rewire the booking tools on live agents (D1, D2, D3). The €249/mo flat pilot also fits that buyer better than D3's €1,500 or D1's €750. The concierge audit on real logs tests the core unknown, how often wrong commitments actually happen in production, before any build. Solo feasibility is the highest of the four because there is no booking hot path to own.\n\nIts weakness is that it only detects errors and never prevents them, so the reworked product should graft in the following:\n(1) From D2: offer the gated tools (verify_and_book with booking_token, plus quote/offer from the signed price list) as a paid v1.5 upsell, pitched only after an agency has seen its own error rate. That turns the monitor into a prevention purchase. Also limit connectors to Google, Microsoft, Cal.com and GHL, and freeze Acuity, Square and the rest until someone pays.\n(2) From D3: lead every audit readout with 'errors per 100 calls that you did not know about'. Weight the product toward prices, discounts and policy promises, because platforms will absorb the date slice within 12 months. Use LLM extraction with a deterministic judge.\n(3) From D1: use a card on file and a signed order form for the pilot, with the fee credited on conversion. Keep the synthetic stress test as a fallback for agencies that won't share logs. Use Skool course-owner affiliates for distribution.\n(4) From D2: charge a recurring paid audit for each new client an agency onboards.\n\nKeep the signed hash-chained ledger internal as the long-term asset for insurers and MGAs, but don't sell it in year one. Hold D4's kill criteria strictly: fewer than 0.5% wrong commitments across 5 real audits, fewer than 6 of 25 agencies granting log access, or no priced pilot by 8 Jan 2027."
+      },
+      {
+        "judge": "evidence-auditor",
+        "scores": [
+          {
+            "name": "BookedRight: a commitment gate and client proof report for voice-agent agencies (snuepi rework)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 2,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 4,
+            "defensibility": 2,
+            "solo_feasibility": 2,
+            "scale_potential": 3,
+            "fatal_flaw": "It builds too much on too little proof. In 4 weeks it ships an inline gate on four platforms (Vapi, Retell, GHL, n8n), reconciliation, a white-label report and a stress tester. That 4-week estimate relies on 9 booking connectors that have only ever run against imitations. Its main validation tool, the simulated stress test, measures failures snuepi provokes, not failures real callers hit. So it cannot show whether production error rates justify a fee, which is the question the evidence leaves open. GHL's claimed native double-booking prevention and builders' own token gates already erode the gate.",
+            "best_idea_to_graft": "A free adversarial stress test as a zero-access opening offer. It needs no logs or API keys, so it can start conversations with agencies that will not yet hand over call data. It is the first step before a real-log audit, not a replacement for one."
+          },
+          {
+            "name": "snuepi Commit: a commitment gate and audit for agency-built voice and chat agents (lens max-reuse)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 2,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 4,
+            "defensibility": 2,
+            "solo_feasibility": 3,
+            "scale_potential": 3,
+            "fatal_flaw": "It leads with the hot-path runtime gate, the part the evidence says competent builders already hand-roll (the booking_token gate in Vapi forum thread 22800021 and Reddit 1tfc3ps) and platforms are absorbing piece by piece (Retell time variables in Mar 2026 and its duplicate-call fix in Aug 2026, plus GHL native). It also takes on live-call latency and liability for being wrong. The €490 pilot is too cheap to separate real willingness to pay from politeness.",
+            "best_idea_to_graft": "Numeric kill criteria tied to real logs: at least 1 material wrong commitment per 200 booking calls in at least 3 of 8 audits, at most half of agencies already running a DIY gate, and an explicit platform-absorption trigger. Also: a fresh free/busy check at write time instead of hourly polling."
+          },
+          {
+            "name": "snuepi Commit: an independent commitment gate and ledger for customer-facing AI agents (lens deepest-moat)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 2,
+            "reachability_of_buyer": 3,
+            "snuepi_reuse": 3,
+            "defensibility": 3,
+            "solo_feasibility": 2,
+            "scale_potential": 4,
+            "fatal_flaw": "Its moat and scale story rest on demand nobody has stated. Insurers need performance data (Armilla, aiSure), but no insurer or managing general agent has asked for SMB commitment ledgers. The SMB cases (UK 80% discount, BMW, Priceline) were settled by refunds or publicity, not proof. Signed receipts are commoditizing (IETF draft, Signet). It also keeps the full inline gate, and it spreads the 25 calls across insurers, platforms and SMBs, which leaves only 15 agency conversations to test the paying buyer.",
+            "best_idea_to_graft": "The audit metric 'commitment errors the agency had NOT caught'. It tests the silent-failure thesis (Roark) directly. Also: a €1,500 pilot price floor, which is a stronger willingness-to-pay test than €249-490."
+          },
+          {
+            "name": "Kept (a snuepi rework): independent booking-truth verification and client proof reports for voice-AI agencies (lens contrarian)",
+            "evidence_of_demand": 3,
+            "willingness_to_pay": 2,
+            "reachability_of_buyer": 4,
+            "snuepi_reuse": 3,
+            "defensibility": 2,
+            "solo_feasibility": 4,
+            "scale_potential": 3,
+            "fatal_flaw": "The retention premise is vendor-sourced. The claims that 70-80% of churn is perception and that a dashboard reduces cancellations come from Trillet and MyVoiceAIConnect, which sell those dashboards. No agency has said it would pay for a proof report. Post-call reconciliation is also easy to copy (Cekura, Roark or the platforms could add it), and it needs read-only API and calendar access, which may stop agencies from trying it at all.",
+            "best_idea_to_graft": "Observe first, gate later. A post-call reconciliation audit on real call logs measures the actual production error rate before anything is built. The inline gate only ships in v1.5, and only if pilots ask for it after seeing their own numbers."
+          }
+        ],
+        "winner": "Kept (a snuepi rework): independent booking-truth verification and client proof reports for voice-AI agencies (lens contrarian)",
+        "rationale": "Counting only what the evidence supports, all four designs share the same demand base. Builder-level pain is heavily documented: false 'booked', wrong dates and timezones, double-booking and invented prices on Vapi, Retell and n8n. Agency willingness to pay is only inferred, from Cekura's $500/mo plan and agency retainers. No first-person case shows an agency losing a client or paying for a runtime guard. Demand and willingness to pay therefore score the same across designs (3 and 2). The real difference is how each design treats the counter-evidence. Builders hand-roll token gates, platforms keep absorbing the date and duplicate slices, and GHL claims native double-booking prevention. Every one of those signals weakens an inline gate as the first product, and D1, D2 and D3 all lead with one. Kept (D4) is the only design that follows from the counter-evidence. It goes after failures that are silent and only visible against ground truth (Roark's 'passes as success until the patient complains'). It sits off the call path, so it adds no latency or liability. Its first sale is an audit on real logs that measures production error rates, the number every design admits it lacks. It is also the most realistic for one founder: an extraction and reconciliation pipeline on top of existing connectors, time logic and reply-guard patterns, with no adapters on four platforms that sit in the call path. Caveats: its churn and dashboard premise is vendor marketing, its moat is speed and channel, and log-access friction could kill it (kill criterion 2 tests this). Grafts for the winner: D1's no-access stress test as the opener before the audit. D3's 'errors the agency had not caught' metric and a higher pilot price floor (about €1,000-1,500 rather than €249), to get a real willingness-to-pay signal. D2's explicit platform-absorption kill trigger and its fresh free/busy check, both for the v1.5 gate. Park the insurer and ledger story (D3) until an insurer or managing general agent states demand. Today it is speculation, not evidence."
+      }
+    ]
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Evidence"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 2,
+      "title": "Design"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 3,
+      "title": "Judge"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "evidence:agency-commitment-errors",
+      "phaseIndex": 1,
+      "phaseTitle": "Evidence",
+      "agentId": "a8c8f615d0a37f530",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794255960834,
+      "queuedAt": 1794255960799,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The pain is real and well documented at the builder level. …",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md. Then hunt evidence for this question: Agencies and freelancers building customer-facing voice/chat agents on Vapi, Retell, GoHighLevel, Synthflow, Bland, n8n for SMB clients: wrong bookings, wrong dates/timezones, double bookings, invented prices/discounts/polici…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256084561,
+      "tokens": 122118,
+      "toolCalls": 26,
+      "durationMs": 123726,
+      "resultPreview": "{\"summary\":\"The pain is real and well documented at the builder level. Vapi, Retell, n8n and Skool forums have many first-person threads about agents booking the wrong date or timezone, booking in the past, double-booking, saying \\\"you're booked\\\" when the tool call failed, and quoting prices that are not in the knowledge base. Almost all of this is debugging help for builders, though. I found no …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "evidence:smb-liability-ai-promises",
+      "phaseIndex": 1,
+      "phaseTitle": "Evidence",
+      "agentId": "aa0bd5643b579bd00",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794255960834,
+      "queuedAt": 1794255960799,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Pain is real and keeps recurring, but it is mostly a reputa…",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md. Then hunt evidence for this question: Businesses held to promises made by their AI agents/chatbots (Moffatt v Air Canada style), refunds/discounts honoured, legal/insurance exposure, EU AI Act / consumer law angle, insurers starting AI liability cover (e.g. Armil…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256085930,
+      "tokens": 128846,
+      "toolCalls": 23,
+      "durationMs": 124319,
+      "resultPreview": "{\"findings\":[{\"claim\":\"A UK small business's after-hours chatbot was talked into an 80% discount on an £8,000+ order. The customer threatened small claims and called the bot the company's legal representative. The owner cancelled and refunded, and no money was lost under the code. This is the clearest first-person SMB case: the business had no visible notice saying the bot cannot authorise discoun…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "evidence:merchant-agent-disputes",
+      "phaseIndex": 1,
+      "phaseTitle": "Evidence",
+      "agentId": "a897173781dfd1135",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256084608,
+      "queuedAt": 1794255960800,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "I ran 20 searches and found no verified production case of …",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md. Then hunt evidence for this question: Merchants and PSPs dealing with chargebacks/disputes on purchases made by AI agents (ChatGPT Instant Checkout, agentic commerce, Visa Intelligent Commerce, Mastercard Agent Pay, Stripe ACP): real incidents, \"my agent bought t…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256218856,
+      "tokens": 122867,
+      "toolCalls": 23,
+      "durationMs": 134247,
+      "resultPreview": "{\"summary\":\"I ran 20 searches and found no verified production case of a merchant or PSP losing, or even fighting, a chargeback on an agent-placed purchase. There are no first-person merchant, PSP or dispute-analyst posts on Reddit, HN or Shopify Community either. Nearly everything comes from chargeback vendors (Chargebacks911, Justt, Chargeflow, Chargeback Gurus, chargeback.io) and aggregator blo…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "evidence:competitors-and-roadmaps",
+      "phaseIndex": 1,
+      "phaseTitle": "Evidence",
+      "agentId": "a7d3ec8986436034d",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256085939,
+      "queuedAt": 1794255960800,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The pain is real and it repeats. Builders on Vapi, GHL and …",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md. Then hunt evidence for this question: Current products and platform roadmaps for: runtime guardrails/validation of agent actions (booking, pricing) for voice/chat agents; Vapi/Retell/GHL/Synthflow native features shipped 2026 (date injection, confirm-before-book,…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256205152,
+      "tokens": 130653,
+      "toolCalls": 26,
+      "durationMs": 119213,
+      "resultPreview": "{\"summary\":\"The pain is real and it repeats. Builders on Vapi, GHL and Make post the same failures over and over: past or wrong dates, wrong time zones, double-booking because the create-event tool does not check for conflicts, and agents saying \\\"you're booked\\\" when the booking failed. The fix practitioners keep landing on is a deterministic gate in their own code (only confirm if a booking toke…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "design:fastest-revenue",
+      "phaseIndex": 2,
+      "phaseTitle": "Design",
+      "agentId": "ab0b263785c2abc3d",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256218898,
+      "queuedAt": 1794256218864,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "BookedRight: a commitment gate and client proof report for …",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md and skim the radar reports it references. You are a top-tier product strategist and seed investor. Design the single best REWORK of snuepi. Lens: Optimise for the fastest path to a signed, paid pilot from a reachable buyer in 4-8 weeks with a solo founder.\n\nFresh …",
+      "promptFramed": true,
+      "lastProgressAt": 1794256317999,
+      "tokens": 116598,
+      "toolCalls": 4,
+      "durationMs": 99100,
+      "resultPreview": "{\"name\":\"BookedRight: a commitment gate and client proof report for voice-agent agencies (snuepi rework)\",\"one_liner\":\"One drop-in tool for Vapi, Retell, GHL and n8n agents that only lets the agent say \\\"you're booked\\\" or quote a price after snuepi has checked it against the client's real calendar and price list. Each week it also gives the agency a white-label, signed report of every booking and…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "design:max-reuse",
+      "phaseIndex": 2,
+      "phaseTitle": "Design",
+      "agentId": "a19d8bddb89553fa7",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256218898,
+      "queuedAt": 1794256218864,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "snuepi Commit: a commitment gate and audit for agency-built…",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md and skim the radar reports it references. You are a top-tier product strategist and seed investor. Design the single best REWORK of snuepi. Lens: Optimise for maximal reuse of what snuepi already built and tested (engine, reply guard, terms, connectors, signed rec…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256311821,
+      "tokens": 114346,
+      "toolCalls": 4,
+      "durationMs": 92023,
+      "resultPreview": "{\"name\":\"snuepi Commit: a commitment gate and audit for agency-built voice and chat agents\",\"one_liner\":\"Your clients' AI receptionist can only say \\\"you're booked\\\" or quote a price when snuepi has confirmed it against the live calendar and the business's signed price list. Every commitment gets a receipt the agency can show its client.\",\"buyer\":\"The owner or founder of a voice/chat AI agency (2-…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "design:deepest-moat",
+      "phaseIndex": 2,
+      "phaseTitle": "Design",
+      "agentId": "aee63cb6bc6b5376c",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256311825,
+      "queuedAt": 1794256218864,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "snuepi Commit: an independent commitment gate and ledger fo…",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md and skim the radar reports it references. You are a top-tier product strategist and seed investor. Design the single best REWORK of snuepi. Lens: Optimise for a defensible, compounding position that platforms (Vapi, GHL, OpenAI, Stripe, Cloudflare, Shopify) will n…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256418541,
+      "tokens": 114265,
+      "toolCalls": 5,
+      "durationMs": 106715,
+      "resultPreview": "{\"name\":\"snuepi Commit: an independent commitment gate and ledger for customer-facing AI agents\",\"one_liner\":\"One drop-in tool URL for Vapi, Retell, GHL and n8n agents. It checks every date, slot, price, discount and policy promise against the business's live calendar and signed terms before the agent says it. It then reconciles what the agent said against what was actually written, and gives the …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "design:contrarian",
+      "phaseIndex": 2,
+      "phaseTitle": "Design",
+      "agentId": "a6832c5a5e2b76266",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256318006,
+      "queuedAt": 1794256218864,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Kept (a snuepi rework): independent booking-truth verificat…",
+      "promptPreview": "Today is 2026-11-09. Read the founder brief at /tmp/claude-0/-home-user/9b1f9a5e-639e-54da-8656-9069784d3244/scratchpad/snuepi_brief.md and skim the radar reports it references. You are a top-tier product strategist and seed investor. Design the single best REWORK of snuepi. Lens: Challenge the obvious answer (a commitment firewall for agency-built agents). Propose the strongest alternative rework…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256432714,
+      "tokens": 116216,
+      "toolCalls": 4,
+      "durationMs": 114708,
+      "resultPreview": "{\"name\":\"Kept (a snuepi rework): independent booking-truth verification and client proof reports for voice-AI agencies\",\"one_liner\":\"After every call, Kept checks what a client's Vapi, Retell or GHL agent promised (time, date, time zone, price, discount) against the real calendar and price list. It alerts the agency within minutes when a \\\"you're booked\\\" or a quote is false, and gives the agency …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "judge:seed-investor",
+      "phaseIndex": 3,
+      "phaseTitle": "Judge",
+      "agentId": "abc9c4aa3209c95e6",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256432745,
+      "queuedAt": 1794256432720,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Design 4: Kept, post-call booking-truth verification (contr…",
+      "promptPreview": "You are a skeptical seed investor who has seen 50 agent-infra pitches this year. Score each design 1-5 on every dimension, name its fatal flaw and the best idea worth grafting into the winner, then pick a winner.\n\nEvidence:\n### agency-commitment-errors\nThe pain is real and well documented at the builder level. Vapi, Retell, n8n and Skool forums have many first-person threads about agents booking t…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256468951,
+      "tokens": 123199,
+      "toolCalls": 1,
+      "durationMs": 36206,
+      "resultPreview": "{\"scores\":[{\"name\":\"Design 1: BookedRight (fastest-revenue)\",\"evidence_of_demand\":3,\"willingness_to_pay\":2,\"reachability_of_buyer\":4,\"snuepi_reuse\":4,\"defensibility\":2,\"solo_feasibility\":2,\"scale_potential\":3,\"fatal_flaw\":\"It tries to do everything in 4 weeks: an inline gate on 4 platforms, post-call reconciliation, a white-label report, a stress tester and 9 booking connectors that have never tou…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 10,
+      "label": "judge:smb-operator",
+      "phaseIndex": 3,
+      "phaseTitle": "Judge",
+      "agentId": "a3c277b47ef3f3e90",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256432745,
+      "queuedAt": 1794256432721,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Design 4: Kept (contrarian, observe-first verification + cl…",
+      "promptPreview": "You are an operator who has sold software to SMBs and voice-AI agencies and knows their budgets and churn. Score each design 1-5 on every dimension, name its fatal flaw and the best idea worth grafting into the winner, then pick a winner.\n\nEvidence:\n### agency-commitment-errors\nThe pain is real and well documented at the builder level. Vapi, Retell, n8n and Skool forums have many first-person thre…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256474499,
+      "tokens": 123202,
+      "toolCalls": 1,
+      "durationMs": 40951,
+      "resultPreview": "{\"scores\":[{\"name\":\"Design 1: BookedRight (fastest-revenue)\",\"evidence_of_demand\":3,\"willingness_to_pay\":3,\"reachability_of_buyer\":4,\"snuepi_reuse\":4,\"defensibility\":2,\"solo_feasibility\":3,\"scale_potential\":3,\"fatal_flaw\":\"The sales hook is a synthetic stress test. It shows the agent CAN fail, not that it DOES fail on real client calls, and agencies will wave off 'your agent fails on adversarial D…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 11,
+      "label": "judge:evidence-auditor",
+      "phaseIndex": 3,
+      "phaseTitle": "Judge",
+      "agentId": "a6bafe66b6a050b62",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794256468956,
+      "queuedAt": 1794256432722,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Kept (a snuepi rework): independent booking-truth verificat…",
+      "promptPreview": "You are an evidence auditor who scores ONLY on what the cited evidence actually supports, penalising speculation and vendor marketing. Score each design 1-5 on every dimension, name its fatal flaw and the best idea worth grafting into the winner, then pick a winner.\n\nEvidence:\n### agency-commitment-errors\nThe pain is real and well documented at the builder level. Vapi, Retell, n8n and Skool forums…",
+      "promptFramed": true,
+      "lastProgressAt": 1794256504216,
+      "tokens": 123210,
+      "toolCalls": 1,
+      "durationMs": 35259,
+      "resultPreview": "{\"scores\":[{\"name\":\"BookedRight: a commitment gate and client proof report for voice-agent agencies (snuepi rework)\",\"evidence_of_demand\":3,\"willingness_to_pay\":2,\"reachability_of_buyer\":4,\"snuepi_reuse\":4,\"defensibility\":2,\"solo_feasibility\":2,\"scale_potential\":3,\"fatal_flaw\":\"It builds too much on too little proof. In 4 weeks it ships an inline gate on four platforms (Vapi, Retell, GHL, n8n), re…"
+    }
+  ],
+  "totalTokens": 1335520,
+  "totalToolCalls": 118
+}
