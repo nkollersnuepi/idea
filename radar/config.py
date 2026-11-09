@@ -43,7 +43,7 @@ class Config:
     gap_searches: int = 6
     gap_complaint_solutions: int = 3
     gap_problem_cut: float = 0.55
-    gap_solution_cut: float = 0.45
+    gap_solution_cut: float = 0.55
 
     themes: list[ThemeSeed] = field(default_factory=list)
 

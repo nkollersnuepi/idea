@@ -28,7 +28,7 @@ only_survivors = true        # only map solutions for themes that survived the s
 searches = 6                 # web searches per theme for the solution mapper
 complaint_solutions = 3      # top-N solutions probed for user complaints on HN/Reddit/GitHub/...
 problem_cut = 0.55           # problem_strength >= this counts as a strong problem
-solution_cut = 0.45          # solution_strength below this counts as weak solutions
+solution_cut = 0.55          # below this = no solution covers >=4/5 (a GA product at 3/5 scores ~0.50)
 
 [sources]
 enabled = ["hackernews", "reddit", "github", "stackexchange", "bluesky", "web"]

@@ -118,7 +118,7 @@ def gap_score(ps: float, ss: float, absorption_risk: int) -> float:
     return round(100 * ps * (1 - ss) * (1 - 0.4 * (absorption_risk - 1) / 4), 1)
 
 
-def quadrant(ps: float, ss: float, problem_cut: float = 0.55, solution_cut: float = 0.45) -> str:
+def quadrant(ps: float, ss: float, problem_cut: float = 0.55, solution_cut: float = 0.55) -> str:
     if ps >= problem_cut:
         return "TRUE GAP" if ss < solution_cut else "CROWDED"
     return "UNDERSERVED NICHE" if ss < solution_cut else "SOLVED"
@@ -145,7 +145,7 @@ COUNTER_SYSTEM = (
 
 class GapEngine:
     def __init__(self, llm, model: str, effort: str, sources: list, searches: int = 6,
-                 complaint_solutions: int = 3, problem_cut: float = 0.55, solution_cut: float = 0.45):
+                 complaint_solutions: int = 3, problem_cut: float = 0.55, solution_cut: float = 0.55):
         self.llm, self.model, self.effort, self.searches = llm, model, effort, searches
         self.sources = [s for s in sources if s.name != "web"]  # cheap keyword sources only
         self.complaint_solutions = complaint_solutions
