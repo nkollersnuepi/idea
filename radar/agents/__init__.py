@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from ..models import (Assessment, ExtractionBatch, Post, Problem, QueryPlan, SkepticVerdict, Theme, ThemeSet)
 from . import prompts
-from .llm import LLM, AgentRefused
+from .llm import LLM, AgentError, AgentRefused
 
 log = logging.getLogger("radar.agents")
 
@@ -34,7 +34,8 @@ class Extractor:
         self.system = prompts.EXTRACTOR.format(segments=", ".join(segments))
         self.batch_size, self.workers = batch_size, workers
 
-    def _batch(self, posts: list[Post]) -> list[Problem]:
+    def _batch(self, posts: list[Post]) -> list[Problem] | None:
+        """Problems for this batch, or None if the batch failed (posts stay pending for the next run)."""
         body = "\n\n".join(
             f"<post uid=\"{p.uid}\" source=\"{p.source}\" date=\"{p.created_at.date() if p.created_at else ''}\">\n{p.snippet()}\n</post>"
             for p in posts
@@ -42,17 +43,28 @@ class Extractor:
         try:
             out = self.llm.structured(model=self.model, effort=self.effort, system=self.system,
                                       schema=ExtractionBatch, max_tokens=32000, user=body)
-        except AgentRefused as e:
-            log.warning("extractor batch refused: %s", e)
-            return []
+        except Exception as e:
+            log.warning("extractor batch of %d failed, will retry next run: %s", len(posts), e)
+            return None
         valid = {p.uid for p in posts}
         return [pr for pr in out.problems if pr.is_problem and pr.post_uid in valid and pr.problem]
 
-    def extract(self, posts: list[Post]) -> list[Problem]:
+    def extract(self, posts: list[Post], on_batch=None) -> list[Problem]:
+        """Extract in parallel. `on_batch(posts, problems)` is called (in this thread) for each successful batch."""
         batches = [posts[i:i + self.batch_size] for i in range(0, len(posts), self.batch_size)]
+        out: list[Problem] = []
+        failed = 0
         with ThreadPoolExecutor(self.workers) as ex:
-            results = list(ex.map(self._batch, batches))
-        return [p for r in results for p in r]
+            for batch, probs in zip(batches, ex.map(self._batch, batches)):
+                if probs is None:
+                    failed += 1
+                    continue
+                out.extend(probs)
+                if on_batch:
+                    on_batch(batch, probs)
+        if failed:
+            log.warning("%d/%d extractor batches failed; their posts remain pending", failed, len(batches))
+        return out
 
 
 class Clusterer:
@@ -113,7 +125,8 @@ class SkepticPanel:
             try:
                 return self.llm.structured(model=self.model, effort=self.effort, schema=SkepticVerdict, max_tokens=8000,
                                            system=prompts.SKEPTIC.format(lens=lens), user=brief)
-            except AgentRefused:
+            except Exception as e:
+                log.warning("skeptic failed for %s: %s", theme.id, e)
                 return None
 
         with ThreadPoolExecutor(len(self.lenses)) as ex:

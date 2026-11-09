@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from ..models import Post
 from .base import Source, get_json
@@ -17,15 +17,28 @@ class Bluesky(Source):
         })
         out = []
         for p in data.get("posts", []):
-            rec = p.get("record", {})
-            handle = p.get("author", {}).get("handle", "")
-            rkey = p["uri"].rsplit("/", 1)[-1]
-            out.append(Post(
-                source=self.name, external_id=p["uri"],
-                url=f"https://bsky.app/profile/{handle}/post/{rkey}",
-                author=handle, text=rec.get("text", ""),
-                created_at=datetime.fromisoformat(rec.get("createdAt", p.get("indexedAt")).replace("Z", "+00:00")),
-                engagement=int(p.get("likeCount", 0)) + int(p.get("replyCount", 0)) + int(p.get("repostCount", 0)),
-                query=query,
-            ))
+            try:
+                rec = p.get("record", {})
+                handle = p.get("author", {}).get("handle", "")
+                rkey = p["uri"].rsplit("/", 1)[-1]
+                out.append(Post(
+                    source=self.name, external_id=p["uri"],
+                    url=f"https://bsky.app/profile/{handle}/post/{rkey}",
+                    author=handle, text=rec.get("text", ""),
+                    created_at=_ts(rec.get("createdAt")) or _ts(p.get("indexedAt")),
+                    engagement=int(p.get("likeCount") or 0) + int(p.get("replyCount") or 0) + int(p.get("repostCount") or 0),
+                    query=query,
+                ))
+            except Exception:  # skip one malformed record, keep the rest
+                continue
         return out
+
+
+def _ts(s: str | None) -> datetime | None:
+    if not s:
+        return None
+    try:
+        d = datetime.fromisoformat(s.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return d if d.tzinfo else d.replace(tzinfo=timezone.utc)

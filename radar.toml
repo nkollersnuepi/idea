@@ -5,6 +5,7 @@
 lookback_days = 120          # only keep posts newer than this
 max_posts_per_query = 25     # per source, per query
 max_posts_total = 1500       # hard cap before extraction (logged if hit)
+max_cluster_problems = 600   # cap on problems sent to the clusterer (logged if hit)
 min_intensity = 2            # drop extracted problems below this pain level
 db_path = "radar.db"
 report_dir = "reports"

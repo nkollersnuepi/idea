@@ -64,15 +64,21 @@ class Pipeline:
         return total_new
 
     def extract(self, run_id: str) -> list[Problem]:
+        since = datetime.now(timezone.utc) - timedelta(days=self.cfg.lookback_days)
         pending = self.store.count_unextracted()
-        posts = self.store.unextracted_posts(self.cfg.max_posts_total)
+        posts = self.store.unextracted_posts(self.cfg.max_posts_total, since)
         if pending > len(posts):
             log.warning("cap: extracting %d of %d pending posts (max_posts_total); rest wait for next run",
                         len(posts), pending)
-        problems = self.extractor.extract(posts)
-        self.store.add_problems(problems, run_id)
-        self.store.mark_extracted([p.uid for p in posts], run_id)
-        self.stats["posts_extracted"] = len(posts)
+        done = {"posts": 0}
+
+        def persist(batch, probs):  # persist per batch so a crash later loses nothing already paid for
+            self.store.add_problems(probs, run_id)
+            self.store.mark_extracted([p.uid for p in batch], run_id)
+            done["posts"] += len(batch)
+
+        problems = self.extractor.extract(posts, on_batch=persist)
+        self.stats["posts_extracted"] = done["posts"]
         self.stats["problems_new"] = len(problems)
         return problems
 
@@ -96,8 +102,19 @@ class Pipeline:
         if not corpus:
             log.warning("no problems in corpus; nothing to analyse")
             return []
+        cap = self.cfg.max_cluster_problems
+        if len(corpus) > cap:
+            # Keep the most painful, most recent, most engaged problems; log what is dropped.
+            total = len(corpus)
+            corpus = sorted(corpus, key=lambda pm: (pm[0].intensity, pm[1]["date"], pm[1]["engagement"]), reverse=True)[:cap]
+            log.warning("cap: clustering top %d of %d problems (max_cluster_problems)", cap, total)
+            self.stats["cluster_dropped"] = total - cap
         problems = [p for p, _ in corpus]
-        themes = self.clusterer.cluster(problems)
+        try:
+            themes = self.clusterer.cluster(problems)
+        except Exception as e:
+            log.error("clusterer failed (%s); falling back to one theme per segment", e)
+            themes = self._segment_themes(problems)
         self.stats["themes"] = len(themes)
         recent_cut = (now - timedelta(days=30)).date().isoformat()
 
@@ -119,7 +136,10 @@ class Pipeline:
                 rep.assessment = self.analyst.assess(theme, ev_text)
             except Exception as e:
                 log.warning("analyst failed for %s: %s", theme.id, e)
-            rep.verdicts = self.skeptics.judge(theme, ev_text, rep.assessment)
+            try:
+                rep.verdicts = self.skeptics.judge(theme, ev_text, rep.assessment)
+            except Exception as e:
+                log.warning("skeptic panel failed for %s: %s", theme.id, e)
             if rep.verdicts:
                 rep.survives = sum(v.survives for v in rep.verdicts) * 2 > len(rep.verdicts)
             if rep.assessment:
@@ -132,6 +152,15 @@ class Pipeline:
         reports.sort(key=lambda r: (r.survives, r.opportunity_score), reverse=True)
         self.stats["themes_surviving"] = sum(r.survives for r in reports)
         return reports
+
+    @staticmethod
+    def _segment_themes(problems: list[Problem]):
+        from .models import Theme
+        groups: dict[str, list[int]] = {}
+        for i, p in enumerate(problems):
+            groups.setdefault(p.segment or "other", []).append(i)
+        return [Theme(id=s, title=f"Unclustered: {s}", problem=f"Problems in segment {s}", who_has_it="various",
+                      problem_indexes=idx) for s, idx in groups.items()]
 
     # ---------------- entrypoint ----------------
     def run(self, now: datetime | None = None, collect: bool = True) -> tuple[str, list[ThemeReport]]:

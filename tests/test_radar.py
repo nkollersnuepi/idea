@@ -191,3 +191,76 @@ def test_bluesky_parser(fake_http):
                           "record": {"text": "agents", "createdAt": "2026-10-01T00:00:00.000Z"}, "likeCount": 2}]})
     p = Bluesky().search("q", SINCE, 5)[0]
     assert p.url == "https://bsky.app/profile/h.bsky.social/post/abc"
+
+
+# ---------------- regression tests for review findings ----------------
+
+class FlakyLLM(FakeLLM):
+    """Fails every other extractor batch and every skeptic call with a non-refusal error."""
+
+    def __init__(self):
+        super().__init__()
+        self.n = 0
+
+    def structured(self, *, schema, user, **kw):
+        if schema is ExtractionBatch:
+            self.n += 1
+            if self.n % 2 == 0:
+                raise ValueError("truncated JSON")
+        if schema is SkepticVerdict:
+            raise RuntimeError("529 overloaded")
+        return super().structured(schema=schema, user=user, **kw)
+
+
+class ManySource(Source):
+    name = "many"
+
+    def search(self, query, since, limit):
+        return [Post(source="many", external_id=f"{query}-{i}", url=f"https://m/{query}/{i}", text="agent broke " * 5,
+                     created_at=NOW) for i in range(20)]
+
+
+def test_failed_batches_stay_pending_and_run_survives(tmp_path):
+    cfg = make_cfg(tmp_path)
+    store = Store(cfg.db_path)
+    pipe = Pipeline(cfg, FlakyLLM(), [ManySource()], store)
+    _, reports = pipe.run(NOW)  # must not raise despite batch + skeptic failures
+    assert pipe.stats["posts_extracted"] < 40 and store.count_unextracted() > 0
+    assert reports and all(r.verdicts == [] for r in reports)
+
+
+def test_round_robin_across_sources(tmp_path):
+    store = Store(tmp_path / "s.db")
+    posts = [Post(source="hackernews", external_id=str(i), url="u", text="t", engagement=1000) for i in range(10)]
+    posts += [Post(source="web", external_id=f"w{i}", url="u", text="t", engagement=0) for i in range(3)]
+    store.add_posts(posts, "r1")
+    got = store.unextracted_posts(6)
+    assert sum(p.source == "web" for p in got) == 3
+
+
+def test_gzip_and_url_normalisation():
+    import gzip
+    from radar.sources.base import _decode
+    from radar.sources.web import normalise_url
+    assert _decode(gzip.compress(b'{"a": 1}'), "gzip") == {"a": 1}
+    assert normalise_url("https://www.twitter.com/u/status/1/?s=20#x") == normalise_url("http://x.com/u/status/1")
+
+
+def test_research_keeps_paused_segments():
+    from types import SimpleNamespace as NS
+    from radar.agents.llm import LLM
+
+    def text(t, url):
+        return NS(type="text", text=t, citations=[NS(url=url, title="", cited_text="q")])
+
+    msgs = iter([NS(stop_reason="pause_turn", content=[text("first", "https://a")], usage=None),
+                 NS(stop_reason="end_turn", content=[text("second", "https://b")], usage=None)])
+
+    class Stream:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def get_final_message(self): return next(msgs)
+
+    client = NS(beta=NS(messages=NS(stream=lambda **kw: Stream())))
+    out = LLM(client).research(model="m", effort="low", system="s", user="u")
+    assert "first" in out and "https://a" in out and "https://b" in out

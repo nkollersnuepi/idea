@@ -18,6 +18,7 @@ class Config:
     lookback_days: int = 120
     max_posts_per_query: int = 25
     max_posts_total: int = 1500
+    max_cluster_problems: int = 600
     min_intensity: int = 2
     db_path: str = "radar.db"
     report_dir: str = "reports"
@@ -49,7 +50,7 @@ class Config:
         run = raw.get("run", {})
         models = raw.get("models", {})
         src = raw.get("sources", {})
-        for k in ("lookback_days", "max_posts_per_query", "max_posts_total", "min_intensity", "db_path", "report_dir"):
+        for k in ("lookback_days", "max_posts_per_query", "max_posts_total", "max_cluster_problems", "min_intensity", "db_path", "report_dir"):
             if k in run:
                 setattr(cfg, k, run[k])
         if "default" in models:

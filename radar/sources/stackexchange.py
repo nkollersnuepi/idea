@@ -5,6 +5,7 @@ from __future__ import annotations
 import html
 import os
 import re
+import time
 from datetime import datetime, timezone
 
 from ..models import Post
@@ -18,10 +19,13 @@ class StackExchange(Source):
 
     def __init__(self, sites: list[str]):
         self.sites = sites
+        self.exhausted = False
 
     def search(self, query, since, limit):
         out = []
         for site in self.sites:
+            if self.exhausted:
+                break
             params = {
                 "order": "desc", "sort": "creation", "q": query, "site": site,
                 "fromdate": int(since.timestamp()), "pagesize": min(limit, 100), "filter": "withbody",
@@ -29,6 +33,12 @@ class StackExchange(Source):
             if os.environ.get("STACKEXCHANGE_KEY"):
                 params["key"] = os.environ["STACKEXCHANGE_KEY"]
             data = get_json("https://api.stackexchange.com/2.3/search/advanced", params)
+            if data.get("backoff"):  # mandatory per API terms
+                time.sleep(min(int(data["backoff"]), 60))
+            if data.get("quota_remaining", 1) <= 0:
+                self.exhausted = True
+                import logging
+                logging.getLogger("radar.sources").warning("stackexchange daily quota exhausted; set STACKEXCHANGE_KEY")
             for it in data.get("items", []):
                 out.append(Post(
                     source=self.name, external_id=f"{site}:{it['question_id']}", url=it["link"],

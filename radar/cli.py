@@ -33,11 +33,15 @@ def main(argv: list[str] | None = None) -> int:
         cfg.themes = [t for t in cfg.themes if t.name in keep]
 
     if a.command == "sources":
-        from .sources.base import Source  # noqa
         since = datetime.now(timezone.utc) - timedelta(days=cfg.lookback_days)
-        for s in build_sources(cfg, None if "web" not in cfg.sources else LLM()):
-            got = s.safe_search("AI agent", since, 3)
-            print(f"{s.name:14} {'OK ' if got else 'FAIL/empty'} {len(got)} posts")
+        if not a.sources:  # the web agent costs Claude calls; probe it only when asked explicitly
+            cfg.sources = [s for s in cfg.sources if s != "web"]
+        for s in build_sources(cfg, LLM() if "web" in cfg.sources else None):
+            try:
+                got = s.search("AI agent", since, 3)
+                print(f"{s.name:14} {'OK   ' if got else 'EMPTY'} {len(got)} posts")
+            except Exception as e:
+                print(f"{s.name:14} FAIL  {type(e).__name__}: {e}")
         return 0
 
     llm = LLM()

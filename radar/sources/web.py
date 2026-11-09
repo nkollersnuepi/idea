@@ -8,6 +8,7 @@ first-person posts with URLs.
 from __future__ import annotations
 
 import hashlib
+import urllib.parse
 from datetime import datetime, timezone
 
 from pydantic import BaseModel, Field
@@ -19,6 +20,13 @@ SYSTEM = (
     "You find real people describing their own problems online. You never invent posts, quotes or URLs. "
     "Vendor marketing, analyst reports and news articles are not posts; skip them unless they quote a named user."
 )
+
+
+def normalise_url(url: str) -> str:
+    """Stable identity for dedup: lowercase host, drop scheme, query, fragment, trailing slash."""
+    u = urllib.parse.urlsplit(url.strip())
+    host = u.netloc.lower().removeprefix("www.").replace("twitter.com", "x.com")
+    return f"{host}{u.path.rstrip('/')}"
 
 
 class WebMention(BaseModel):
@@ -62,7 +70,7 @@ class WebAgent(Source):
             if created and created < since:
                 continue
             out.append(Post(
-                source=f"web:{m.platform}", external_id=hashlib.sha1(m.url.encode()).hexdigest()[:20],
-                url=m.url, author=m.author, text=m.text, created_at=created, query=query,
+                source="web", external_id=hashlib.sha1(normalise_url(m.url).encode()).hexdigest()[:20],
+                url=m.url, author=m.author, title=f"[{m.platform}]", text=m.text, created_at=created, query=query,
             ))
         return out

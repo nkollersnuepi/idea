@@ -46,16 +46,28 @@ class Store:
         self.db.commit()
         return fresh
 
-    def unextracted_posts(self, limit: int) -> list[Post]:
+    def unextracted_posts(self, limit: int, since: datetime | None = None) -> list[Post]:
+        """Pending posts, round-robin across sources (newest, then most engaged, first) so no source starves."""
         rows = self.db.execute(
             "SELECT source, external_id, url, author, title, text, created_at, engagement, query FROM posts "
-            "WHERE uid NOT IN (SELECT post_uid FROM extracted) ORDER BY engagement DESC LIMIT ?",
-            (limit,),
+            "WHERE uid NOT IN (SELECT post_uid FROM extracted) "
+            "ORDER BY first_seen_run DESC, created_at DESC, engagement DESC"
         ).fetchall()
+        by_source: dict[str, list] = {}
+        cutoff = since.isoformat() if since else None
+        for r in rows:
+            if cutoff and r[6] and r[6] < cutoff:
+                continue  # aged out of the window; never worth paying to extract
+            by_source.setdefault(r[0].split(":")[0], []).append(r)
+        picked, queues = [], [q for q in by_source.values()]
+        while len(picked) < limit and any(queues):
+            for q in queues:
+                if q and len(picked) < limit:
+                    picked.append(q.pop(0))
         return [
             Post(source=r[0], external_id=r[1], url=r[2], author=r[3], title=r[4], text=r[5],
                  created_at=datetime.fromisoformat(r[6]) if r[6] else None, engagement=r[7], query=r[8])
-            for r in rows
+            for r in picked
         ]
 
     def count_unextracted(self) -> int:
