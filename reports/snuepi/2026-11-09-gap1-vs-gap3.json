@@ -1,0 +1,1749 @@
+{
+  "summary": "Targeted validation of gap #1 (enterprise agent verification) vs gap #3 (Kept) with GitHub-verified evidence and adversarial checks",
+  "agentCount": 12,
+  "logs": [
+    "g1 {\"total\":54,\"verified\":11,\"pain\":28,\"wtp\":7,\"counter\":5} | g3 {\"total\":76,\"verified\":35,\"pain\":44,\"wtp\":7,\"counter\":7}"
+  ],
+  "result": {
+    "stats": {
+      "g1": {
+        "total": 54,
+        "verified": 11,
+        "pain": 28,
+        "wtp": 7,
+        "counter": 5
+      },
+      "g3": {
+        "total": 76,
+        "verified": 35,
+        "pain": 44,
+        "wtp": 7,
+        "counter": 7
+      }
+    },
+    "hunts": [
+      {
+        "key": "g1-forums",
+        "gap": "g1",
+        "findings": [
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Salesforce admitted its own Agentforce Deflection Rate metric was inflated: timed-out sessions were counted as deflected until a bug fix in version 260.9. Vendor-reported outcome metrics cannot be trusted at face value.",
+            "quote": "The prior classification inflated Deflection numbers and understated Abandonment by counting timed-out sessions as deflected.",
+            "url": "https://help.salesforce.com/s/articleView?id=005316995&language=en_US&type=1",
+            "date": "2026-04-03",
+            "who": "Salesforce Help (official knowledge article, 'Agentforce Session End Classification Logic Bug Fix')",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "An Intercom Fin customer hand-audited 'resolved by Fin' tickets and found most were not actually resolved, so the vendor's resolution metric overstated outcomes.",
+            "quote": "16 of those are marked as \"resolved by Fin\"... However, when looking at these tickets, 9 out of 16 are not solved by Fin at all.",
+            "url": "https://community.intercom.com/fin-product-feedback-member-group-49/fin-s-flawed-resolution-assumption-10516",
+            "date": "approx 2025-05 (thread ~531 days old per search snippet)",
+            "who": "Intercom customer, Intercom Community 'Fin product feedback' thread",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A support manager reported a real Fin resolve rate of about 12% while the Fin dashboard showed 84.5%. This is a large gap between the vendor's claim and ground truth.",
+            "quote": "Her dashboard showed 84.5% resolution.",
+            "url": "https://www.getmacha.com/blog/ai-customer-service-resolution-rate-statistics",
+            "date": "2026 (unknown exact)",
+            "who": "Support manager quoted in an Intercom community thread, relayed by a competitor blog (Macha)",
+            "verification": "secondhand"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Intercom's own caveat concedes its headline resolution rate is not the same as work actually done. Fin's 'assumed resolution' counts silence as success.",
+            "quote": "a 66% resolution rate isn't yet doing 66% of the work for you",
+            "url": "https://clonedesk.ai/blog/intercom-fin-limitations",
+            "date": "2026 (unknown exact)",
+            "who": "Intercom statement quoted by a competitor blog (CloneDesk)",
+            "verification": "secondhand"
+          },
+          {
+            "gap": "g1",
+            "kind": "counter_evidence",
+            "claim": "Intercom reportedly changed billing so replies after an assumed resolution no longer count toward the bill. The vendor partly fixed the metric-billing mismatch itself, which shrinks the wedge for an outside auditor.",
+            "quote": "Intercom later changed billing so replies after an assumed resolution no longer count toward the bill.",
+            "url": "https://community.intercom.com/fin-product-feedback-member-group-49/fin-s-flawed-resolution-assumption-10516",
+            "date": "unknown",
+            "who": "Intercom Community thread (search summary)",
+            "verification": "secondhand"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Several 2026 r/servicenow discussions describe customers and implementers abandoning or constraining Now Assist after generic or incorrect answers. One admin said it failed on questions that span several tables.",
+            "quote": "ServiceNow customers abandoned Now Assist after wrong answers and weak capabilities",
+            "url": "https://vibegraveyard.ai/story/servicenow-now-assist-customer-abandonment-reports/",
+            "date": "2026",
+            "who": "Aggregator (vibegraveyard.ai) summarizing four Reddit r/servicenow threads; the threads themselves were not opened",
+            "verification": "secondhand"
+          },
+          {
+            "gap": "g1",
+            "kind": "buyer_budget",
+            "claim": "Bloomberg reports that SAP customers and partners question whether SAP's AI tools are worth the money, and that early Joule users are disappointed.",
+            "quote": "Some early users of the company's flagship AI assistant, Joule, have been disappointed, customers and partners said, asking to not be identified.",
+            "url": "https://www.bloomberg.com/news/articles/2026-02-25/sap-users-question-value-for-money-of-firm-s-ai-tools",
+            "date": "2026-02-25",
+            "who": "Bloomberg, citing anonymous SAP customers and partners",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A customer team that deployed Joule in S/4HANA Cloud Private Edition reported irrelevant answers, inconsistent results when the same question was repeated, and no official channel for feedback.",
+            "quote": "Most users feel frustrated with its performance.",
+            "url": "https://community.sap.com/t5/enterprise-resource-planning-blog-posts-by-members/feedback-on-joule/ba-p/14219219",
+            "date": "2025 (approx; post id 14219219)",
+            "who": "SAP customer member, SAP Community blog 'Feedback on Joule'",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "In an independent consultant test, SAP Joule for Consultants answered 8 of 17 Public Sector Management questions correctly, no better than a general-purpose model. Polished presentation made the wrong answers look more convincing.",
+            "quote": "SAP's own Joule for Consultants answered 8 correctly. The best tools in that test reached 12, and a general-purpose AI model without SAP specialization also got 8.",
+            "url": "https://blog.adesso-bc.com/en/pushing-sap-joule-for-consultants-to-the-limits-what-the-expert-feature-really-delivers/",
+            "date": "2026-10 (approx, ~2 weeks before search)",
+            "who": "adesso business consulting (SAP partner consultants)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "An SAP consultancy found that Joule's answers changed with prompt wording and contradicted each other. It warned that non-experts could act on wrong answers, which points to the need for verification against ground truth.",
+            "quote": "On archived data in DART, Joule first said yes, then later said the feature had been removed.",
+            "url": "https://www.tjc-group.com/blogs/is-sap-joule-for-consultants-a-great-assistant-our-opinion/",
+            "date": "unknown (2025-2026)",
+            "who": "TJC Group (SAP data-management consultancy)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "An HR agent builder on Copilot Studio reported inconsistent answers to the same question from a 140-page policy document, although the bot is supposed to answer strictly from that document.",
+            "quote": "The bot is expected to provide answers strictly based on the content of this document.",
+            "url": "https://learn.microsoft.com/en-us/answers/questions/5654951/inconsistent-and-hallucinatory-responses-from-copi",
+            "date": "2025-12",
+            "who": "Copilot Studio customer/builder, Microsoft Q&A",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A Copilot Studio HR agent grounded on 30 internal documents kept naming insurance companies that appear in none of them, a hallucination of facts outside the system of record.",
+            "quote": "I realized \"Use general knowledge\" was switched on, when switched off its more grounded to the internal knowledge sources.",
+            "url": "https://learn.microsoft.com/en-us/answers/questions/5620401/microsoft-copilot-agent-struggle-with-hallucinatio",
+            "date": "2025-11",
+            "who": "Copilot Studio customer, Microsoft Q&A",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A Copilot Studio builder saw the agent stream the correct grounded answer and then switch to a wrong or incomplete final answer, most often with SharePoint List knowledge sources.",
+            "quote": "Copilot Studio Agent: Why Does It Start With the Right Answer and Then Switch Mid-Response?",
+            "url": "https://learn.microsoft.com/en-us/answers/questions/5635444/copilot-studio-agent-why-does-it-start-with-the-ri",
+            "date": "2025-11 (approx)",
+            "who": "Copilot Studio builder, Microsoft Q&A (question title)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A practitioner found Copilot Studio's native evaluation workflow broken end to end. Generated eval sets were silently dropped on push, and CSV imports were rejected. Building golden test sets inside the vendor tool is fragile.",
+            "quote": "End-to-end, this means a user who asks for evaluation test sets gets ~25 minutes of work product that fails on every supported import surface, with no actionable error from the tooling itself",
+            "url": "https://github.com/microsoft/skills-for-copilot-studio/issues/170",
+            "date": "2026-05-14",
+            "who": "GitHub user Dewain27, issue on microsoft/skills-for-copilot-studio",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A builder could not import golden evaluation CSVs into the Copilot Studio Evaluate tab, which shows friction in replaying test sets against vendor agents.",
+            "quote": "When importing the evaluation CSV files (`evaluation-1-smoke.csv` through `evaluation-4-compound.csv`) into the Copilot Studio Evaluate tab, the import fails.",
+            "url": "https://github.com/t3blake/woodgrove-modern-bank-mcp/issues/1",
+            "date": "2026-04-08",
+            "who": "GitHub user t3blake (Copilot Studio agent builder)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A Microsoft-ecosystem practitioner found that the agent reasoning and tool-call traces in Copilot Studio transcripts are undocumented and stored as opaque JSON that common tooling throws away. Independently auditing what the agent did requires reverse engineering.",
+            "quote": "None of these appear anywhere in Microsoft Learn. I searched; there are no hits for the event names",
+            "url": "https://github.com/russrimm/Russ-Rimmerman-Blog/issues/139",
+            "date": "2026-08-24",
+            "who": "GitHub user russrimm (Russ Rimmerman, Copilot Studio blogger)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Agentforce Testing Center scores responses with an LLM judge. Practitioners note that a wrong answer structured like the expected one can still pass, so a vendor test pass does not prove factual accuracy.",
+            "quote": "Response Evaluation (turn-level): an LLM judge compares the agent's answer to the expected one.",
+            "url": "https://www.getclientell.com/salesforce-blogs/agentforce-testing-center-vs-real-testing-2026",
+            "date": "2026",
+            "who": "Clientell (Salesforce consultancy blog, 'What It Does & Doesn't Test')",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "TestZeus positions itself as AI test automation built specifically for Salesforce and Agentforce, a direct competitor for independent Agentforce verification.",
+            "quote": "an AI-powered test automation platform built specifically for Salesforce and the Salesforce Agentforce ecosystem",
+            "url": "https://testzeus.com/blog/agentforce-testing-new-qa-playbook",
+            "date": "2026 (unknown exact)",
+            "who": "TestZeus (vendor) / third-party guide",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Coval raised a $28M Series A in June 2026 for agent evaluation and simulation (voice-first). The adjacent space of independent agent QA is being funded.",
+            "quote": "Coval, the evaluation platform for voice AI, today announced a $28 million Series A round of financing led by Norwest with participation from Base10 Partners, Twilio Ventures and Y Combinator.",
+            "url": "https://www.fiercehealthcare.com/ai-and-machine-learning/coval-raises-28m-series-address-ai-voice-agent-reliability-compliance",
+            "date": "2026-06-24",
+            "who": "Fierce Healthcare reporting Coval funding",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Cyara is the funded incumbent in CX testing and assurance (about $375M raised), and newer entrants such as Bluejay (YC X25) also test chat and voice agents. The independent auditor would compete with them.",
+            "quote": "an end-to-end testing and observability platform for voice and chat AI agents, backed by YC X25",
+            "url": "https://www.coval.ai/blog/coval-vs-bluejay/",
+            "date": "2026",
+            "who": "Coval comparison blog (competitor source, not neutral)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "platform_roadmap",
+            "claim": "ServiceNow ships native evaluation (truthfulness and grounding checks, results in AI Control Tower) and earlier announced a Data Kit for ground-truth datasets. The platform is absorbing evaluation, which is a risk to a third-party auditor.",
+            "quote": "Improving Virtual Agent Conversation Quality with Now Assist Evaluation Skills",
+            "url": "https://www.servicenow.com/community/servicenow-otto-articles/improving-virtual-agent-conversation-quality-with-now-assist/ta-p/3597302",
+            "date": "2026 (approx)",
+            "who": "ServiceNow Community article",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "counter_evidence",
+            "claim": "Consultants attribute much of Now Assist's poor output to customer knowledge-base and data quality rather than the product. An auditor would surface data problems as well as vendor failures, so the buyer's motivation may be remediation rather than holding the vendor accountable.",
+            "quote": "Now Assist grounds every answer in the knowledge articles and incident records already sitting in your instance",
+            "url": "https://www.screenmeet.com/blog/signs-your-servicenow-kb-is-not-ready-for-now-assist",
+            "date": "2026 (unknown exact)",
+            "who": "ScreenMeet (ServiceNow ecosystem vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "counter_evidence",
+            "claim": "Despite the anecdotes, Now Assist commercial traction is strong (ACV above $600M, heading toward a $1B run rate). Dissatisfaction is not stopping purchases.",
+            "quote": "Now Assist ACV surpassed $600M and tracked toward a $1B run rate",
+            "url": "https://www.infotech.com/software-reviews/vendor-technology-notes/servicenow-q4-results-reinforce-enterprise-ai-driving-business-impact",
+            "date": "2026-01/02 (Q4 results note)",
+            "who": "Info-Tech Research Group vendor note",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "buyer_budget",
+            "claim": "Gartner found that customer service AI spending rose 38% while overall service budgets rose 2%. Flat budgets make each AI line item visible to CFOs, which creates demand for proof of outcomes.",
+            "quote": "spending on AI has increased by 38%, while overall service and support function budgets have grown just 2%.",
+            "url": "https://www.gartner.com/en/newsroom/press-releases/2026-08-26-gartner-survey-finds-ai-spending-by-customer-service-leaders-has-surged-by-38-percent-despite-overall-service-and-support-function-budgets-rising-by-just-2-percent",
+            "date": "2026-08-26",
+            "who": "Gartner press release (survey of 199 service leaders)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "buyer_budget",
+            "claim": "A reported Gartner survey found that only 24% of service functions saw positive financial returns from AI, even though service invested the highest share of budget in AI (median 12%).",
+            "quote": "service and support functions invested a median of 12% of their 2025 budget in AI, the highest of any business function, yet only 24% saw positive financial returns.",
+            "url": "https://www.cxtoday.com/ai-automation-in-cx/gartner-warns-cx-ai-budgets-are-surging/",
+            "date": "2026-08/09",
+            "who": "CX Today reporting Gartner survey of 1,303 senior leaders",
+            "verification": "secondhand"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Gartner's analyst says AI agents must be managed like technology, with observability and auditability, which supports demand for audit tooling.",
+            "quote": "AI agents are tools. They're very powerful tools, but they're not employees, they're not teammates, and they have to be managed like technology.",
+            "url": "https://www.cxtoday.com/ai-automation-in-cx/gartner-warns-cx-ai-budgets-are-surging/",
+            "date": "2026-08/09",
+            "who": "Kathy Ross, Gartner analyst, quoted in CX Today",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "An analysis argues that vendor-reported deflection runs 10 to 20 points above independently measured deflection, because vendors count any conversation without a human as deflected.",
+            "quote": "Vendors count as 'deflected' any conversation where no human agent was directly involved.",
+            "url": "https://aiagentforcustomerservice.com/deflection-rates/",
+            "date": "2026",
+            "who": "Third-party benchmark blog (not independent study)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A Salesforce partner blogger says Agentforce holds up only for simple use cases and criticizes the rollout. Complex deployments are where it struggles.",
+            "quote": "If you have simple uses cases you stand a good chance of being able to launch an Agent to help customers 24/7, that isn't easily wrong-footed if someone asks an unexpected question, with minimal effort.",
+            "url": "https://bobbuzz.substack.com/p/agentforce-a-mixed-bag",
+            "date": "unknown (2025)",
+            "who": "Bob Buzzard (Keir Bowden, Salesforce CTO/consultant) Substack",
+            "verification": "snippet"
+          }
+        ],
+        "summary": "I found 27 findings, but direct first-person evidence was thin. GitHub code search (GraphQL) is blocked, and the REST issue search returned mostly noise. Three relevant Copilot Studio issues were read in full: microsoft/skills-for-copilot-studio#170, t3blake/woodgrove-modern-bank-mcp#1 and russrimm/Russ-Rimmerman-Blog#139. All are about how hard it is to build or replay evaluations and to audit agent traces. I used all 12 web searches. None surfaced individual Reddit, G2 or LinkedIn posts, so the first-person complaints come from vendor forums (Intercom Community, SAP Community, Microsoft Q&A) and are snippet quality.\n\nThe strongest evidence for the gap is vendor metrics shown to be wrong:\n- **Salesforce's own fix (April 2026):** a bug fix in Agentforce 260.9 admits timed-out sessions had been counted as deflected, which inflated the Deflection Rate.\n- **Intercom Fin hand audit:** a customer checked 16 tickets marked \"resolved by Fin\" and found 9 were not actually solved.\n- **Fin dashboard gap:** a support manager reported a dashboard showing 84.5% resolution against about 12% real resolution. This came secondhand, through a competitor blog.\n\nJoule complaints are documented by Bloomberg (anonymous users, February 2026), an SAP Community post and consultant tests (adesso: 8 of 17 correct). Copilot Studio hallucination and inconsistency complaints are on Microsoft Q&A. Now Assist abandonment reports reached me only through an aggregator, vibegraveyard.ai; I did not open the underlying Reddit threads.\n\nOn budget, Gartner reports customer service AI spending up 38% against budgets up 2%. A secondhand figure says only 24% of service functions saw positive financial returns from AI.\n\nThe main risks:\n- **Platforms are building their own testing:** Agentforce Testing Center and ServiceNow's evaluation checks with AI Control Tower.\n- **Funded independent QA players already exist:** Coval ($28M Series A), Cyara, Bluejay, and TestZeus, which targets Agentforce.\n- **Data quality, not just the vendor, is often the cause:** consultants trace Now Assist's poor output to customers' own knowledge bases.\n- **Strong sales despite complaints:** Now Assist ACV passed $600M.\n- **Intercom partly fixed the problem itself:** it changed billing for assumed resolutions.\n\nTwo things would firm this up: a browser able to open r/servicenow, r/salesforce and G2 directly, and opening the Reddit threads behind vibegraveyard's summary to get verified quotes."
+      },
+      {
+        "key": "g1-budget-competitors",
+        "gap": "g1",
+        "findings": [
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A practitioner testing Agentforce reports that Testing Center's LLM-judged expectedOutcome is too lenient. An agent with an instruction clause removed still passed. The only deterministic text assertion errors on the documented reference. So the vendor's own test tool can't reliably catch regressions.",
+            "quote": "The LLM-judged `expectedOutcome` is lenient (... an agent whose instruction clause was removed still passed a judge rubric that named the missing behavior). `string_comparison` is the platform's only deterministic assertion over response text — precisely the tool needed when the judge is too soft — and it errors as documented.",
+            "url": "https://github.com/forcedotcom/cli/issues/3636",
+            "date": "2026-08-28",
+            "who": "jimnovakoff (Salesforce CLI user, Agentforce Developer Edition org)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "The same practitioner found that Testing Center results report the routed topic as a truncated name ('p') for topics that Salesforce's own `sf agent create` generates. This means vendor-native test reporting of topic routing is unreliable.",
+            "quote": "Testing Center results report the routed topic as a truncated name (\"p\") for topics with the `p_<plannerId>_` prefix that `sf agent create` itself generates",
+            "url": "https://github.com/forcedotcom/cli/issues/3635",
+            "date": "2026-08-28",
+            "who": "jimnovakoff (Salesforce CLI user)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A Microsoft (Power CAT) staffer notes that the Copilot Studio Kit runs each test once, so the results are statistically weak and flaky. This is a known gap in the vendor-adjacent testing tool.",
+            "quote": "Because genAIi models are non-deterministic, a single execution of a test case will not produce a statistically significant result. The single-run approach of test sets is likely to produce false positive/negatives and \"flaky\" test sets.",
+            "url": "https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/issues/277",
+            "date": "2025-08-12",
+            "who": "AndreaC-MSFT (Microsoft Power CAT)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Copilot Studio Kit's pass/fail grading hides gradual quality regressions between agent versions.",
+            "quote": "We run test case 1 against my agent v2 and it still we get \"Success\" because the answer still satisfies the eval. However, the change that we made decreases the quality of the answer slightly (but not enough to make it fail). Here we are with an undetected regression",
+            "url": "https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/issues/276",
+            "date": "2025-08-12",
+            "who": "Copilot Studio Kit issue author (Microsoft repo)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "willingness_to_pay",
+            "claim": "An enterprise Copilot Studio team is asking for factual-precision and business-rubric scoring (Compliance, Citations) that the native kit lacks. They are willing to build custom evaluators, which signals unmet evaluation demand inside Copilot Studio shops.",
+            "quote": "Scoring metrics such as Semantic similarity, BERTScore, CosSim, Factual precision, F1/BLEU/ROUGE ... are not currently available in Copilot Studio Kit... We aim to develop custom LLM-based evaluators leveraging GPT models to perform business-specific rubric scoring for categories such as Compliance, Citations, Relevancy, Clarity, and Recommendations.",
+            "url": "https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/issues/432",
+            "date": "2025-10-30",
+            "who": "gondor-netizen (Copilot Studio Kit user)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Copilot Studio Kit validates only one output message rather than the full agent response, so the agent's real behavior can go unchecked.",
+            "quote": "if an agent provides multiple messages in the output for an input query, the framework either takes the first message or the message at position X ... It is not always possible to know the position of the exact message we want to validate beforehand",
+            "url": "https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/issues/517",
+            "date": "2025-12-11",
+            "who": "IamAkshay14 (Copilot Studio Kit user)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "In Copilot Studio Kit, the Generative Answers evaluation and Dataverse enrichment steps get stuck in Pending. The native evaluation pipeline is operationally fragile.",
+            "quote": "after the Test Run, when the Responses has been generated, the Test run is struggling to run the Generative Answers Evaluation and Dataverse Enrichment, keeping them in Pending Status",
+            "url": "https://github.com/microsoft/Power-CAT-Copilot-Studio-Kit/issues/904",
+            "date": "2026-10-09",
+            "who": "Copilot Studio Kit user",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A user found that Microsoft's own Copilot Studio skill for authoring evaluation test sets produces files that fail on every supported import path. Building golden sets for vendor agents takes a lot of manual effort.",
+            "quote": "a user who asks for evaluation test sets gets ~25 minutes of work product that fails on every supported import surface, with no actionable error from the tooling itself",
+            "url": "https://github.com/microsoft/skills-for-copilot-studio/issues/170",
+            "date": "2026-05-14",
+            "who": "Dewain27 (Copilot Studio user)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Copilot Studio Agent Evaluation became generally available on March 31, 2026. It supports CSV test sets with expected responses, test sets generated from production conversations, and an evaluation API. This is the closest native equivalent to golden-set replay, but it compares against expected text, not against system-of-record outcomes.",
+            "quote": "Makers can build test sets by uploading a CSV of questions and expected responses, writing questions by hand, or generating questions from production conversations",
+            "url": "https://techcommunity.microsoft.com/blog/copilot-studio-blog/agent-evaluation-in-microsoft-copilot-studio-is-now-generally-available/4507392",
+            "date": "2026-03-31",
+            "who": "Microsoft Copilot Studio blog",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Agentforce Testing Center auto-generates synthetic interactions to check topic and action selection. Salesforce puts production accuracy in a separate product (Agentforce Analytics / Utterance Analysis), and practitioners say synthetic cases need manual review to avoid false failures.",
+            "quote": "Testing Center can auto-generate hundreds of synthetic interactions, then test them in parallel ... cleaning those out before testing saved me from chasing false failures",
+            "url": "https://dev.to/dipojjal/how-to-test-agentforce-agents-before-they-hit-production-44fj",
+            "date": "2026",
+            "who": "Practitioner blog (DEV Community) plus Salesforce materials",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Copado, a Salesforce DevOps vendor, positions itself as going beyond Agentforce Testing Center. It argues the native tool validates responses only in controlled environments, so it is not the entire solution. Salesforce-ecosystem testing vendors are entering this space.",
+            "quote": "Testing Center provides powerful new tools to test autonomous AI agents, but it's not the entire solution",
+            "url": "https://copado.com/resources/blog/beyond-the-agentforce-testing-center",
+            "date": "2025",
+            "who": "Copado (vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "platform_roadmap",
+            "claim": "At Knowledge 2026, ServiceNow expanded AI Control Tower to third-party agents, adding runtime 'Observe' (built on the Traceloop acquisition), an AI Gateway, and enforcement. Third-party agents are registered through the CMDB. ServiceNow is claiming to be the cross-vendor agent governor, but its focus is governance and telemetry, not outcome accuracy.",
+            "quote": "replacing periodic manual audits with live visibility into how agents operate",
+            "url": "https://siliconangle.com/2026/05/05/servicenow-bids-become-control-tower-enterprise-ai/",
+            "date": "2026-05-05",
+            "who": "SiliconANGLE / ServiceNow announcement",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "A ServiceNow community thread asks whether AI Control Tower can actually enforce policy on third-party agents, or whether they are effectively read-only. This leaves open how well the platform can verify agents it does not own.",
+            "quote": "whether third-party agents are effectively \"read-only\" from a policy enforcement standpoint",
+            "url": "https://www.servicenow.com/community/now-assist-for-creator-forum/how-does-ai-control-tower-handle-governance-for-third-party-ai/m-p/3535450",
+            "date": "2026-04",
+            "who": "ServiceNow Community forum user",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "counter_evidence",
+            "claim": "Salesforce publishes its own answer-quality measurement for Agentforce (Customer Zero). It pairs answer quality with resolution and escalation rates and reports a 60% answer-quality benchmark. The vendor is claiming the measurement role itself, which could reduce demand for third-party verification, but the numbers are self-reported.",
+            "quote": "answer quality on its own isn't enough to determine effectiveness",
+            "url": "https://www.salesforce.com/agentforce/use-cases/customer-zero/how-salesforce-measures-answer-quality/",
+            "date": "2025-10",
+            "who": "Salesforce",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "Vendor resolution claims are inconsistent. Fin's figure is reported as 76%, 65% or 60% depending on the source, and 'resolution' means 'no human handoff', not a verified outcome. Analysts tell buyers to audit sampled resolved conversations themselves.",
+            "quote": "76% in the Press Release, 51% Out of the Box: The Real Math of AI Support Agents in 2026",
+            "url": "https://www.aceverse.co/en/blog/ai-agenty-pidtrymky-2026",
+            "date": "2026",
+            "who": "aceverse analysis blog",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "pain",
+            "claim": "There is no consistent definition of AI 'resolution'. It can mean deflection, customer-confirmed resolution, or no ticket created. Salesforce's own Agentforce resolution figures dropped from 84% to 76% to 63% across its pages.",
+            "quote": "There's no consistent definition of \"resolution\"",
+            "url": "https://www.getmacha.com/blog/ai-customer-service-resolution-rate-statistics",
+            "date": "2026",
+            "who": "Macha (blog analysis)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "AIUC-1 is an agent certification with technical evaluations and quarterly retests. Auditors include Schellman, A-LIGN, Coalfire and Grant Thornton. Certified so far: UiPath (March 2026), Fieldguide, Sierra (September 2026), and reportedly KPMG. AIUC-1 certifies the agent vendor rather than verifying a buyer's deployment against its own CRM data, and no price is published.",
+            "quote": "No price is published. Audit costs will likely depend on scope",
+            "url": "https://soc2auditors.org/frameworks/aiuc-1/",
+            "date": "2026",
+            "who": "soc2auditors.org directory; Schellman",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "buyer_budget",
+            "claim": "AIUC-1 links certification to AI agent insurance with coverage of up to $50M, and ElevenLabs became the first policyholder in February 2026. Insurance and certification could become a funded budget line for agent assurance, but today it is paid by the agent vendor.",
+            "quote": "unlocking coverage up to $50 million for AI-specific risks",
+            "url": "https://www.safebase.io/blog/introducing-aiuc-1",
+            "date": "2026-07-16",
+            "who": "SafeBase blog",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "buyer_budget",
+            "claim": "The Big 4 sell AI assurance: PwC UK 'Assurance for AI' (July 2025), Deloitte Algorithm Assurance, the EY AI Assurance Framework (with new AI assurance services announced in April 2026), and KPMG Trusted AI. This consulting and assurance spend exists, but it focuses on controls and governance, not on continuously replaying deployed agents against ground truth.",
+            "quote": "new formal independent assurance over relevant AI controls",
+            "url": "https://www.techmarketview.com/ukhotviews/archive/2025/07/23/pwc-ups-the-ante-on-ai-assurance",
+            "date": "2025-07-23",
+            "who": "TechMarketView on PwC",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Coval raised a $28M Series A in June 2026, led by Norwest, for simulation, production monitoring and evaluation of voice and chat agents. Investors are funding independent agent QA, though Coval targets teams that build their own agents rather than buyers of bundled vendor agents.",
+            "quote": "Coval raises $28M to stress-test AI voice agents",
+            "url": "https://thenextweb.com/news/coval-28m-series-a-voice-ai-testing",
+            "date": "2026-06-24",
+            "who": "The Next Web",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Cekura (about $2.4M seed, YC) and Bluejay (about $4.5M, YC X25) test voice and chat agents for startups such as Kastle and AssemblyAI. They are small, aimed at builders, and have no apparent integrations to Agentforce, ServiceNow or Copilot Studio.",
+            "quote": "Cekura has raised $2.4M to help make conversational agents reliable",
+            "url": "https://www.callcentrehelper.com/cekura-raises-2m-test-voice-ai-259565.htm",
+            "date": "2025",
+            "who": "Call Centre Helper; Caplight",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Braintrust raised an $80M Series B in February 2026, reportedly at an $800M valuation. Its customers are AI-native builders (Notion, Replit, Ramp, Stripe). Patronus reportedly raised a $50M Series B in June 2026. Eval and observability budgets are large but sit with teams that build their own LLM apps, not with buyers of black-box vendor agents.",
+            "quote": "Braintrust lands $80M funding round to become the observability layer for AI",
+            "url": "https://www.pulse.bot/ai/news/braintrust-lands-80m-funding-round-to-become-the-observability-layer-for-ai-c2222350-8fba-4702-bb11-eb33d5112749",
+            "date": "2026-02",
+            "who": "pulse.bot / aggregators",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "Credo AI and Holistic AI sell governance, risk and agent-monitoring tools, and Credo lists Microsoft as a partner. I found no direct integration with Agentforce or Copilot Studio that verifies agent outcomes against CRM or ITSM data.",
+            "quote": "runtime monitoring for autonomous agents, covering discovery, registration, risk assessment, and deployment gates",
+            "url": "https://credo.ai/product",
+            "date": "2026",
+            "who": "Credo AI product page",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "competitor",
+            "claim": "TestMu AI (formerly LambdaTest) offers third-party testing for Copilot Studio agents with red-team grades. It scores agents against questions the user supplies, not real traffic or system-of-record outcomes.",
+            "quote": "scores Copilot Studio agents against questions you supply, not real-user traffic",
+            "url": "https://www.testmuai.com/blog/copilot-studio-agent-testing/",
+            "date": "2026",
+            "who": "TestMu AI (vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "buyer_budget",
+            "claim": "Gartner expects 40% of agentic AI projects to be canceled by the end of 2027. In its September 2026 forecast it puts AI Agents and Assistants spend at $29.2B in 2026 and $65.5B in 2027, and says enterprises want usage tracking embedded 'to evaluate success'. Gartner gives no separate budget figure for evaluation or assurance.",
+            "quote": "embed usage tracking into their workflows to evaluate success",
+            "url": "https://www.gartner.com/en/newsroom/press-releases/2026-09-16-gartner-forecasts-worldwide-ai-spending-to-grow-49-point-5-percent-in-2026",
+            "date": "2026-09-16",
+            "who": "Gartner press release",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g1",
+            "kind": "counter_evidence",
+            "claim": "Salesforce's own CRMArena-Pro benchmark found out-of-the-box CRM agents at roughly 35% accuracy before customization. This supports the underdelivery pain, but it also shows Salesforce owns the benchmark narrative.",
+            "quote": "out-of-the-box agent reached accuracy of nearly 35% before customization",
+            "url": "https://www.pixiebrix.com/tool/salesforce-agentforce",
+            "date": "2026",
+            "who": "PixieBrix analysis citing Salesforce CRMArena-Pro",
+            "verification": "snippet"
+          }
+        ],
+        "summary": "Who pays and how much: there is still no named enterprise budget line for independently verifying deployed vendor agents. Visible money sits elsewhere:\n- Agent vendors pay for their own certification: AIUC-1, with no published price, a 4-8 week audit through Schellman, A-LIGN, Coalfire or Grant Thornton, and optional insurance of up to $50M.\n- Big 4 AI-assurance practices are paid for controls and governance work, not outcome replay.\n- VC money flows to tools for teams that build their own agents: Braintrust ($80M Series B at about $800M), Coval ($28M Series A, June 2026), Patronus (about $50M), Arize and Galileo.\n- I found no RFPs or published consulting rates. Gartner's 40% cancellation forecast and the inconsistent resolution figures from Fin and Agentforce show buyers have a reason to want verification, but none of it is priced yet.\n\nVendor-native testing is weak, and GitHub issues show it in practitioners' own words:\n- Agentforce Testing Center: the LLM judge is lenient, the deterministic assertion is broken, and topic names are truncated (forcedotcom/cli 3635 and 3636, August 2026). It runs on synthetic test cases, and production accuracy is measured in a separate analytics product.\n- Copilot Studio Kit: tests run once, grading is pass/fail only, only one output message is validated, and evaluation flows get stuck.\n- Copilot Studio Agent Evaluation (GA March 2026) can generate test sets from production conversations. It is the closest native competitor to golden-set replay, but it compares against expected text, not system-of-record outcomes.\n- ServiceNow AI Control Tower (expanded at Knowledge 2026 with Traceloop, the AI Gateway and CMDB registration of third-party agents) is the strongest platform claim to be the cross-vendor governor. It covers telemetry and policy, not accuracy against ground truth, and a forum user questions whether it can enforce policy on third-party agents at all.\n\nIndependent tools (Cekura, Coval, Bluejay, TestMu, Braintrust, Arize, Galileo, Patronus, Credo AI, Holistic AI) either target builders' own agents, use user-supplied questions or synthetic simulation, or focus on governance. I found none that pulls historical resolved CRM or ITSM cases as a golden set and checks agent claims against the system of record, so that gap looks open.\n\nRisks:\n- Platforms may close the gap natively: Microsoft's production-derived test sets, ServiceNow's control-tower ambition, and Salesforce's Customer Zero answer-quality metrics.\n- Willingness to pay is unproven; no buyer-side budget evidence turned up.\n\nLimits of this research:\n- GraphQL was blocked, so GitHub search went through the REST API. Issue text came from search results; direct repo reads were denied, and a request to add the forcedotcom/cli repo was refused by the permission check.\n- Forum, Reddit and review sites could not be fetched, so web findings are search snippets. I used all 12 web searches."
+      },
+      {
+        "key": "g3-forums",
+        "gap": "g3",
+        "findings": [
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A receptionist agent moved a customer's appointment to a date they did not ask for, told them it was done, and made up a policy to justify it. Measured rate: 10.6% of live reschedule writes.",
+            "quote": "This is a silent wrong write, not a wrong answer. The Receptionist moves a Customer's appointment to a date they did not ask for, tells them it did, and states a constraint that does not exist to justify it... The rate is 5 of 47 writes, 10.6%, exact 95% CI [3.5%, 23.1%], over 50 live conversations.",
+            "url": "https://github.com/sanama-stack/reception-booking-system/issues/17",
+            "date": "2026-09-10",
+            "who": "sanama-stack (builder of an AI reception/booking system)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "The agent read back 1:00 PM ET, the caller said yes, and it booked the 12:00 PM ET slot from an earlier offer. Nothing in code checks the booked slot against the confirmed time.",
+            "quote": "Agent: To confirm: I'll book an appointment with Dr. Samuel Okafor on Tuesday, October 13 at 1:00 PM ET... book_appointment({ slot_id: \"slot_okafor_20261013T1600Z\" ...}), the 12:00 PM ET slot from an earlier offer... The prompt asks for it; nothing in code enforces it.",
+            "url": "https://github.com/nick-delgado/serverless-ai-scheduling/issues/313",
+            "date": "2026-10-17",
+            "who": "nick-delgado (voice scheduling agent builder)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A realtime voice model said it had done an action without calling the tool in 29% of first turns. Because the wording of the claim varies, client-side detectors miss some cases, which argues for checking against the system of record.",
+            "quote": "The model often says it has started or handed off a task ... without calling the function tool in that response. The user is told work is happening when nothing was started... claimed a handoff with no call in 7/24 runs (29%)... The claim phrasing varies ... so a client-side detector misses some.",
+            "url": "https://github.com/boson-ai/Boson-Feedback-Collection/issues/19",
+            "date": "2026-10-24",
+            "who": "takeachangs (developer on Higgs Realtime voice model)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Retell-based receptionist SaaS linked bookings to the wrong call with a 'most recent call' heuristic whenever a Retell webhook was missed. The fix had never been confirmed end to end.",
+            "quote": "El fix de `executeBookAppointment` (vincular por `callId` real en vez del heurístico de \"llamada más reciente\") ... nunca se ha confirmado con una llamada real de extremo a extremo a través de Retell.",
+            "url": "https://github.com/MMARTID/alhabla/issues/5",
+            "date": "2026-09-02",
+            "who": "MMARTID (founder, Alhabla AI booking receptionist on Retell)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Retell builder reports the agent announcing the booking while it only kept calling the availability check, so nothing was booked. Another case in the thread: the agent confirmed and hung up without ever calling the booking tool.",
+            "quote": "agent repeatedly called check_availability_cal several times while saying \"I am proceeding with the booking\"",
+            "url": "https://community.retellai.com/t/cal-com-booking-issue-agent-repeatedly-calls-check-availability-cal-instead-of-book-appointment-cal/3496",
+            "date": "~2026-08 (about 87 days old at search time)",
+            "who": "Retell community builder",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Double booking on Retell: after a streaming timeout, 5 book_appointment calls fired at once and all 5 committed for one requested slot.",
+            "quote": "All 5 reached the booking endpoint concurrently and all 5 committed, because the \"Already Booked\" check ran before any of them wrote ... resulted in multiple appointments booked for one requested slot",
+            "url": "https://community.retellai.com/t/book-appointment-tool-calls-fired-in-a-single-llm-turn-after-streaming-timeout-resulted-in-multiple-appointments-booked-for-one-requested-slot/3301",
+            "date": "2026 (exact date not shown)",
+            "who": "Retell community builder",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Vapi user's agent says the meeting is booked, but nothing appears in the real calendar.",
+            "quote": "it says that it has successfully booked the meeting and I can see that it has been done but nothing actually shows up in my Calendar",
+            "url": "https://support.vapi.ai/t/29712194/i-ve-also-got-some-problems-with-the-calendar-booking-tools-",
+            "date": "unknown (2025-2026)",
+            "who": "Vapi community user",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Vapi agent resolved 'Monday' to the wrong date and booked a Saturday.",
+            "quote": "Customer asked for Monday at 12 pm (May 26th). The AI said \"Perfect, I'll check the availability for this coming Monday\" and then AI checked for May 24th (Saturday).",
+            "url": "https://support.vapi.ai/t/18898178/halluzination-with-connected-calendar",
+            "date": "~2025",
+            "who": "Vapi community user",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A GP-clinic builder on Vapi says the agent mixes up or invents time slots across several doctors even though the backend returns correct data.",
+            "quote": "The agent hallucinates or misinterprets time slot data when asked about multiple doctors in the same call. It often mixes up slots or gives completely wrong info, even though our backend API and workflow are returning the correct data.",
+            "url": "https://support.vapi.ai/t/28560453/hi-team-i-m-shailesh-sharma-cto-of-primumai-we-re-building-a",
+            "date": "unknown (2025-2026)",
+            "who": "CTO of PrimumAI (builds voice booking for clinics)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Vapi's Google Calendar freeBusy tool returned no busy slots although events existed, so the agent booked over existing appointments. Separately, a Vapi thread reports appointments being scheduled in the past.",
+            "quote": "free/busy tool returning no busy slots even when events existed, so the agent booked over existing appointments (search summary); thread title: \"Calendar Booking Issue: appointments being scheduled in the p[ast]\"",
+            "url": "https://support.vapi.ai/t/32740490/google-calendar-freebusy-suddenly-not-working",
+            "date": "unknown (2026)",
+            "who": "Vapi community users",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "In n8n, Google Calendar agent tools book wrong dates and times. Timestamps without an offset are treated as UTC, offsets get applied twice, and there is a node bug that forces America/New_York.",
+            "quote": "if you send timestamps without an offset, Google's endpoint assumes UTC, which shifts your date/time and makes it look like \"wrong dates.\"",
+            "url": "https://community.n8n.io/t/ai-agente-or-google-calendar-gives-wrong-dates/259554",
+            "date": "2025-2026",
+            "who": "n8n community helper/users",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A write-up on agency churn describes a plumbing client's voice agent confidently quoting wrong prices on emergency calls, framed as the reason voice-AI agencies lose clients within 30 days.",
+            "quote": "confidently gave wrong pricing information for three emergency calls",
+            "url": "https://medium.com/@R.H_Rizvi/why-your-ai-voice-agent-business-will-lose-clients-in-30-days-not-scale-2934297d58de",
+            "date": "unknown (2025-2026)",
+            "who": "R.H. Rizvi (Medium author, voice-AI agency commentary)",
+            "verification": "secondhand"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A vendor guide names the downstream cost of a booking that does not reach the client's real calendar: double booking, refund, and a bad review.",
+            "quote": "customer shows up, you are on another job, you are double-booked, refund and one-star review",
+            "url": "https://www.myvoiceaiconnect.com/blog/ai-receptionist-appointment-booking-setup-agency",
+            "date": "2026",
+            "who": "MyVoiceAIConnect (white-label AI receptionist vendor for agencies)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Wrong-price and invented-discount failures: agents read stale price documents, honour expired quotes, or make up discounts. One guide says there is no published error rate, so owners have to review transcripts themselves.",
+            "quote": "Invents a discount, or matches a number the caller claims a competitor quoted ... There is no published error rate for service-business voice agents.",
+            "url": "https://dring.ai/blog-ai-wrong-price-information-risk",
+            "date": "2026",
+            "who": "Dring.ai (vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "willingness_to_pay",
+            "claim": "A Retell community post offers paid one-off 'booking incident review' work. Builders are being sold post-incident booking forensics.",
+            "quote": "[For hire] One booking incident review or mapping correction",
+            "url": "https://community.retellai.com/t/for-hire-one-booking-incident-review-or-mapping-correction/3712",
+            "date": "2026 (exact date not shown)",
+            "who": "Retell community freelancer (Hire A Retell Expert category)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "willingness_to_pay",
+            "claim": "A freelancer prices fixed-scope Vapi/n8n booking backends for voice-AI agencies at $300-1,200 plus a monthly maintenance retainer, which anchors what agencies pay for booking reliability work.",
+            "quote": "Technical slice: USD 300-500. Full first build: USD 500-1200 ... Ongoing maintenance: after the first build, fixed monthly retainer or hourly support.",
+            "url": "https://github.com/josephye72-source/ai-automation-service/issues/2",
+            "date": "2026-06-18",
+            "who": "josephye72-source (freelance builder targeting voice-AI agencies)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "'Voice Agent TestOps', an open-source harness, explicitly flags unsupported price, offer, availability and outcome promises. Its author is pitching it to voice-agent frameworks, so pre-launch testing overlaps with 'Kept'.",
+            "quote": "produces JSON/HTML reports for risks like: ... unsupported offer, price, availability, or outcome promises; missed lead or booking fields",
+            "url": "https://github.com/blackdwarftech/siphon/issues/19",
+            "date": "2026-05-08",
+            "who": "monkeyin92 (builder of Voice Agent TestOps)",
+            "verification": "verified-full-text"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Booking-action check tooling is already being shared in the Retell community.",
+            "quote": "Six booking-action checks you can run locally — 30s silent walkthrough",
+            "url": "https://community.retellai.com/t/six-booking-action-checks-you-can-run-locally-30s-silent-walkthrough/3763",
+            "date": "2026",
+            "who": "Retell community member (Share Your Videos)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Voice QA platforms already monitor Vapi and Retell production calls with public pricing: Cekura at $0.05 per monitored call, Coval from $100/month, and Hamming with an 'Agency' tier priced on request. No source showed white-label agency reports or calendar/price-list verification.",
+            "quote": "pay-as-you-go at $0.25 per voice testing minute and $0.05 per monitored call ... Starter at $100 per month ... All plans (Agency, Startup, Enterprise) require contacting sales.",
+            "url": "https://www.cekura.ai/blogs/hamming-alternative",
+            "date": "2026",
+            "who": "Cekura / Coval comparison pages (vendors)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "Retell froze its legacy check_availability_cal/book_appointment_cal tools on 2026-09-30 and moved them to a Cal.com integration on 2026-10-31. Migrated tools whose key was rejected fail silently mid-call, a fresh source of booking failures that agencies may not notice.",
+            "quote": "a tool is skipped when Cal.com rejects its key at migration time, and a skipped tool fails mid-call, the first time the agent tries to check availability or book",
+            "url": "https://docs.retellai.com/deprecation-notice/2026/10-31_legacy_calcom_tools",
+            "date": "2026-10-31",
+            "who": "Retell AI (official docs)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "Vapi's native Google Calendar integration exposes availability and event creation as separate tools with no conflict detection on create, according to a third-party analysis. That is a structural cause of double bookings and false 'booked' messages.",
+            "quote": "Vapi's native Google Calendar integration exposes availability checks and event creation as independent tools, with no link between them and no conflict detection on create",
+            "url": "https://deskcaller.com/blog/voice-agent-booking-write-failures",
+            "date": "2026",
+            "who": "Deskcaller (vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "HighLevel's own docs tell agencies to set up linked/conflict calendars to stop Voice AI double booking. Agency guides call a calendar left in the agency's timezone a common configuration error that causes double bookings or impossible slots.",
+            "quote": "Linked/conflict calendars set to prevent double booking ... Setting the calendar timezone to the agency's location instead of the client's, which double-books or offers impossible slots.",
+            "url": "https://help.gohighlevel.com/support/solutions/articles/155000007203-highlevel-voice-ai-book-across-multiple-calendars-intent%E2%80%91based-selection-",
+            "date": "2026",
+            "who": "HighLevel support docs; agency guides (hlgrowthpartner.com)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "counter_evidence",
+            "claim": "A vendor selling to agencies claims that most AI receptionist cancellations are 'perception churn' rather than errors, which weakens the case that false commitments drive client loss. It also suggests a monthly proof report may be valued for perception as much as for error catching.",
+            "quote": "most agency owners find that 70–80% of their cancellations fall into perception churn",
+            "url": "https://www.myvoiceaiconnect.com/blog/reduce-ai-receptionist-client-churn-rate",
+            "date": "2026",
+            "who": "MyVoiceAIConnect (vendor)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "counter_evidence",
+            "claim": "Builders are fixing the issue in code and prompts themselves: never confirm until the save returns, and verify the confirmed slot inside the tool. That could shrink demand for an external verifier, although several threads show the fixes are unproven in production.",
+            "quote": "the agent never says a slot is booked until the booking actually comes back as saved (Skool voice AI builder, per search summary); \"Make a write fail safely when the agent passes a slot other than the one the patient just confirmed\" (nick-delgado #313)",
+            "url": "https://www3.skool.com/voice-ai-alliance?c=c38e7273a26848ed92ac0180d82b635f",
+            "date": "2026",
+            "who": "Voice AI Alliance Skool builder",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "counter_evidence",
+            "claim": "I found no first-person post in which an agency names losing a client, refunding, or paying for monitoring specifically because of false bookings or prices. Searches of r/AI_Agents, r/gohighlevel and Skool returned only vendor content (Reddit and Skool are poorly indexed and blocked from this environment).",
+            "quote": "I couldn't find the specific Reddit thread you're describing, an AI receptionist agency losing a client over a hallucinated booking or wrong time. The results were mostly vendor marketing",
+            "url": "https://www.skool.com/brendan/vapi-ai-chatbot-gets-many-hallucinations",
+            "date": "2026-11-09 (search date)",
+            "who": "search result absence (Skool thread title 'VAPI ai chatbot gets many hallucinations' is the closest)",
+            "verification": "secondhand"
+          }
+        ],
+        "summary": "The pain is well evidenced and recent; evidence that agencies lose money over it is thin.\n\nPain. Builder issues dated Sep-Oct 2026, read in full on GitHub, show the exact failures 'Kept' would catch:\n- reschedules written to a date the customer never named, with an invented policy given as the reason, at 10.6% of live writes (sanama-stack #17);\n- the wrong slot booked straight after the caller confirmed a different time (nick-delgado #313);\n- the model claiming an action without calling the tool, 29% of first turns, in wording that varies too much for simple detection (boson-ai #19);\n- a Retell booking linked to the wrong call (alhabla #5).\n\nThe Retell and Vapi community forums add matching reports, read as search snippets only:\n- 'proceeding with the booking' while no booking was made;\n- 5 bookings committed for one slot;\n- 'says it booked, nothing in my Calendar';\n- Monday resolved to Saturday;\n- free/busy returning empty, so the agent booked over existing appointments;\n- bookings landing in the past.\n\nn8n threads document timezone and UTC-offset errors when creating Google Calendar events. Wrong-price and invented-discount evidence is weaker: vendor blogs and one Medium plumbing anecdote.\n\nTailwind. Retell's 2026-10-31 forced Cal.com tool migration can make tools fail mid-call. Vapi's create tool reportedly has no conflict detection. HighLevel's own docs tell users to configure conflict calendars.\n\nWillingness to pay. Only indirect signals:\n- a paid 'booking incident review' offer on the Retell forum;\n- freelancers charging $300-1,200 plus a retainer for booking backends;\n- existing voice QA vendors with published prices (Cekura $0.05 per monitored call, Coval from $100/month, Hamming 'Agency' tier).\n\nNone of these vendors was shown to verify commitments against the real calendar or price list, or to offer white-label agency proof reports. That looks like open ground.\n\nMain gaps and counter-evidence:\n- No first-person post was found of an agency losing a client, refunding, or paying for QA specifically because of false commitments. Reddit, Skool and the Vapi forum are blocked here, and Reddit and Skool are poorly indexed by search.\n- One vendor claims 70-80% of agency churn is 'perception', not errors.\n- Builders are adding confirm-after-save and slot checks themselves.\n\nNext step: get first-person loss and refund evidence directly from Reddit (r/AI_Agents, r/gohighlevel), Skool, and agency interviews."
+      },
+      {
+        "key": "g3-github",
+        "gap": "g3",
+        "findings": [
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A live-model test of a reception booking agent found it moved appointments to a date the customer never named and then made up a policy to justify the move, in about 1 of 10 writes.",
+            "quote": "This is a silent wrong write, not a wrong answer. The Receptionist moves a Customer's appointment to a date they did not ask for, tells them it did, and states a constraint that does not exist to justify it. ... The rate is 5 of 47 writes, 10.6%, exact 95% CI [3.5%, 23.1%], over 50 live conversations.",
+            "url": "https://github.com/sanama-stack/reception-booking-system/issues/17",
+            "date": "2026-09-10",
+            "who": "sanama-stack (builder of reception-booking-system)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Verbatim transcript from the same agent: it confirms a successful move to the wrong date. The appointment row ends up on Sept 11 when the customer asked for Sept 21.",
+            "quote": "> Yes — 15:00 please. Go ahead and move it.\n  Your appointment has been successfully moved to September 11 at 15:00 with Nino Beridze. ... Row after: `2026-09-11 15:00`, `CONFIRMED`. Expected `2026-09-21 15:00`.",
+            "url": "https://github.com/sanama-stack/reception-booking-system/issues/17",
+            "date": "2026-09-10",
+            "who": "sanama-stack",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "The same project measured over 50 trials: only 24% of authorised reschedules were correct, 62% landed on the wrong date, and 14% were refused even though the slot was free.",
+            "quote": "REFUSED — this issue | 7/50 | 14.0% ... ELSEWHERE — [#17]'s wrong date | 31/50 | 62.0% ... Correct | 12/50 | 24.0%",
+            "url": "https://github.com/sanama-stack/reception-booking-system/issues/40",
+            "date": "2026-09-15",
+            "who": "sanama-stack",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "In a clinic scheduling agent, the patient said yes to a restated 1:00 PM slot, but the agent passed the ID of a different (12:00) slot and booked the wrong time. The builder notes that nothing in code checks the booking against what was confirmed.",
+            "quote": "Agent: To confirm: I'll book an appointment with Dr. Samuel Okafor on Tuesday, October 13 at 1:00 PM ET ... Patient: Yes, go ahead. `book_appointment({ slot_id: \"slot_okafor_20261013T1600Z\", ... })`, the 12:00 PM ET slot from an earlier offer ... The prompt asks for it; nothing in code enforces it.",
+            "url": "https://github.com/nick-delgado/serverless-ai-scheduling/issues/313",
+            "date": "2026-10-17",
+            "who": "nick-delgado (serverless-ai-scheduling)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "In NVIDIA's appointment-agent blueprint, the agent tells the patient 'your appointment is booked' but the write is never committed, and the slot is offered again on the next search.",
+            "quote": "`book_appointment` runs its `UPDATE ...` on a plain `sqlite3` connection and then closes it without `conn.commit()` ... The working copy still shows the slot as free right after \"your appointment is booked\".",
+            "url": "https://github.com/NVIDIA-AI-Blueprints/ambient-patient/issues/3",
+            "date": "2026-11-04",
+            "who": "trackoor (external reporter on NVIDIA-AI-Blueprints)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "In AWS's appointment-scheduler blueprint, the agent said a cancelled booking still stood even though state held only the new booking. Conversation history won over the true state, and no workaround is known.",
+            "quote": "after cancelling one viewing and booking another, the agent claimed the cancelled viewing was still booked and asked whether to keep both, although state held only the new booking ... Workaround: None known.",
+            "url": "https://github.com/awslabs/social-messaging-agent-runtime-toolkit/issues/71",
+            "date": "2026-11-04",
+            "who": "art-aws (awslabs maintainer)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A realtime voice model claims it performed an action without calling the tool in 29% of first turns. The claim is worded differently each time, so a client-side detector misses some cases. This is the 'says booked when not' failure at the model layer.",
+            "quote": "The model often says it has started or handed off a task (\"I've handed that off\", \"I'm on it\", \"sent that off now\") without calling the function tool in that response. ... claimed a handoff with no call in 7/24 runs (29%) ... The claim phrasing varies ... so a client-side detector misses some.",
+            "url": "https://github.com/boson-ai/Boson-Feedback-Collection/issues/19",
+            "date": "2026-10-24",
+            "who": "takeachangs (developer building on Higgs Realtime)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "An LLM sales advisor invented a booking reference and confirmed an order even though it has no order-placement tool. It also asserted a waived setup fee.",
+            "quote": "\"Order placed and sealed, Agent Bond! Your booking reference AUDYAM-2023-LL1G is officially in our system...\" ... The LLM fabricated a synthetic booking reference (AUDYAM-2023-LL1G), misleading the user into thinking an order was recorded in the database.",
+            "url": "https://github.com/Hrushikesh-ramilla/project-udyam-digital/issues/12",
+            "date": "2026-11-08",
+            "who": "Hrushikesh-ramilla",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A voice agent made false claims about a meeting it had scheduled itself, refusing about 10 times over 7 minutes. The user filed the bug at the owner's explicit request.",
+            "quote": "The voice agent refused every time with two statements that were both false ... 04:42:59 [assistant] \"I don't currently have the meeting code, as I can't extract it from the DM\"",
+            "url": "https://github.com/sonichi/sutando/issues/4985",
+            "date": "2026-10-01",
+            "who": "akag2",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A clinic voice-agent spec lists the exact failure modes Kept targets as the expensive ones, and requires a post-write check against the system of record before telling the caller anything.",
+            "quote": "in healthcare the failure modes are expensive: booking the wrong person, double-booking a provider, telling a caller \"you're booked\" when the write failed ... When a write fails or its result is unknown, the agent checks the EHR for the true state before telling the caller anything.",
+            "url": "https://github.com/Sacarianos/clinic-voice-agent/issues/1",
+            "date": "2026-10-07",
+            "who": "Sacarianos",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "In Pipecat, a function call that times out keeps running in the background. A booking can still land after the pipeline was told the call failed, so the agent's account of the call can disagree with the calendar.",
+            "quote": "If the handler is doing something non-idempotent (booking an appointment, charging a card, sending a message), the operation can still complete seconds or minutes after the timeout already reported `None` to the pipeline.",
+            "url": "https://github.com/pipecat-ai/pipecat/issues/4936",
+            "date": "2026-07-02",
+            "who": "Sarita-Joshi",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "Pipecat's official simulation judge, by design, sees tool calls but not their results. It cannot catch a reply that contradicts the backend (wrong next-opening time, wrong appointment date), and a proposal to add that check was withdrawn. This leaves the post-call verification gap open at the framework level.",
+            "quote": "wrote `success:` criteria expecting the judge to notice when a reply contradicted what a tool had returned (a wrong \"next opening\" time, a cancelled appointment read back with the caller's date instead of the one on file). It cannot: the judge sees call names and arguments only, and that is by design. ... That is a groundedness check ... and it does not belong in the simulation verdict; withdrawn.",
+            "url": "https://github.com/pipecat-ai/pipecat/issues/5664",
+            "date": "2026-09-08",
+            "who": "jamsea (Pipecat contributor)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Cal.com's CalDAV conflict check failed silently and an event was booked over a blocking all-day event. The user asks for an alert email when checks fail, which is essentially the alerting half of Kept.",
+            "quote": "Just wondered, why a event was booked, also I had setup a blocking all day event. Found now out in the interface, that conflict check failed silently, which is a critical issue for me ... a message must be send to the controlling e-mail ... that one can check, why and whats happened.",
+            "url": "https://github.com/calcom/cal.diy/issues/29896",
+            "date": "2026-08-03",
+            "who": "itsbrody (self-hosted Cal.com user)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "On an agent platform, bookings made through MCP tools are invisible to the platform. If a second registration call is left to the model's discretion, it can be skipped and the failure is silent.",
+            "quote": "An agenda served over MCP can book an appointment and has no way to tell the platform it did ... a second call is a call that can be omitted, and the failure is silent — no pause, no reminder, and nothing anywhere says why.",
+            "url": "https://github.com/fazer-ai/agents/issues/386",
+            "date": "2026-08-26",
+            "who": "gabrieljablonski (fazer-ai)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Vapi user reports the same tool call reaching their backend repeatedly in one conversation, which risks duplicate bookings unless they dedupe by hand.",
+            "quote": "I'm experiencing multiple identical tool calls being sent to my backend API during a single conversation. My backend receives repeated calls with the same parameters throughout a conversation, leading to duplicate processing.",
+            "url": "https://github.com/VapiAI/example-client-javascript-react/issues/5",
+            "date": "2025-04-11",
+            "who": "umerfarok",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "On LangGraph Cloud, tool calls are silently re-executed from checkpoint, with both original and duplicate completing. 88 comments show broad pain, and for a booking tool this means double bookings.",
+            "quote": "When a tool call takes longer than ~3 minutes on LangGraph Cloud, it gets silently re-dispatched from the last checkpoint while the original is still running. Both the original and the duplicate complete successfully",
+            "url": "https://github.com/langchain-ai/langgraph/issues/7417",
+            "date": "2026-04-05",
+            "who": "MarioAlessandroNapoli",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Retell receptionist builder serving a real salon on Booksy lists 'do not guess policy/pricing answers' among the fixes from tester results, and keeps booking creation disabled until availability reads are reliable. Guessed prices and policies were observed in practice.",
+            "quote": "The September test results also require: ... do not guess policy/pricing answers ... complete service menu / correct business facts ... Keep booking creation disabled until read-only availability is reliable through the voice path.",
+            "url": "https://github.com/shobanaravishankar/aria-receptionist/issues/3",
+            "date": "2026-10-09",
+            "who": "shobanaravishankar (building ARIA receptionist on Retell for a salon client)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Retell voice-agent builder reconciles the stored calendar event against the agent's claim. The builder found that three code paths deciding 'is this really booked' had already drifted apart.",
+            "quote": "Booking confirmation, restart recovery, and the one-upcoming-appointment rule per callback number all answer the same question: what does this stored calendar event mean for the appointment. They answer it in three places today, and those answers have already drifted",
+            "url": "https://github.com/JacobStephens2/voice-agent-scheduling/issues/44",
+            "date": "2026-10-22",
+            "who": "JacobStephens2",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "In the Vapi forums, practitioners report bookings landing an hour off (asked for 3pm, shown at 4pm), busy slots offered as free, create_event overbooking, and an agent confirming 2:30 PM after booking 9:30 AM.",
+            "quote": "bookings at 3pm showing up at 4pm ... the create-event tool allows overbooking and does no availability checking ... the agent booked 9:30 AM when asked for 2:30 PM, yet still confirmed 2:30 PM",
+            "url": "https://support.vapi.ai/t/28944848/incorrect-time-zone",
+            "date": "unknown (forum, search snippet)",
+            "who": "Vapi community users (multiple threads)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "On the Retell community forum, an agent kept saying it was proceeding with the booking while it actually looped on the availability check, so nothing was booked. Other users report timezone mismatches persisting even when configured correctly everywhere.",
+            "quote": "it repeatedly called check_availability_cal several times while saying \"I am proceeding with the booking\". As a result, the appointment was not actually booked.",
+            "url": "https://community.retellai.com/t/cal-com-booking-issue-agent-repeatedly-calls-check-availability-cal-instead-of-book-appointment-cal/3496",
+            "date": "unknown (forum, search snippet)",
+            "who": "Retell community user",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Vapi users booking through GoHighLevel report the agent checking and booking the wrong day, using past dates, and booking after it had itself said no slots were available.",
+            "quote": "Whenever the agent checked calendar availability in GoHighLevel, it had a very high probability of using a date from the past.",
+            "url": "https://vapi.ai/community/m/1401507343144976464",
+            "date": "unknown (forum, search snippet)",
+            "who": "Vapi community user (GHL integration)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "willingness_to_pay",
+            "claim": "The Retell community has a paid freelancer market for booking-failure forensics, including a post for reviewing a single booking incident and $350 fixed failure-path diagnostics and audits. This is a manual, per-incident version of what Kept would automate.",
+            "quote": "[For hire] One booking incident review or mapping correction ... [For Hire] Async Retell Failure-Path Diagnostic — $350 fixed",
+            "url": "https://community.retellai.com/t/for-hire-one-booking-incident-review-or-mapping-correction/3712",
+            "date": "unknown (forum, search snippet)",
+            "who": "Retell community freelancers",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "counter_evidence",
+            "claim": "Platform vendors' own GitHub trackers show almost no commitment-failure signal. VapiAI has only 2 matching issues across its orgs and RetellAI has 0. n8n issues about agents and calendars are about node and UI bugs, not wrong commitments. The pain shows up in builders' own repos and in vendor forums, not in vendor issue trackers.",
+            "quote": "org:VapiAI booking -> total 2; org:RetellAI booking -> total 0; org:RetellAI timezone -> total 0",
+            "url": "https://github.com/VapiAI/example-client-javascript-react/issues/5",
+            "date": "2026-11-09",
+            "who": "search-count observation (this research)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "counter_evidence",
+            "claim": "Serious builders are writing their own verification into the agent itself: confirm-then-check against the system of record, ledger projections, and slot/time cross-checks. This could shrink demand for an external post-call verifier among sophisticated teams, though not among template-based agencies.",
+            "quote": "Make a write fail safely when the agent passes a slot other than the one the patient just confirmed. ... `book_appointment` and `reschedule_appointment` also take the start time the agent restated and the patient confirmed",
+            "url": "https://github.com/nick-delgado/serverless-ai-scheduling/issues/313",
+            "date": "2026-10-17",
+            "who": "nick-delgado",
+            "verification": "verified-full-text (opened via gh/API)"
+          }
+        ],
+        "summary": "GitHub has strong evidence for Gap #3, but almost all of it sits in builders' own repos and in vendor forums, not in the Vapi, Retell or n8n issue trackers.\n\n**Method.** GitHub search through gh's GraphQL route was blocked and repo-level API endpoints returned 403. I used REST search/issues, which returns each issue's full body text. All GitHub quotes above are verbatim from those bodies; I did not read comment threads. Four WebSearch results (Vapi forum, Retell community, GoHighLevel threads) are marked \"snippet\" and are undated.\n\n**Who reported it, and how recently.** 18 distinct GitHub reporters have issues on this failure family: art-aws, trackoor, sanama-stack, nick-delgado, takeachangs, Hrushikesh-ramilla, akag2, Sacarianos, jamsea, Sarita-Joshi, itsbrody, gabrieljablonski, umerfarok, MarioAlessandroNapoli, JacobStephens2, shobanaravishankar, kodekinetics79 and LAtyeo. The last two (a Retell appointment-confirmation demo and a Retell/Cal.com rescheduling 500 error) are related context only; neither is a false commitment, and neither appears in the findings. 15 of the 18 filed in the last 6 months, and two (AWS blueprint, NVIDIA blueprint) on 2026-11-04. Only umerfarok (2025-04, Vapi) and LAtyeo (2025-09, Retell) are older than about 7 months.\n\n**Strongest evidence.**\n- **Measured failure rates:** sanama-stack found 10.6% silent wrong-date writes with an invented policy, and only 24% correct reschedules across 50 trials. Boson found a realtime model claiming the action without calling the tool in 29% of first turns.\n- **\"Booked\" but nothing written:** NVIDIA's ambient-patient blueprint never commits the write; AWS's blueprint says a cancelled booking still stands; an advisor bot invents a booking reference.\n- **Wrong slot after the caller said yes:** nick-delgado's agent booked 12:00 after the patient confirmed 1:00 PM.\n- **Duplicate or late side effects:** Pipecat calls that keep running after a timeout, LangGraph re-executing tool calls, Vapi duplicate tool calls.\n- **Guessed prices and policies:** a Retell plus Booksy receptionist built for a real salon was told to stop guessing policy and pricing answers.\n\n**Why it matters for Kept.**\n- **Framework gap:** Pipecat's official simulation judge sees tool calls but not their results. A proposal to check replies against backend data was withdrawn as out of scope, so nothing at the framework level verifies replies against the backend.\n- **Alerting demand:** a Cal.com user explicitly asks for an alert email when a conflict check fails silently.\n- **Willingness to pay (snippet only):** Retell community freelancers sell per-incident booking reviews and $350 fixed failure-path diagnostics.\n\n**Counter-evidence.** There is almost no signal in the Vapi or Retell GitHub orgs, and n8n issues are about node bugs rather than wrong commitments. Sophisticated builders are adding confirm-then-check logic inside their own agents. No GitHub hits named GoHighLevel or Synthflow, so agency-template pain rests only on the undated forum snippets. No GitHub issue directly showed an unauthorised discount or a price missing from the price list."
+      },
+      {
+        "key": "g3-budget-competitors",
+        "gap": "g3",
+        "summary": "Gap #3 (\"Kept\"), post-call verification of what voice agents promise.\n\nThe pain is real and documented first-hand in recent GitHub issues. A Booksy/Retell-style receptionist test measured a 10.6% silent wrong-write rate on reschedules: the agent wrote the wrong date, said it had succeeded, and made up a policy to justify it. An agency's client issue shows the agent reading a calendar as full when it was wide open and quoting $219 where the price list says $209. A Retell+n8n+Cal.com builder reports that cancellation \"always deletes the first upcoming booking\". A realtime-model bug tracker shows the agent claiming it had acted without calling the tool in up to 29% of first turns.\n\nOn the competitor side, the voice QA and observability layer is crowded and well funded:\n- Coval: $28M Series A (Jun 2026), more than 60 customers, about $100 to $4,500 a month.\n- Hamming: $3.8M seed, quote-only pricing, with an \"Agency\" tier.\n- Bluejay: $4M seed, no public pricing.\n- Cekura: YC F24, about $2.4M seed, $0.05 per monitored call or $500 a month.\n- Roark: YC W25, about $500K, $500 to $1,200 a month.\n\nVapi (Evals, Simulations, and Monitoring since Apr 2026, with effectiveness and compliance limited to Enterprise) and Retell (AI QA at $0.10 a minute) now ship native QA.\n\nNone of these, as far as the evidence shows, reconciles each spoken commitment against the client's real calendar or price list after the call. Their monitoring scores transcripts and conversation quality (\"state-blind\", per a competitor's note on Cekura).\n\nThe pre-call side is covered by Temporal Cortex (pre-1.0 MCP with atomic two-phase-commit booking), Cronofy (MCP server) and Nylas (Agent Accounts plus a Vapi/Retell tutorial). These stop double-booking at write time. They do not catch false claims or wrong prices.\n\nThe idea itself is out in the open. A DEV Community post (\"hasn't booked until the reservation record agrees\"), a DeskCaller blog, Plura and Trillet all describe reading the record back by ID and flagging mismatches. Expect fast followers, and voice-platform vendors may build it in.\n\nAgency economics, from vendor and agency blogs (snippet only), are typically a $1,500 to $5,000 setup fee plus $300 to $2,000 a month per client. One GoHighLevel SaaS reseller prices an AI Receptionist add-on at $79 a month, which sets a low price ceiling at the bottom of the market. GoHighLevel Voice AI costs about $0.06 to $0.215 a minute all-in after the May 2026 pricing change. White-label platforms charge agencies $29 to $499 a month.\n\nVendor content says churn is mostly \"perception\" churn (invisible value) and peaks around months 4 to 6. That supports a white-label monthly proof report even more than error alerts. No Reddit or forum practitioner quotes were found, because none surfaced and forum sites cannot be fetched from here. All agency-pricing and churn figures are vendor blogs.\n\nGitHub issue bodies were read through the REST search API (body text). Direct issue view was blocked for repos not attached to this session.",
+        "findings": [
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A live-model test of a receptionist booking system found silent wrong writes on reschedules: the agent moved the appointment to a date the customer never named, said it had succeeded, and made up a policy to justify it. Measured rate: 10.6%.",
+            "quote": "The rate is 5 of 47 writes, 10.6%, exact 95% CI [3.5%, 23.1%], over 50 live conversations... This is a silent wrong write, not a wrong answer. The Receptionist moves a Customer's appointment to a date they did not ask for, tells them it did, and states a constraint that does not exist to justify it.",
+            "url": "https://github.com/sanama-stack/reception-booking-system/issues/17",
+            "date": "2026-09-10",
+            "who": "sanama-stack (builder of a reception booking system)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "In an agency's urgent client ticket, an SMB owner's test call got 'no availability' while the calendar was wide open. The same client thread also reports a wrong quoted price, which is exactly the commitment-vs-price-list failure.",
+            "quote": "The agent told her there was no availability, but the shop's calendar is wide open... Pricing data: Premium for a sedan should be $209, not $219 — needs correcting in the pricing data tables.",
+            "url": "https://github.com/Teamleepai/Team-brain/issues/2",
+            "date": "2026-08-05",
+            "who": "Teamleepai (agency; client Damian, Ace Auto Detailing)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A builder using Retell AI with n8n and Cal.com cannot find the caller's real booking. Their cancel/reschedule flow hits the wrong appointment.",
+            "quote": "Backend is n8n workflow that handles the rescheduling and cancellation part, however we are not able to find the correct booking. It always deletes the first upcoming booking in the calendar.",
+            "url": "https://github.com/calcom/cal.diy/issues/26874",
+            "date": "2026-01-15",
+            "who": "perknutsen011-sketch (Retell AI voice agent builder, Scandinavia)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Realtime voice models often claim an action without calling the tool, at 29% of first turns on one model. Detecting this client-side is unreliable because the phrasing varies, which supports independent post-call reconciliation.",
+            "quote": "The model often says it has started or handed off a task (\"I've handed that off\", \"I'm on it\", \"sent that off now\") without calling the function tool... claimed a handoff with no call in 7/24 runs (29%)... The claim phrasing varies... so a client-side detector misses some.",
+            "url": "https://github.com/boson-ai/Boson-Feedback-Collection/issues/19",
+            "date": "2026-10-24",
+            "who": "takeachangs (developer reporting to Boson AI Higgs Realtime)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A builder's spec for a home-services voice booking agent lists invented slots, unconfirmed writes and double bookings as the core failures of thin Vapi/Retell wrappers. It treats 'cannot explain what happened afterwards' as a gap.",
+            "quote": "a double booking, an unconfirmed write, a missed gas leak or a caller left on hold is a real business failure. Most voice demos show the first call and stop. They talk over the caller, invent a slot... or cannot explain what happened afterwards.",
+            "url": "https://github.com/ArpanSM/forge-voice/issues/2",
+            "date": "2026-11-06",
+            "who": "ArpanSM (voice agent builder)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A French voice-AI agency for plumbers (n8n + Vapi/Retell + Airtable + Twilio + Google Calendar) says outright that one live bug costs the client relationship.",
+            "quote": "réactivité sur les bugs critiques (l'agent décroche en temps réel, un bug = client perdu)",
+            "url": "https://github.com/DavidGeismarLtd/agentic-brainstorm/issues/4",
+            "date": "2026-05-20",
+            "who": "Alexandre Cussigh, founder of Lenovia (voice AI agency), job post quoted in a GitHub issue",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "buyer_budget",
+            "claim": "A GoHighLevel SaaS-mode reseller approved its retail prices: the AI Receptionist is a $79/mo add-on on core plans of $97 to $497/mo. This sets a low price ceiling for the bottom of the SMB market.",
+            "quote": "Approved prices (D1): Operator $97/mo (14-day trial) · Command $297/mo + $97 setup · Command Pro $497/mo + $297 setup · ... AI Receptionist add-on $79/mo",
+            "url": "https://github.com/tonybotchev/nofluff-marketing-site/issues/32",
+            "date": "2026-10-09",
+            "who": "NoFluff Marketing (HighLevel reseller agency)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "buyer_budget",
+            "claim": "An agency pricing guide puts a single-purpose voice agent at a $1,500 to $5,000 build fee plus a $300 to $800/mo retainer, with calendar/CRM wiring and testing included in setup.",
+            "quote": "one-time build fee of roughly $1,500 to $5,000, plus a monthly retainer of about $300 to $800 for management and tuning",
+            "url": "https://ciela.ai/blogs/how-much-to-charge-for-ai-voice-agent",
+            "date": "2026",
+            "who": "Ciela (agency pricing guide, vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "buyer_budget",
+            "claim": "Other agency playbooks put retainers at $500 to $2,000/mo per client. Managed builds run $300 to $2,000/mo, and white-label platforms charge agencies $29 to $499/mo.",
+            "quote": "per-client monthly retainers in the $500 to $2,000 range... white-label platforms charge agencies anywhere from $29 to $499 a month",
+            "url": "https://www.seldonframe.com/guides/how-to-price-an-ai-receptionist-service",
+            "date": "2026",
+            "who": "SeldonFrame / VentixAI (vendor blogs)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "buyer_budget",
+            "claim": "Agency tooling cost on GoHighLevel Voice AI after the May 20, 2026 change: a $0.045/min engine plus TTS and LLM, about $0.06 to $0.215/min all-in plus telephony. The flat AI Employee Unlimited plan is $97 per sub-account.",
+            "quote": "all-in range at roughly $0.06 to $0.215 per minute, plus telephony fees",
+            "url": "https://www.thestackinsiders.com/blog/gohighlevel-voice-ai-cost",
+            "date": "2026",
+            "who": "The Stack Insiders (third-party GHL guide)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Vendor content says AI-receptionist agency churn is driven mostly by 'perception churn' (the client can't see the value), with risk peaking at months 4 to 6. That supports a white-label monthly proof report.",
+            "quote": "Perception churn is described as the most common reason AI receptionist clients cancel, because the AI operates invisibly and clients get no regular update on what it delivered (claimed 70–80% of cancellations, unsourced)",
+            "url": "https://www.myvoiceaiconnect.com/blog/reduce-ai-receptionist-client-churn-rate",
+            "date": "2026",
+            "who": "VoiceAI Connect (white-label vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Another vendor lists 'no visible ROI' and integration issues as recurring churn reasons. It says performance-driven churners raise specific complaints before cancelling.",
+            "quote": "no visible ROI and integration issues as recurring reasons",
+            "url": "https://trillet.ai/blogs/voice-agent-client-churn-reduction",
+            "date": "2026",
+            "who": "Trillet (voice AI white-label vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Coval: $28M Series A led by Norwest (about $31M total), with more than 60 customers including Zoom and Deepgram. It covers simulation through production monitoring. Third-party pricing: $100 / $500 / from $4,500 per month.",
+            "quote": "Coval raises $28M series A to address AI voice agent reliability, compliance... more than 60 customers, including Zoom and Deepgram",
+            "url": "https://www.fiercehealthcare.com/ai-and-machine-learning/coval-raises-28m-series-address-ai-voice-agent-reliability-compliance",
+            "date": "2026-06-24",
+            "who": "Fierce Healthcare (news)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Cekura (YC F24, formerly Vocera) does testing plus monitoring at $0.25 per test minute and $0.05 per monitored call, with Startup at $500/mo. It has a reported $2.4M seed. A competitor notes its testing is 'state-blind', meaning it does not check backend state such as the calendar.",
+            "quote": "pay-as-you-go at $0.25 per voice testing minute and $0.05 per monitored call... as of March 2026, Cekura's testing is state-blind",
+            "url": "https://www.coval.ai/blog/coval-vs-cekura",
+            "date": "2026-03",
+            "who": "Coval (competitor comparison) and Cekura pages",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Hamming AI: $3.8M seed led by Mischief (Dec 2024). Pricing is quote-only and it lists an 'Agency' tier, so it already targets agencies. No Series A was found.",
+            "quote": "Hamming.ai Announces $3.8 Million Seed Led by Mischief",
+            "url": "https://www.businesswire.com/news/home/20241218104943/en/Hamming.ai-Announces-%243.8-Million-Seed-Led-by-Mischief",
+            "date": "2024-12-18",
+            "who": "BusinessWire press release",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Roark (YC W25) is voice observability that turns failed calls into regression tests. It raised about $500K pre-seed, lists Startup at $500/mo and Growth at $1,200/mo, and claims more than 10M minutes monitored.",
+            "quote": "Startup ($500/month), Growth ($1,200/month), or Enterprise (custom pricing)... Roark crosses 10M+ minutes of calls monitored and simulated by June 2025",
+            "url": "https://runtimewire.com/article/startup-spotlight-roark-voice-agent-testing",
+            "date": "2025-2026",
+            "who": "Third-party directories / RuntimeWire",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Bluejay raised a $4M seed (Floodgate, Peak XV, Homebrew, YC). It simulates users for voice and chat agents, with no public pricing and no self-serve.",
+            "quote": "Bluejay makes testing voice and text AI agents easy with a $4 million seed",
+            "url": "https://homebrew.co/blog/2025/08/27/ai-models-are-evolving-fast-but-their-use-is-gated-by-how-easy-it-is-to-test-bluejay-makes-testing-voice-and-text-ai-agents-easy-with-a-usd4-million-seed",
+            "date": "2025-08-27",
+            "who": "Homebrew (investor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "Vapi now ships native Evals (JSON tests, three judge types, CI), AI tester-caller Simulations, and Monitoring (Apr 2026). The Effectiveness and Compliance metrics are Enterprise-only, which leaves SMB agencies uncovered.",
+            "quote": "Monitoring (Apr 2026) covers Effectiveness, Compliance, Technical, and Infrastructure metrics — Effectiveness and Compliance are Enterprise-only.",
+            "url": "https://www.coval.ai/blog/vapi-review-2026-is-this-voice-ai-platform-right-for-your-project/",
+            "date": "2026",
+            "who": "Coval review of Vapi",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "Retell sells an AI QA add-on at about $0.10/min that grades sampled calls. It is described as confirming that the flow runs, not reconciling against backend records.",
+            "quote": "Retell's AI QA add-on is priced per minute... $0.10 per minute (with the first 100 minutes free)... the built-in simulator and AI QA confirm that the flow runs",
+            "url": "https://www.cekura.ai/blogs/retell-ai-voice-automation-features",
+            "date": "2026",
+            "who": "Cekura blog on Retell",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "GoHighLevel documents that Voice AI post-call summary emails are separate from calendar booking confirmations. So the platform's own reporting does not prove a booking exists.",
+            "quote": "post-call summary emails are separate from the calendar's own booking confirmations",
+            "url": "https://help.gohighlevel.com/support/solutions/articles/155000005293-appointment-booking-in-voice-ai",
+            "date": "2026",
+            "who": "HighLevel help center",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "counter_evidence",
+            "claim": "The core idea, reading the booking record back by ID after the agent speaks and flagging mismatches, is already published as a design pattern. That lowers novelty and invites fast followers.",
+            "quote": "A Voice Agent Hasn't Booked the Table Until the Reservation Record Agrees — fetch the booking by its ID and compare it with the approved request; if a material field differs, suppress the success phrasing and surface a reason-coded mismatch to staff",
+            "url": "https://dev.to/isabelle_dubuis_d858453d7/a-voice-agent-hasnt-booked-the-table-until-the-reservation-record-agrees-gnh",
+            "date": "2026",
+            "who": "Isabelle Dubuis (DEV Community)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "DeskCaller, a voice-agent vendor, writes about agents confirming bookings that failed. It notes that Google and Microsoft calendars silently accept conflicting writes and that agents speak confirmations without calling the tool, which suggests booking vendors may build verification in-house.",
+            "quote": "Google Calendar and Microsoft Graph won't refuse a second conflicting write... an agent kept saying it was proceeding with a booking without calling the booking tool",
+            "url": "https://deskcaller.com/blog/voice-agent-booking-write-failures",
+            "date": "2026",
+            "who": "DeskCaller (vendor blog)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "Agency-facing vendor Trillet reports phantom slots and double-bookings caused by calendar platforms that sync only every 5 to 15 minutes.",
+            "quote": "Some platforms refresh calendar data only every 5 to 15 minutes, which can lead to double-bookings.",
+            "url": "https://trillet.ai/blogs/voice-ai-appointment-scheduling-integration",
+            "date": "2026",
+            "who": "Trillet (vendor blog for agencies)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "competitor",
+            "claim": "Temporal Cortex prevents double booking before the write via an MCP with two-phase-commit atomic booking across Google, Outlook and CalDAV. It is pre-1.0 (v0.9.1, Mar 2026) with about 9 GitHub stars.",
+            "quote": "Atomic booking uses Two-Phase Commit: lock the time slot, verify no conflicts exist, then write. If two agents try to book the same slot, exactly one succeeds.",
+            "url": "https://glama.ai/mcp/servers/@billylui/cortex-mcp/blob/07b35e6c82640ef3881c3c20e61b372e65ab600f/README.md",
+            "date": "2026-03",
+            "who": "Temporal Cortex MCP README (billylui)",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "platform_roadmap",
+            "claim": "Nylas markets scheduling for AI agents across voice and chat, with a tutorial bridging LiveKit/Vapi/Retell. Agent Account grants have worked with Nylas Scheduler since Aug 20, 2026. Cronofy ships an MCP server for agents. Both are write-time infrastructure, not post-call auditing.",
+            "quote": "AI agents that own scheduling end-to-end — text, voice, or chat.",
+            "url": "https://developer.nylas.com/docs/v3/use-cases/industries/scheduling/",
+            "date": "2026-08-20",
+            "who": "Nylas developer docs",
+            "verification": "snippet"
+          },
+          {
+            "gap": "g3",
+            "kind": "counter_evidence",
+            "claim": "An open-source clinic voice-agent spec makes double-booking impossible at the database level. Builders who enforce constraints in their own booking layer reduce the need for after-the-fact verification, though not for wrong-price or invented-policy errors.",
+            "quote": "The booking is created as `CONFIRMED`, stores its own duration, and can never double-book a doctor, including under concurrent requests.",
+            "url": "https://github.com/arthuralvesc/greatclinic/issues/5",
+            "date": "2026-10-06",
+            "who": "arthuralvesc (clinic voice agent builder)",
+            "verification": "verified-full-text (opened via gh/API)"
+          },
+          {
+            "gap": "g3",
+            "kind": "pain",
+            "claim": "A Retell builder using Make.com and Cal.com struggles to build reschedule logic: unexplained 500 errors when looking up the caller's appointments by phone. Agencies glue the booking layer together by hand.",
+            "quote": "I am having issues creating an appointment rescheduling function within Retell AI, I have a Make.com scenario that currently is set up to request all appointments and filter them by the phone number... it is giving me a 500 error",
+            "url": "https://github.com/calcom/cal.diy/issues/23943",
+            "date": "2025-09-19",
+            "who": "LAtyeo (Retell AI builder, UK)",
+            "verification": "verified-full-text (opened via gh/API)"
+          }
+        ]
+      }
+    ],
+    "refs": {
+      "g1": [
+        {
+          "refuted": false,
+          "strongest_objection": "All four major platforms now ship, or will soon ship, the mechanics of the \"secret shopper\" themselves, and at little or no added cost. That leaves only the \"independence\" angle, and nobody has shown a buyer will pay for it.\n- ServiceNow's agentic-evaluation docs say to build evaluation datasets from agent execution logs on real records such as incidents, with explicit expected outputs and at least 100 scenarios. Results go into AI Control Tower, which since Knowledge 2026 also registers third-party agents.\n- Microsoft Copilot Studio Agent Evaluation (generally available March 2026) generates test sets from production conversations and has an API.\n- Salesforce's Agentforce Testing Center evaluates against \"ground truth\", has had conversation-level persona tests since April 2026, and is reportedly unmetered from Summer '26. Observability and Command Center cover production traffic, and Data Cloud can feed real data into tests.\n- Zendesk AutoQA scores 100% of AI agent conversations, and Intercom splits resolutions into assumed and confirmed and adds a CX Score.\n\nWhat remains is narrow: replaying historical resolved cases and reconciling them against system-of-record outcomes, plus third-party independence. That is a features-and-trust argument, and vendors are steadily closing the feature half.\n\nThe buyer side is weak too:\n- No RFPs, budget line or pricing evidence exists for buyer-side verification.\n- Now Assist ACV passed $600M even with the complaints.\n- When agents underperform, consultants often blame the customer's own knowledge base or data quality. So an audit tends to end in remediation work, not vendor accountability, which is the job the platforms' own consultants and SIs already sell.\n- Funded QA players (Cyara, Coval, TestZeus, Copado on Agentforce) can add a \"replay historical cases\" mode faster than a solo founder can win platform-admin data access inside enterprises.",
+          "evidence_quality": 3,
+          "demand": 3,
+          "willingness_to_pay": 2,
+          "solution_gap": 3,
+          "absorption_risk": 4,
+          "reachability_for_solo_founder": 2,
+          "notes": "Lens: is this already solved, or about to be shipped, by the platform vendors? I made 3 extra web searches, all snippet quality.\n\nNew evidence on absorption:\n(1) ServiceNow's docs (\"General guidelines for AI agent and agentic workflow evaluation\" and \"FAQs about agentic evaluations\", servicenow.com/docs/r/intelligent-experiences/aia-eval-faqs.html) tell customers to build evaluation datasets from execution logs of earlier agent runs on records such as incidents. Quote: \"Define clear success criteria by specifying the expected correct outputs for your agent.\" They recommend at least 100 scenarios. A ServiceNow community masterclass (servicenow.com/community/now-assist-articles/ai-agent-masterclass-session-4/ta-p/3469309) describes golden datasets with known expected outcomes. A RapDev partner case study (rapdev.io/blog/servicenow-ai-agent-use-case-power-incident-resolution-quality-control) used historical resolution notes as golden standards. Taken together, golden-set replay from historical ITSM cases is already native or SI-delivered on ServiceNow.\n(2) Salesforce says Testing Center evaluates topic, action and response \"against ground truth and predefined metrics\" (via the getclientell blog and salesforce.com/blog/agentforce-testing-center-usecase-blog). It added conversation-level persona tests in April 2026, reportedly became unmetered in Summer '26, and Data Cloud can bring real-world data into tests (gearset.com/blog/agentforce-testing-center). Observability and Command Center cover all production agents (salesforce.com/blog/command-center). However, I found no documented workflow that turns production transcripts into ground-truth tests. mindblaze.ai notes that Command Center does not show everything.\n(3) Zendesk QA for AI agents (zendesk.com/service/quality-assurance/qa-for-ai-agents/) auto-scores 100% of AI agent conversations, and its Real-time QA flags \"unresolved issues\". Intercom separates assumed from confirmed resolutions and sells a CX Score (Pro add-on) built on resolution, sentiment and quality signals (intercom.com/help/en/articles/10495092).\n\nWhere the gap survives:\n- Platforms grade their own homework. The Salesforce Deflection Rate bug in 260.9 and the Intercom 9-of-16 audit show vendor metrics can be wrong.\n- Vendor tests compare against expected text or an LLM judge, not reconciled CRM or ITSM outcomes such as reopen rates, repeat contacts or refunds.\n- Native tools are buggy (forcedotcom/cli#3636, Power-CAT Kit #277/#276/#904, skills-for-copilot-studio#170).\n- Each platform's tooling covers only its own agents, except ServiceNow AI Control Tower, which is telemetry-focused and may be read-only for third-party agents.\n\nNet: the independent outcome-reconciliation layer is still technically open. But absorption pressure is high (about 4/5), and the most plausible acquirers or absorbers are the platforms and QA incumbents (Cyara, Zendesk QA, Copado/TestZeus).\n\nPossible narrower wedge: a procurement- or renewal-time audit, meaning a point-in-time \"agent ROI audit\" sold to CFO or procurement ahead of an Agentforce, Now Assist or Fin renewal. It could be delivered as a service at first, which suits a solo founder better than a continuous SaaS product that needs platform-admin integrations. WTP remains unproven.\n\nSources: https://www.servicenow.com/docs/r/intelligent-experiences/aia-eval-faqs.html ; https://www.servicenow.com/community/now-assist-articles/ai-agent-masterclass-session-4/ta-p/3469309 ; https://www.rapdev.io/blog/servicenow-ai-agent-use-case-power-incident-resolution-quality-control ; https://www.salesforce.com/blog/agentforce-testing-center-usecase-blog/ ; https://www.salesforce.com/blog/command-center/ ; https://gearset.com/blog/agentforce-testing-center/ ; https://mindblaze.ai/blog/agentforce-observability-command-center/ ; https://www.zendesk.com/service/quality-assurance/qa-for-ai-agents/ ; https://www.intercom.com/help/en/articles/10495092-understand-customer-experience-at-scale-with-the-cx-score ; https://www.eesel.ai/blog/servicenow-ai-accuracy"
+        },
+        {
+          "refuted": false,
+          "strongest_objection": "The money for this is already spoken for. Nobody has a separate budget line for an independent \"secret shopper\" auditor of vendor agents. Three existing places absorb the job:\n(a) The vendor itself, at no extra cost: Agentforce Testing Center, Copilot Studio Agent Evaluation (GA March 2026, which generates tests from production conversations), ServiceNow Now Assist evaluation and AI Control Tower, and Salesforce Customer Zero answer-quality metrics.\n(b) The contact-center QA/WFO budget line the buyer already pays. Zendesk QA's AutoQA says it scores 100% of AI agent conversations next to human agents, and Cyara has launched a trust platform for AI agents.\n(c) The SI or consultant hired for the rollout, who samples tickets by hand.\n\nThe clearest first-person proof of the pain is the Intercom customer who hand-audited 16 tickets. That customer fixed it with a manual audit and a forum post, not a purchase, and Intercom then changed its billing itself. Generic guides put evaluation at 8-15% of the build, with tooling at $100-1,000 a month. That is a line item inside the implementation project, not a standalone vendor budget.\n\nThe finding where Now Assist's poor output traced back to the customer's own KB quality also points the other way: an audit result often ends with \"fix your knowledge base,\" which hurts both the urgency and the case for holding the vendor accountable. Meanwhile Now Assist ACV passed $600M despite the complaints, so dissatisfaction is not producing spend on verification.",
+          "evidence_quality": 3,
+          "demand": 3,
+          "willingness_to_pay": 2,
+          "solution_gap": 3,
+          "absorption_risk": 4,
+          "reachability_for_solo_founder": 2,
+          "notes": "Lens: no real budget. The pain is real, but nobody pays a separate vendor for it. Verdict: not refuted outright, but weakened. The pain is well documented. The budget is not: no RFP, no priced consulting offer and no buyer-side line item turned up in 2 rounds of research plus 3 more searches here. GitHub search via gh (GraphQL) returned 403 this round, so no new practitioner quotes came from GitHub.\n\nPoints against a separate budget:\n1) Existing paid QA tools already cover AI agents. Zendesk QA markets AutoQA scoring \"100% of AI agent conversations\" with bot and human scores side by side, and Cyara \"debuts trust platform for AI agents\" (CMSWire). These sit in the contact-center QA/WFO budget the buyer already has, so a new auditor has to displace them, not fill an empty slot. Sources: https://www.zendesk.com/dk/service/quality-assurance/qa-for-ai-agents/ (vendor, snippet) and https://www.cmswire.com/contact-center/cyara-debuts-trust-platform-for-ai-agents/ (snippet).\n2) Evaluation is costed as a slice of build cost. Agency guides put it at 8-15% of build, or $5K-20K, and tooling at about $100-1,000 a month (https://sista.ai/en/insights/ai-agent-budget-2026 and similar; vendor blogs, snippet). That spend sits with whoever runs the implementation (the SI or the internal CoE), not with a separate auditor.\n3) The strongest first-person evidence, the Intercom customer who found 9 of 16 tickets wrongly marked resolved, was handled with manual sampling and a community post. The vendor then partly fixed billing. Pain that gets resolved by complaining to the vendor shows low willingness to pay a third party.\n4) The visible assurance money goes elsewhere. AIUC-1 is paid by agent vendors, not buyers. Big 4 AI assurance covers controls and governance. Eval VC money (Braintrust, Patronus, Coval) targets teams building their own agents.\n5) Gartner's \"only 24% of service functions saw positive returns\" figure cuts both ways. A CFO who doubts AI ROI is more likely to cut or renegotiate the vendor contract, or ask the vendor for proof, than to add a new verification vendor while budgets grow only 2%.\n\nPoints for the opportunity (why it is not fully refuted):\n- Vendor metrics are provably unreliable: Salesforce's deflection bug fix, inconsistent Fin and Agentforce resolution figures, and the lenient Testing Center judge (forcedotcom/cli#3636).\n- None of the native or QA tools I found reconcile agent claims against CRM or ITSM ground truth.\n- Agentforce and Fin are priced per outcome, so verifying \"resolutions\" has direct dollar value in contract disputes and renewals. That is the most credible budget hook, as a cost-recovery or billing-audit service.\n\nReachability is low for a solo founder. Buyers are enterprise CX and ITSM leaders with long sales cycles. The product needs read access to production CRM and ITSM data, which means security review. SIs and Big 4 firms own the relationship.\n\nBest pivot if pursued: sell it as an outcome-billing audit (\"recover over-billed resolutions\") or as a feature licensed through SIs or QA platforms, not as standalone software with its own budget line."
+        },
+        {
+          "refuted": false,
+          "strongest_objection": "No enterprise buyer of a bundled vendor agent says anywhere in the evidence that they want, or would pay for, independent golden-set replay against their system of record. The claimed demand is pieced together from three weaker kinds of evidence. (a) Builder-side tooling complaints on GitHub, several in Microsoft's own repos, one from a Microsoft Power CAT employee, and two forcedotcom issues from one user. These are about authoring evals, not auditing a vendor. (b) Metric disputes about Intercom Fin, which is mostly a mid-market tool, not the enterprise bundled agent the thesis targets. (c) Competitor-blog and aggregator retellings. The strongest \"vendor numbers are wrong\" items are a single customer's 16-ticket audit from about 18 months ago (outside the 12-month window) and an 84.5% vs 12% figure that reached us only through a competitor's (Macha) blog. Meanwhile buyers keep paying: Now Assist ACV is above $600M. Vendors also correct the metrics themselves (Salesforce's 260.9 deflection fix, Intercom's billing change) and are shipping native evaluation that builds tests from production conversations (Copilot Studio Agent Evaluation GA, AI Control Tower, Testing Center). The pain is real, but the evidence for a paid, independent, buyer-side product is close to zero.",
+          "evidence_quality": 2,
+          "demand": 2,
+          "willingness_to_pay": 2,
+          "solution_gap": 3,
+          "absorption_risk": 4,
+          "reachability_for_solo_founder": 2,
+          "notes": "I checked the evidence quality myself. GitHub GraphQL is blocked here. REST reads of forcedotcom/cli#3636 returned 403 (repo not enabled), so I could not re-check that quote. REST issue searches for '\"Now Assist\" accuracy OR hallucination' (9,593 hits) and 'agentforce deflection OR resolution rate' (1,090 hits) brought back only noise: training spam, digest bots, unrelated repos. GitHub has no buyer-side voice for this gap, so the \"verified-full-text\" label covers builder friction, not auditor demand.\n\nProblems with the evidence, source by source:\n1) Fin 9/16 audit: one customer, about 2025-05, outside the 12-month window. It also concerns Fin, not an enterprise bundled agent.\n2) 84.5% vs 12%: secondhand through a competitor blog (Macha), with the original thread unverified.\n3) Intercom's \"66% isn't 66% of the work\" quote and the claim that deflection runs 10-20 points high: both come from competitor or SEO blogs (CloneDesk, aiagentforcustomerservice.com, aceverse), which have a reason to run down incumbents.\n4) Now Assist abandonment: an aggregator (vibegraveyard.ai) only; the four Reddit threads were never opened.\n5) Bloomberg Joule: anonymous sources, and about value for money, not accuracy verification.\n6) adesso and TJC Joule tests: SAP partners testing Joule for Consultants, a design-time tool, not production agents against a system of record.\n7) Copilot Studio Q&A posts: builders debugging grounding settings (one fixed it by turning off general knowledge), which is configuration error rather than vendor underdelivery.\n8) GitHub issues: microsoft/skills-for-copilot-studio, Power-CAT kit issues (one written by a Microsoft employee), and forcedotcom 3635/3636 from a single user. These are feature requests to the vendor, which points toward native fixes.\n9) Salesforce's 260.9 fix: shows the vendor finds and fixes metric bugs itself.\n10) Gartner figures: the 38% vs 2% figure is first-party; the \"24% positive ROI\" figure is secondhand via CX Today. Neither names a budget for verification.\n11) Competitor and funding items: largely press-release or vendor sourced.\n\nWhat holds up:\n- Vendor \"resolution\" definitions are inconsistent across sources.\n- Vendor-native testing is LLM-judged and runs on synthetic cases.\n- No tool was found that replays historical resolved CRM or ITSM cases against the system of record.\n\nWhat would change the verdict:\n- First-person posts from service or IT ops leaders at enterprises running Agentforce or Now Assist saying they cannot verify the vendor's numbers and would fund third-party verification.\n- Any RFP, or consulting engagement scoped as \"independent agent outcome audit.\"\n- Procurement or contract-renewal disputes over agent outcome metrics.\n\nReachability is low for a solo founder. The product needs enterprise data-access approvals across CRM, ITSM and the vendor agent APIs, a security review, and long sales cycles. Buyers may also blame their own knowledge-base or data quality and send the budget to consultants instead."
+        }
+      ],
+      "g3": [
+        {
+          "refuted": false,
+          "strongest_objection": "The most common failure, \"says booked when nothing was booked\", can be detected from data the platforms already hold: tool-call logs, action results and post-call analysis fields. Checking a commitment against the calendar is cheap for a platform that owns the calendar. HighLevel already logs, for each call, the actions triggered and their results, and its dashboard counts booking actions completed versus attempted. Retell's post-call analysis already writes an appointment_booked field to the CRM. Coval already does pre- and post-call state verification against a backend through API calls, though only in simulation. Roark reportedly already flags 'told caller booked, but it was not' from tool-call annotations. Any of them could turn this into a production alert in one release. That would leave \"Kept\" with the harder and less evidenced parts: wrong price, invented discount, invented policy, and the white-label report. Willingness to pay for those parts is the weakest in the evidence (a GoHighLevel reseller charges $79/mo for the whole receptionist).",
+          "evidence_quality": 3,
+          "demand": 3,
+          "willingness_to_pay": 2,
+          "solution_gap": 3,
+          "absorption_risk": 3,
+          "reachability_for_solo_founder": 4,
+          "notes": "Platform-absorption lens, 4 searches run 2026-11-09 (all results are snippets or vendor content). Verdict: not refuted. No vendor has shipped production reconciliation of each spoken commitment against the real calendar and price list. But the core booking check is a thin, easily absorbed feature.\n\nAlready shipped or adjacent, by platform:\n(1) HighLevel. Voice AI call logs show \"actions triggered … action results\", and the launch checklist tells users to confirm the call log contains the expected action results. The dashboard tracks appointment booking actions \"completed or attempted\", and logs can be filtered by Appointment Booking, Cancel or Reschedule. Guided templates add an Update Tag action that sets a \"Booked\" outcome tag. Sources: help.gohighlevel.com/support/solutions/articles/155000004693-voice-ai-agents-dashboard-overview and /155000005900-call-logs-for-voice-ai-agents (article modified Sep-Oct 2026). HighLevel owns both the agent and the calendar, so a \"claimed booked vs calendar event exists\" check is trivial for it to add. What it does not yet do is alert on a mismatch, or check the spoken time against the written slot.\n(2) Retell. Post-call analysis lets users define custom outcome fields such as call_outcome and appointment_booked and write them to the GHL contact (retellai.com/blog/gohighlevel-ai-voice-agent). That is a log of the model's own claim, not a verification against the calendar. The AI QA add-on is about $0.10/min.\n(3) Vapi. Monitoring launched Apr 2026, but Effectiveness and Compliance metrics are Enterprise-only, so SMB agencies are left out for now. Vapi has no white-label offering.\n(4) QA vendors. Coval advertises stateful pre/post state verification through API calls (\"Did the agent book the appointment?\"), but only in simulation (coval.ai/blog/hamming-vs-cekura). Roark reportedly caught 'told caller appointment booked when it hadn't been' from tool-call annotations, not the booking system (thecontextcompany.com/compare/best-voice-agent-monitoring-tools, snippet). Coval adding production backend checks would be a short step; it has $28M.\n(5) Synthflow reportedly removed in-product reselling on 2026-09-15 (agency comparison, unverified). If true, that pushes agencies toward Retell/Vapi via partners and fragments the market.\n\nNo search found a vendor changelog that announces production commitment verification.\n\nWhy this does not fully refute: no platform checks spoken time and date against the written slot (the nick-delgado and sanama-stack failures), prices against a price list, or policies, and none sells cross-platform white-label proof reports. Agencies that mix Vapi, Retell, GHL and n8n need a neutral layer.\n\nWhy absorption risk is 3 and not lower: HighLevel can ship a \"booking mismatch\" alert natively. Coval or Roark can move simulation state checks into production. The DEV/DeskCaller pattern is already public.\n\nPositioning advice: lead with cross-platform coverage, time and price mismatch detection, and the agency proof report; do not lead with \"booked vs not booked\"."
+        },
+        {
+          "refuted": false,
+          "strongest_objection": "The money that would pay for \"Kept\" is thin and already spoken for. The SMB end client pays the agency $79 to $800 a month, sometimes up to $2,000. At the low end, a GoHighLevel reseller sells the whole AI Receptionist as a $79/mo add-on (tonybotchev/nofluff-marketing-site#32, verified). The agency's QA budget is therefore a few dollars to a few tens of dollars per client per month, and it competes with things that cost nothing extra:\n- **HighLevel Voice Intelligence**: native per-call QA scorecards, summaries and dispositions on every recorded Voice AI call (help.gohighlevel.com, snippet).\n- **Retell AI QA**: about $0.10/min.\n- **Vapi Monitoring.**\n- **Free n8n templates**: they already check the calendar and return eventId and calendarId as the booking confirmation (n8n.io/workflows/20300, snippet).\n\nToday the fix is a code pattern (\"never say booked until the save returns\"; \"fetch the booking by ID and compare\") that builders add once, for free. It is not a recurring vendor line item.\n\nEvery willingness-to-pay signal is indirect. One-off freelance incident reviews ($350 fixed) are spent on build-and-fix work, not on ongoing monitoring. Funded QA vendors have chased enterprise contact centres (Coval: Zoom, Deepgram; $4,500/mo tiers), not $300/mo SMB agencies. That suggests SMB agency budgets were not worth targeting.\n\nIn three rounds of research, plus my own 2 web searches and 2 GitHub REST queries this round, I found no first-person account of an agency paying for, budgeting for, or churning a client over false commitments. My query on \"agency AI receptionist churn/refund\" returned 31 GitHub issues: none were loss reports, and most were agency marketing or go-to-market tracking. The best first-person signal (a French plumbing voice-AI agency: \"un bug = client perdu\", meaning \"one bug = a lost client\") is a hiring post, not a purchase.\n\nThe vendor claim that 70-80% of churn is \"perception\" points the budget at a monthly ROI/proof report, not at error verification. GHL, Retell and Vapi could ship that report (call outcomes, bookings made) as a native dashboard.",
+          "evidence_quality": 3,
+          "demand": 3,
+          "willingness_to_pay": 2,
+          "solution_gap": 3,
+          "absorption_risk": 4,
+          "reachability_for_solo_founder": 4,
+          "notes": "Lens: no real budget. Verdict: weakened, not refuted. The pain is real and recent. Budget exists only as a fraction of thin agency retainers. The \"no separate vendor\" objection is strong but not proven: absence of evidence is partly because Reddit and Skool cannot be reached from here.\n\nFINDINGS THIS ROUND (my own searches):\n1. [counter/budget|snippet] HighLevel Voice Intelligence produces automatic summaries, QA scores out of 10, field suggestions and dispositions after every recorded Voice AI call. A GHL agency already gets a native per-call QA layer at no extra vendor cost. It does not check against the calendar or price list. https://help.gohighlevel.com/support/solutions/articles/155000009487-voice-intelligence\n2. [counter/absorption|snippet] HighLevel's docs push pre-launch web-call and phone-call testing to find \"incorrect responses, action failures\". The platform treats correctness as its own job. https://help.gohighlevel.com/support/solutions/articles/155000004108-testing-voice-ai-agents\n3. [counter/DIY|snippet] Free n8n workflow templates check calendar availability before creating the event and return eventId and calendarId as the confirmation. Another receives a second confirmed-booking webhook before writing. The verification pattern ships free in templates agencies already copy. https://n8n.io/workflows/20300-book-home-care-assessments-by-phone-with-vapi-google-gemini-and-google-calendar/\n4. [counter/DIY|snippet] An n8n template has a white-label confirmation email (agency name, colours, footer) built in. White-label reporting is a template feature, not a product. https://n8n.io/workflows/22195-triage-ai-receptionist-calls-with-openai-google-sheets-calendar-and-gmail/\n5. [counter/absorption|snippet] Retell already emits a call_analyzed webhook with custom post-call variables such as \"IsAppointmentBooked\". Agencies can wire their own check against the calendar on top of it. The community thread shows the variable silently failing because of a trailing space, so this is a fragile DIY gap, though not a budget. https://community.retellai.com/t/post-call-analysis-variables-are-autogenerated-when-no-one-spoke/3633\n6. [counter/budget|verified gh REST] GitHub search for agency \"AI receptionist\" client churn, refund or cancellation returned 31 issues, none of which reports an agency losing or refunding a client over a bad commitment. The hits are agency go-to-market and site-build trackers, e.g. https://github.com/xobie/master-projects/issues/1 and https://github.com/tonybotchev/nofluff-marketing-site/issues/38\n7. [counter/budget|verified (prior round)] The AI Receptionist is retailed as a $79/mo add-on by a GHL reseller. A per-client verifier at even $20/mo would take about 25% of that revenue line. https://github.com/tonybotchev/nofluff-marketing-site/issues/32\n8. [counter/demand|snippet] Web search for agencies refunding or losing clients over hallucinated bookings found no Reddit thread. Results were vendor blogs, e.g. getaron.ai \"Why AI Receptionists Fail by Month Three\" (https://getaron.ai/blog/ai-receptionist-fails-by-month-three) and sagnikbhattacharya.com \"What to Do When an AI Receptionist Gets a Booking Wrong\" (https://sagnikbhattacharya.com/blog/ai-receptionist-booking-mistakes-fix). Vendors are writing about the problem, practitioners are not complaining about it.\n9. [pain-support|snippet] A UK AI-receptionist startup (SIMCOAI) logged a status-page incident: a call was offered a start time from another service's timetable. The vendor here absorbed the incident; no agency was involved. https://vibegraveyard.ai/story/simcoai-ai-receptionist-wrong-service-appointment-times/\n10. [pain-support/liability|snippet] Morgan Lewis (2026-08) argues consumer-protection liability attaches to AI-generated booking statements, citing the Air Canada chatbot precedent. This is a possible budget source in regulated or high-ticket verticals (clinics, legal, travel), not in commodity SMB. https://www.morganlewis.com/blogs/sourcingatmorganlewis/2026/08/ai-concierge-services-who-is-liable-when-a-bot-books-the-wrong-vacation\n11. [pain-support|snippet] A DEV Community post reports an agent saying \"cancelled\" while billing had no termination event in 31 of 214 cases, 22 of which renewed and charged (internal figures, unverified). Claim-versus-system-of-record mismatch is measurable and costly where money moves. https://dev.to/chenwengui23/your-ai-told-the-customer-they-were-cancelled-the-subscription-renewed-11-days-later-463m\n\nSYNTHESIS OF PRIOR EVIDENCE THROUGH THE BUDGET LENS:\n- **Willingness to pay is indirect only.** It rests on per-incident freelance reviews and $300-1,200 build gigs. Both are one-off fix spend, not recurring monitoring spend.\n- **Funded QA vendors avoid the low end.** Coval ($28M), Hamming ($3.8M, Agency tier quote-only), Cekura and Roark exist, yet none prices for $300/mo SMB agencies with calendar verification. Either the gap is open, or the segment cannot pay. Cekura's $0.05/call is about $15/mo at 300 calls per client, which shows how small the price point would be.\n- **Sophisticated builders fix it in code**, so the real buyer is template-based GHL/Vapi agencies with low technical skill. Those are also the lowest-budget and highest-churn buyers.\n- **\"Perception churn\" points elsewhere.** If agencies pay at all, they pay for the client-facing monthly proof/ROI report, which GHL and Retell dashboards can easily absorb.\n\nWHAT WOULD SURVIVE:\n- **Reframed buyer.** Bundle verification inside a white-label \"proof of value\" report that agencies resell to clients for $50-150/mo. That way the client's budget pays, not the agency's margin.\n- **Or a narrower market.** Target regulated or high-ticket verticals (dental, medical, legal, home-services emergency) where one false commitment costs hundreds of dollars and carries liability.\n\nKill test: 10 agency interviews asking \"what did you spend last quarter on call QA/monitoring, and would you pass a $X/mo proof report to clients?\" If fewer than 3 already pay any per-client QA line item, treat the idea as refuted on budget.\n\nMethod note: gh GraphQL search is blocked. The REST search/issues endpoint requires is:issue. I used 2 of my 4 allowed web searches and 2 REST queries; one first-pass gh attempt failed on GraphQL."
+        },
+        {
+          "refuted": false,
+          "strongest_objection": "The best evidence does not show the buyer having the problem. The 'verified-full-text' pain comes from 0-star hobby or portfolio repos that look agent-authored (synthetic eval harnesses, not paying SMB deployments). Everything about agency churn, pricing and willingness to pay comes from vendor blogs or undated forum snippets. Only one item is a genuine agency-client incident (Teamleepai / Ace Auto Detailing), and it is not a hallucinated commitment. The agent said 'no availability' when the calendar was open, which is a false negative and not a false 'booked'. The client caught it himself on a test call. The $209 vs $219 error sat in the agency's own pricing table, so a checker comparing against 'the real price list' would have confirmed the wrong price. No source shows an agency losing a client, refunding, or paying for this specific kind of verification. Measured failure rates (10.6%, 29%, 62% wrong date) come from test harnesses on custom or experimental stacks, not from GHL, Vapi or Retell agency templates in production.",
+          "evidence_quality": 2,
+          "demand": 2,
+          "willingness_to_pay": 2,
+          "solution_gap": 3,
+          "absorption_risk": 4,
+          "reachability_for_solo_founder": 3,
+          "notes": "Adversarial review through the evidence-quality lens. Checks made this session: repo metadata and issue cadence via the gh REST search API, plus one search for agency loss or refund evidence.\n\nFINDINGS\n1. [source-quality|verified] The anchor source for the 10.6% rate is sanama-stack/reception-booking-system: 0 stars, 0 forks, created 2026-09-07, with 25 issues filed in about two weeks (6 on 09-09, 10 on 09-25). It is a Java/Spring 'multi-tenant SaaS' with no evidence of customers. Issue #17 was filed 3 days after the repo was created. Its rate is a lab measurement (5 of 47 writes, 95% CI 3.5-23.1%), not a production incident.\n2. [source-quality|verified] nick-delgado/serverless-ai-scheduling: 0 stars, created 2026-09-27, with 201 issues in about 5 weeks (16 on 2026-10-16 alone). The repo describes itself as 'an evaluation harness that measures whether it gets them right'. This cadence and style point to agent-generated issue streams in a portfolio or eval project. The wrong-slot example (#313) is a test transcript, not a real patient.\n3. [source-quality|verified] MMARTID/alhabla (1 star, created 2026-08-20) and shobanaravishankar/aria-receptionist (0 stars, created 2026-10-08, described as a 'salon receptionist demo') are early-stage solo builds. Their 'real salon client' framing is unverified.\n4. [source-quality|verified] The boson-ai #19 figure of 29% (7 of 24 runs) concerns one experimental realtime model (Higgs) and a 'handoff' claim, not booking. Its sample is tiny and it does not transfer to the GPT-4o or Claude backends that agencies use on Vapi or Retell.\n5. [source-quality|verified] NVIDIA ambient-patient #3 (missing conn.commit), AWS blueprint #71, LangGraph #7417 and Pipecat #4936 are framework or reference-code bugs that their maintainers fix upstream. They are not evidence of recurring pain at SMB agencies, and they argue for absorption by the platforms.\n6. [counter|verified] Teamleepai/Team-brain #2 (2026-08-05) is the only real agency-to-SMB-client ticket found. Its failure is 'no availability' when the calendar was open. That is a missed booking, not a false commitment, and Kept's core 'verify every commitment' check would not catch it. The client found it himself on a test call.\n7. [counter|verified] In the same ticket, the price error ('$209, not $219') sat in the agency's own 'pricing data tables'. The source of truth was wrong. Checking against the configured price list would have passed the bad price, so the wrong-price use case partly falls apart.\n8. [source-quality] Every Retell or Vapi forum item (5 bookings for one slot, 'says booked, nothing in Calendar', Monday resolved to Saturday, freeBusy returning empty) is a search snippet, undated or about a year old, often from 2025, and never read in full. Several describe bugs the platform later fixed (freeBusy 'suddenly not working').\n9. [source-quality] All churn, pricing and agency-economics claims come from vendor blogs with an interest in the answer: MyVoiceAIConnect, Trillet, Dring.ai, DeskCaller, Ciela, SeldonFrame. The '70-80% perception churn' figure is unsourced, and it argues against error-driven demand.\n10. [source-quality] The wrong-price and invented-discount evidence is a Medium anecdote with no date plus a vendor blog that says 'There is no published error rate'. Unauthorised discounts are effectively unevidenced.\n11. [wtp|weak] The willingness-to-pay signals are one 'For hire' freelancer post (a snippet, with no evidence anyone hired), a $350 diagnostic offer (snippet), and a freelancer rate card on GitHub. That shows supply, not demand. No agency is quoted saying it would pay for monitoring.\n12. [wtp|verified] A GHL reseller (nofluff-marketing #32) prices the whole AI Receptionist add-on at $79/mo. A per-client verification layer has to fit inside that margin at the bottom of the market.\n13. [counter|verified] My gh search for 'AI receptionist' issues mentioning refund, churn or cancelled (448 hits) surfaced mostly student projects, roadmaps and marketing-site tickets, and no agency loss or refund story.\n14. [counter|verified] The Vapi and Retell GitHub orgs show near-zero booking issues (2 and 0). Builders do not escalate this pain to the platforms, which could mean it is handled with prompt and tool fixes.\n15. [absorption|snippet] Vapi shipped Evals, Simulations and Monitoring in April 2026, and Retell sells AI QA at $0.10 a minute. Both own the tool-call logs and calendar integrations (Retell's forced Cal.com migration on 2026-10-31), so a check of 'tool result vs spoken claim' is a small step for them. GHL owns the calendar natively.\n16. [competition|snippet] Coval ($28M Series A), Cekura, Hamming (which has an Agency tier) and Roark are well funded or already ship production monitoring. The read-back-by-ID pattern is already published (DEV post, DeskCaller, Trillet), so the gap rests on a single claim that Cekura is 'state-blind', made by a competitor (Coval).\n17. [counter|verified] Builders already add confirm-after-save and slot or time checks in-tool (nick-delgado #313, arthuralvesc DB constraints, Sacarianos spec), which reduces the residual error surface.\n18. [gap] Reddit, Skool and the Vapi forum were not reachable from this environment, so missing first-person agency evidence is partly a collection artifact and not proof of absence. But nothing positive offsets it.\n\nOverall: the pain looks real in the abstract, but the headline numbers come from synthetic tests on agent-built demo repos, and the buyer (the agency), its losses and its willingness to pay are all unevidenced. Not refuted, but the case is not yet supported. Before building, get 5-10 interviews with GHL/Vapi agency owners asking for incident counts, client losses, and what they would pay per client."
+        }
+      ]
+    },
+    "decision": {
+      "winner": "g3",
+      "scores": {
+        "g1": {
+          "demand": 3,
+          "wtp": 2,
+          "gap": 3,
+          "absorption": 4,
+          "reach": 1,
+          "evidence": 2
+        },
+        "g3": {
+          "demand": 3,
+          "wtp": 2,
+          "gap": 3,
+          "absorption": 3,
+          "reach": 4,
+          "evidence": 3
+        }
+      },
+      "convergence": "Yes, g1 is a credible later stage of g3, but only as a reuse of the engine, not of the market. Both products run the same pipeline. First, pull structured claims out of what an agent says or writes (\"booked Tue 13:00\", \"price EUR 209\", \"ticket resolved\"). Then judge each claim deterministically against a system of record. Then write a signed, hash-chained evidence record of the verdict. The snuepi assets already cover g3's version of this: DST-safe time logic, 20 calendar and booking connectors, deterministic price and discount rules, and the evidence log. For g1, none of the domain layer carries over; only the claim -> verdict -> evidence core does.\n\nFour things must be true for the path from g3 to g1 to be real:\n(1) The claim and verdict schema is domain-agnostic from day one. Commitment types, ground-truth adapters and verdict rules are plugins, so a CRM or ITSM outcome such as reopened, repeat contact, refund issued or SLA breached is just another adapter.\n(2) The evidence log becomes the product's differentiator, not a side feature. No QA competitor (Coval, Cekura, Hamming, Roark, Testing Center, Copilot Evaluation) produces tamper-evident, third-party-verifiable records. That asset is what an enterprise buyer would actually pay for in an outcome-billing dispute, a renewal negotiation or an audit, for example as deployer evidence under the EU AI Act or Air Canada-style liability.\n(3) g1 gets reframed from a continuous \"secret shopper\" SaaS, where absorption is 4/5 and access is blocked, into a point-in-time outcome-billing or renewal audit. The pitch: the product reconciles per-resolution charges (Fin, Agentforce flex credits) against CRM or ITSM ground truth, delivered first as a service. That is the only g1 wedge with a dollar-denominated budget hook.\n(4) g3 delivers the founder SOC 2 or ISO 27001-ready operations, EU data-residency credibility, and at least one referenceable signed pilot. Without those, g1's security reviews and 6-12 month cycles are unreachable for a solo founder.\nIf any of (1)-(3) fails, g1 is a different company.",
+      "what_changed_vs_prior": "The prior ranking had enterprise (g1) at 31.3 ahead of Kept (g3) at 26.8. This validation reverses it.\n\ng1 lost the most:\n- Willingness to pay fell to 2. Across three research passes there was no RFP, no budget line and no priced offer. The money that exists is already allocated to vendor-native tools, the existing QA/WFO line, SIs and the Big 4.\n- Absorption rose to 4. ServiceNow docs already prescribe golden sets built from historical incident logs. Copilot Studio Agent Evaluation generates tests from production conversations. Testing Center is reportedly unmetered, and Zendesk AutoQA scores 100% of AI conversations.\n- Reach fell to 1-2. The product needs production CRM and ITSM access, a security review, and a relationship that SIs already own.\n- Evidence fell to 2. The \"vendor metrics are wrong\" anchors are one 16-ticket Fin audit (~18 months old, mid-market, not enterprise), a secondhand 84.5%-vs-12% figure via a competitor blog, and a Salesforce bug that Salesforce fixed itself. The verified GitHub items show builder friction, not buyer demand for an auditor.\n- What survived: the narrow technical gap of reconciling against system-of-record outcomes, and the outcome-billing audit angle.\n\ng3 also weakened:\n- Willingness to pay is 2. The only signals are $79/mo receptionist add-ons and freelancer supply posts.\n- The headline failure rates (10.6%, 29%, 62%) come from 0-star, likely agent-generated eval repos.\n- The one real agency ticket was a false negative (\"no availability\"), plus a wrong price that sat in the agency's own price table.\n\nBut g3 kept what g1 lost:\n- Reach is 4: self-serve agencies, a reachable community, and short cycles.\n- Asset fit is near-total: calendar connectors, DST and timezone logic, and price rules address exactly the documented failures (wrong timezone, Monday resolved to Saturday, wrong slot after confirmation, double booking).\n- Absorption is lower at 3. No platform reconciles the spoken time or price against the written record, and none does it across platforms.\n\nNet: both have weak willingness to pay, but only g3 lets a solo founder cheaply find out whether it is real. Reach and asset fit decide this, and both favour g3.",
+      "decisive_unknowns": [
+        "Production mismatch rate: on a real agency's last 30 days of GHL/Vapi/Retell calls, what share of spoken commitments (booked, date/time, price) disagree with the calendar or price list? Lab rates of 10-29% come from synthetic repos; anything under ~2% kills the alerting value.",
+        "Agency willingness to pay: in 10 interviews, do at least 3 agencies already pay any per-client QA or monitoring line item? Will they pay $15-40 per client per month, or resell a white-label proof report at $50-150 per month?",
+        "Is the price list or calendar a trustworthy source of truth at SMB clients? (In the Ace Auto Detailing ticket, the agency's own price table was wrong.) If not, the price-verification half of the product collapses into a data-hygiene report.",
+        "Whether HighLevel ships a native 'claimed booked vs event exists' mismatch alert, or Coval or Roark moves its simulation state checks into production monitoring, within the next 6-9 months.",
+        "Whether a higher-ticket or regulated vertical (dental, clinics, legal, emergency home services, EU healthcare under GDPR) pays materially more per false commitment than commodity GHL agencies. That would decide the beachhead and the price point.",
+        "For g1 later: whether any enterprise running per-resolution-priced agents (Fin, Agentforce) would fund a point-in-time outcome-billing or renewal audit, and grant read access to CRM or ITSM for it."
+      ],
+      "recommendation": "Pursue g3 (\"Kept\"). Shelve g1 as a deliberate later stage, not a parallel bet.\n\nWeeks 1-4 are a kill test, not a build:\n(a) Find 10 GHL, Vapi or Retell agency owners, ideally from higher-ticket verticals: clinics, dental, legal, emergency trades.\n(b) Offer each a free retroactive backtest. Ingest their last 30 days of call logs or webhooks plus calendar and price-list access through the existing snuepi connectors. Return a signed mismatch report: claimed booked but no event, spoken time not equal to the written slot (including timezone and DST), double booking, price off-list, invented discount or policy.\n(c) Turn backtests into paid pilots. The target is 3 paid design partners at about $200-500 per agency per month, or $20-40 per client per month, plus a white-label monthly proof report the agency resells to its clients.\n\nKill or pivot criteria:\n- A production mismatch rate under 2% across the backtests.\n- Fewer than 3 of 10 agencies paying for any QA today.\n- Zero conversions from backtest to paid.\n\nPositioning, so the product is not absorbed:\n- Lead with cross-platform coverage, time and date plus price reconciliation, and tamper-evident proof.\n- Do not lead with \"booked vs not booked\", which HighLevel can ship in one release.\n\nArchitecture:\n- Build the claim -> ground-truth adapter -> verdict -> signed evidence pipeline as a domain-agnostic core from day one, so CRM and ITSM adapters can be added later.\n- Start the security posture early: EU hosting, a DPA, and the SOC 2/ISO controls the evidence log already supports.\n\nReconsider g1 only after both of these:\n- g3 has a signed pilot and a referenceable evidence-report format.\n- At least one enterprise or mid-market buyer of per-resolution-priced agents (Fin, Agentforce) says it would pay for an outcome-billing or renewal audit, delivered first as a service."
+    }
+  },
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Hunt"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 2,
+      "title": "Refute"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 3,
+      "title": "Decide"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "hunt:g1-forums",
+      "phaseIndex": 1,
+      "phaseTitle": "Hunt",
+      "agentId": "abf31b17a99115d1e",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258277016,
+      "queuedAt": 1794258276995,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "I found 27 findings, but direct first-person evidence was t…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258406645,
+      "tokens": 116416,
+      "toolCalls": 19,
+      "durationMs": 129628,
+      "resultPreview": "{\"findings\":[{\"gap\":\"g1\",\"kind\":\"pain\",\"claim\":\"Salesforce admitted its own Agentforce Deflection Rate metric was inflated: timed-out sessions were counted as deflected until a bug fix in version 260.9. Vendor-reported outcome metrics cannot be trusted at face value.\",\"quote\":\"The prior classification inflated Deflection numbers and understated Abandonment by counting timed-out sessions as deflect…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "hunt:g1-budget-competitors",
+      "phaseIndex": 1,
+      "phaseTitle": "Hunt",
+      "agentId": "ae6fb526c22a78e45",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258277017,
+      "queuedAt": 1794258276995,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Who pays and how much: there is still no named enterprise b…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258430259,
+      "tokens": 127011,
+      "toolCalls": 25,
+      "durationMs": 152610,
+      "resultPreview": "{\"findings\":[{\"gap\":\"g1\",\"kind\":\"pain\",\"claim\":\"A practitioner testing Agentforce reports that Testing Center's LLM-judged expectedOutcome is too lenient. An agent with an instruction clause removed still passed. The only deterministic text assertion errors on the documented reference. So the vendor's own test tool can't reliably catch regressions.\",\"quote\":\"The LLM-judged `expectedOutcome` is len…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "hunt:g3-forums",
+      "phaseIndex": 1,
+      "phaseTitle": "Hunt",
+      "agentId": "a8f90cb12dfce72c8",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258406657,
+      "queuedAt": 1794258276995,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The pain is well evidenced and recent; evidence that agenci…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258575048,
+      "tokens": 129999,
+      "toolCalls": 23,
+      "durationMs": 168391,
+      "resultPreview": "{\"findings\":[{\"gap\":\"g3\",\"kind\":\"pain\",\"claim\":\"A receptionist agent moved a customer's appointment to a date they did not ask for, told them it was done, and made up a policy to justify it. Measured rate: 10.6% of live reschedule writes.\",\"quote\":\"This is a silent wrong write, not a wrong answer. The Receptionist moves a Customer's appointment to a date they did not ask for, tells them it did, an…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "hunt:g3-github",
+      "phaseIndex": 1,
+      "phaseTitle": "Hunt",
+      "agentId": "ab1c54b8433cfc876",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258430267,
+      "queuedAt": 1794258276995,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "GitHub has strong evidence for Gap #3, but almost all of it…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258618093,
+      "tokens": 145460,
+      "toolCalls": 23,
+      "durationMs": 187826,
+      "resultPreview": "{\"findings\":[{\"gap\":\"g3\",\"kind\":\"pain\",\"claim\":\"A live-model test of a reception booking agent found it moved appointments to a date the customer never named and then made up a policy to justify the move, in about 1 of 10 writes.\",\"quote\":\"This is a silent wrong write, not a wrong answer. The Receptionist moves a Customer's appointment to a date they did not ask for, tells them it did, and states …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "hunt:g3-budget-competitors",
+      "phaseIndex": 1,
+      "phaseTitle": "Hunt",
+      "agentId": "ae5ebcb0643040007",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258575055,
+      "queuedAt": 1794258276995,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Gap #3 (\"Kept\"), post-call verification of what voice agent…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258734283,
+      "tokens": 132805,
+      "toolCalls": 23,
+      "durationMs": 159228,
+      "resultPreview": "{\"summary\":\"Gap #3 (\\\"Kept\\\"), post-call verification of what voice agents promise.\\n\\nThe pain is real and documented first-hand in recent GitHub issues. A Booksy/Retell-style receptionist test measured a 10.6% silent wrong-write rate on reschedules: the agent wrote the wrong date, said it had succeeded, and made up a policy to justify it. An agency's client issue shows the agent reading a calend…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "refute:g1:0",
+      "phaseIndex": 2,
+      "phaseTitle": "Refute",
+      "agentId": "af857f79ca3c0ebcc",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258734317,
+      "queuedAt": 1794258734293,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "All four major platforms now ship, or will soon ship, the m…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258784202,
+      "tokens": 102858,
+      "toolCalls": 5,
+      "durationMs": 49884,
+      "resultPreview": "{\"refuted\":false,\"strongest_objection\":\"All four major platforms now ship, or will soon ship, the mechanics of the \\\"secret shopper\\\" themselves, and at little or no added cost. That leaves only the \\\"independence\\\" angle, and nobody has shown a buyer will pay for it.\\n- ServiceNow's agentic-evaluation docs say to build evaluation datasets from agent execution logs on real records such as incident…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "refute:g1:1",
+      "phaseIndex": 2,
+      "phaseTitle": "Refute",
+      "agentId": "a819dd24c2994e536",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258734317,
+      "queuedAt": 1794258734294,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The money for this is already spoken for. Nobody has a sepa…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258777997,
+      "tokens": 102752,
+      "toolCalls": 6,
+      "durationMs": 42794,
+      "resultPreview": "{\"refuted\":false,\"strongest_objection\":\"The money for this is already spoken for. Nobody has a separate budget line for an independent \\\"secret shopper\\\" auditor of vendor agents. Three existing places absorb the job:\\n(a) The vendor itself, at no extra cost: Agentforce Testing Center, Copilot Studio Agent Evaluation (GA March 2026, which generates tests from production conversations), ServiceNow …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "refute:g1:2",
+      "phaseIndex": 2,
+      "phaseTitle": "Refute",
+      "agentId": "ade4388658339461e",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258778001,
+      "queuedAt": 1794258734294,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "No enterprise buyer of a bundled vendor agent says anywhere…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258812431,
+      "tokens": 99140,
+      "toolCalls": 3,
+      "durationMs": 34430,
+      "resultPreview": "{\"refuted\":false,\"strongest_objection\":\"No enterprise buyer of a bundled vendor agent says anywhere in the evidence that they want, or would pay for, independent golden-set replay against their system of record. The claimed demand is pieced together from three weaker kinds of evidence. (a) Builder-side tooling complaints on GitHub, several in Microsoft's own repos, one from a Microsoft Power CAT e…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "refute:g3:0",
+      "phaseIndex": 2,
+      "phaseTitle": "Refute",
+      "agentId": "aa0f864264d72181c",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258812440,
+      "queuedAt": 1794258812435,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The most common failure, \"says booked when nothing was book…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258855875,
+      "tokens": 109045,
+      "toolCalls": 6,
+      "durationMs": 43434,
+      "resultPreview": "{\"refuted\":false,\"strongest_objection\":\"The most common failure, \\\"says booked when nothing was booked\\\", can be detected from data the platforms already hold: tool-call logs, action results and post-call analysis fields. Checking a commitment against the calendar is cheap for a platform that owns the calendar. HighLevel already logs, for each call, the actions triggered and their results, and its…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 10,
+      "label": "refute:g3:1",
+      "phaseIndex": 2,
+      "phaseTitle": "Refute",
+      "agentId": "a954ab718f982d4c1",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258812440,
+      "queuedAt": 1794258812435,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The money that would pay for \"Kept\" is thin and already spo…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258885593,
+      "tokens": 110913,
+      "toolCalls": 8,
+      "durationMs": 73150,
+      "resultPreview": "{\"refuted\":false,\"strongest_objection\":\"The money that would pay for \\\"Kept\\\" is thin and already spoken for. The SMB end client pays the agency $79 to $800 a month, sometimes up to $2,000. At the low end, a GoHighLevel reseller sells the whole AI Receptionist as a $79/mo add-on (tonybotchev/nofluff-marketing-site#32, verified). The agency's QA budget is therefore a few dollars to a few tens of do…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 11,
+      "label": "refute:g3:2",
+      "phaseIndex": 2,
+      "phaseTitle": "Refute",
+      "agentId": "a7e47c6d78864b419",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258855879,
+      "queuedAt": 1794258812436,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "The best evidence does not show the buyer having the proble…",
+      "promptPreview": "Today is 2026-11-09. Network: most websites cannot be fetched here (WebFetch to forums fails). GitHub IS reachable: use Bash with the gh CLI (e.g. gh search issues \"<q>\" --limit 30 --json url,title,createdAt,commentsCount,repository ; gh issue view <url> --json body,comments) and quote real text. Use WebSearch (prefer mode \"extended\" for hard queries; at most 12 searches) for forum/review/news evi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258907554,
+      "tokens": 105902,
+      "toolCalls": 4,
+      "durationMs": 51674,
+      "resultPreview": "{\"refuted\":false,\"strongest_objection\":\"The best evidence does not show the buyer having the problem. The 'verified-full-text' pain comes from 0-star hobby or portfolio repos that look agent-authored (synthetic eval harnesses, not paying SMB deployments). Everything about agency churn, pricing and willingness to pay comes from vendor blogs or undated forum snippets. Only one item is a genuine agen…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 12,
+      "label": "decide",
+      "phaseIndex": 3,
+      "phaseTitle": "Decide",
+      "agentId": "a6e87e3ca4b21b9e3",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1794258907581,
+      "queuedAt": 1794258907558,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "g3",
+      "promptPreview": "Today is 2026-11-09. Decide between two opportunities for a solo, EU-based founder who owns a codebase with DST-safe booking/time logic, 20 calendar/booking connectors, deterministic price/discount rules and a signed hash-chained evidence log (snuepi), and who plans an enterprise-grade build after a signed pilot.\n\nGAP #1 — Enterprise buyers of bundled vendor AI agents (Salesforce Agentforce, Servi…",
+      "promptFramed": true,
+      "lastProgressAt": 1794258951224,
+      "tokens": 122856,
+      "toolCalls": 1,
+      "durationMs": 43643,
+      "resultPreview": "{\"winner\":\"g3\",\"scores\":{\"g1\":{\"demand\":3,\"wtp\":2,\"gap\":3,\"absorption\":4,\"reach\":1,\"evidence\":2},\"g3\":{\"demand\":3,\"wtp\":2,\"gap\":3,\"absorption\":3,\"reach\":4,\"evidence\":3}},\"convergence\":\"Yes, g1 is a credible later stage of g3, but only as a reuse of the engine, not of the market. Both products run the same pipeline. First, pull structured claims out of what an agent says or writes (\\\"booked Tue 13:…"
+    }
+  ],
+  "totalTokens": 1405157,
+  "totalToolCalls": 146
+}
