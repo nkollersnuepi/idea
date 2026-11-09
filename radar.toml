@@ -21,6 +21,15 @@ analyst_effort = "high"
 skeptic_effort = "high"
 skeptics_per_theme = 3       # independent refuters; theme dies if a majority refute
 
+[gap]
+# Market-gap engine: strong problem x weak current solutions. See radar/gap.py for the math.
+enabled = true
+only_survivors = true        # only map solutions for themes that survived the skeptic panel
+searches = 6                 # web searches per theme for the solution mapper
+complaint_solutions = 3      # top-N solutions probed for user complaints on HN/Reddit/GitHub/...
+problem_cut = 0.55           # problem_strength >= this counts as a strong problem
+solution_cut = 0.45          # solution_strength below this counts as weak solutions
+
 [sources]
 enabled = ["hackernews", "reddit", "github", "stackexchange", "bluesky", "web"]
 reddit_subreddits = [

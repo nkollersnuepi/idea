@@ -111,6 +111,7 @@ class ThemeReport(BaseModel):
     verdicts: list[SkepticVerdict] = []
     opportunity_score: float = 0.0
     survives: bool = True
+    gap: dict = {}  # radar.gap.GapResult.model_dump(); empty if the gap engine did not run
 
 
 SCORE_WEIGHTS = {

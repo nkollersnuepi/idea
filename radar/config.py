@@ -38,6 +38,13 @@ class Config:
     github_query_suffix: str = "is:issue created:>{since}"
     web_searches_per_theme: int = 4
 
+    gap_enabled: bool = True
+    gap_only_survivors: bool = True
+    gap_searches: int = 6
+    gap_complaint_solutions: int = 3
+    gap_problem_cut: float = 0.55
+    gap_solution_cut: float = 0.45
+
     themes: list[ThemeSeed] = field(default_factory=list)
 
     @classmethod
@@ -65,5 +72,9 @@ class Config:
         for k in ("reddit_subreddits", "stackexchange_sites", "github_query_suffix", "web_searches_per_theme"):
             if k in src:
                 setattr(cfg, k, src[k])
+        gap = raw.get("gap", {})
+        for k in ("enabled", "only_survivors", "searches", "complaint_solutions", "problem_cut", "solution_cut"):
+            if k in gap:
+                setattr(cfg, f"gap_{k}", gap[k])
         cfg.themes = [ThemeSeed(t["name"], t["seed"]) for t in raw.get("themes", [])]
         return cfg

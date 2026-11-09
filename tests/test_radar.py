@@ -21,8 +21,9 @@ NOW = datetime(2026, 11, 8, tzinfo=timezone.utc)
 class FakeLLM:
     usage = {"calls": 0}
 
-    def __init__(self, refute: bool = False):
+    def __init__(self, refute: bool = False, coverage: int = 1):
         self.refute = refute
+        self.coverage = coverage
         self.seen_users: list[str] = []
 
     def research(self, **kw):
@@ -53,6 +54,20 @@ class FakeLLM:
                               why_now="agents in prod", who_pays="eng leads", opportunity="build it", investable_angle="DDOG")
         if schema is SkepticVerdict:
             return SkepticVerdict(survives=not self.refute, strongest_objection="maybe solved", confidence=3)
+        from radar import gap
+        if schema is gap.SolutionMap:
+            return gap.SolutionMap(solutions=[
+                gap.Solution(name="BigCo", url="https://big", kind="incumbent-product", coverage=self.coverage, maturity=5,
+                             adoption_signal="", pricing="", weaknesses="generic"),
+                gap.Solution(name="Tiny", url="https://tiny", kind="startup", coverage=1, maturity=1,
+                             adoption_signal="", pricing="", weaknesses="demo"),
+            ], absorption_risk=2, absorption_note="n", whitespace="ws", wedge="wedge")
+        if schema is gap.ComplaintBatch:
+            return gap.ComplaintBatch(complaints=[gap.Complaint(post_index=0, solution="BigCo", is_complaint=True, complaint="BigCo fails"),
+                                                  gap.Complaint(post_index=1, solution="Nope", is_complaint=True, complaint="x")])
+        if schema is gap.CounterCheck:
+            return gap.CounterCheck(strongest_solution="BigCo", url="https://big", coverage=self.coverage,
+                                    gap_holds=self.coverage < 4, reason="r", missed_solutions=[])
         raise AssertionError(schema)
 
 
@@ -264,3 +279,41 @@ def test_research_keeps_paused_segments():
     client = NS(beta=NS(messages=NS(stream=lambda **kw: Stream())))
     out = LLM(client).research(model="m", effort="low", system="s", user="u")
     assert "first" in out and "https://a" in out and "https://b" in out
+
+
+# ---------------- market-gap engine ----------------
+
+def test_gap_math():
+    from radar import gap
+    strong = Scores(pain=5, frequency=5, willingness_to_pay=5, momentum=5, solution_gap=5, market_size=5)
+    weak = Scores(pain=1, frequency=1, willingness_to_pay=1, momentum=1, solution_gap=1, market_size=1)
+    assert gap.problem_strength(strong) == 1.0 and gap.problem_strength(weak) == 0.0
+    sm = gap.SolutionMap(solutions=[gap.Solution(name="A", url="u", kind="startup", coverage=5, maturity=5,
+                                                 adoption_signal="", pricing="", weaknesses="")],
+                         absorption_risk=1, absorption_note="", whitespace="", wedge="")
+    full, _ = gap.solution_strength(sm, {}, None)
+    hurt, _ = gap.solution_strength(sm, {"A": [{}] * 3}, None)  # user complaints weaken it
+    assert full == 1.0 and abs(hurt - 0.7) < 1e-9
+    assert gap.gap_score(1.0, 0.0, 1) == 100 and gap.gap_score(1.0, 0.0, 5) == 60
+    assert gap.quadrant(0.8, 0.2) == "TRUE GAP" and gap.quadrant(0.8, 0.9) == "CROWDED"
+    assert gap.quadrant(0.2, 0.2) == "UNDERSERVED NICHE" and gap.quadrant(0.2, 0.9) == "SOLVED"
+
+
+def test_counter_check_raises_solution_strength():
+    from radar import gap
+    sm = gap.SolutionMap(solutions=[], absorption_risk=1, absorption_note="", whitespace="", wedge="")
+    c = gap.CounterCheck(strongest_solution="Missed", url="u", coverage=5, gap_holds=False, reason="", missed_solutions=[])
+    ss, name = gap.solution_strength(sm, {}, c)
+    assert name == "Missed" and ss > 0.9
+
+
+@pytest.mark.parametrize("coverage,expected", [(1, "TRUE GAP"), (5, "CROWDED")])
+def test_pipeline_gap_quadrants(tmp_path, coverage, expected):
+    cfg = make_cfg(tmp_path)
+    pipe = Pipeline(cfg, FakeLLM(coverage=coverage), [FakeSource()], Store(cfg.db_path))
+    run_id, reports = pipe.run(NOW)
+    g = reports[0].gap
+    assert g["quadrant"] == expected
+    assert list(g["complaints"]) == ["BigCo"]  # complaint about unknown solution dropped
+    md = report.markdown(run_id, reports, pipe.stats)
+    assert "Market gaps" in md and expected in md and "Whitespace" in md

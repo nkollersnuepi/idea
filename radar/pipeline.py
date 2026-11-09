@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 
 from .agents import LLM, Analyst, Clusterer, Extractor, Planner, SkepticPanel
 from .config import Config
+from .gap import GapEngine
 from .models import Problem, ThemeReport, opportunity_score
 from .sources import Source
 from .store import Store
@@ -24,6 +25,8 @@ class Pipeline:
         self.clusterer = Clusterer(llm, cfg.model_default, cfg.clusterer_effort)
         self.analyst = Analyst(llm, cfg.model_default, cfg.analyst_effort)
         self.skeptics = SkepticPanel(llm, cfg.model_default, cfg.skeptic_effort, cfg.skeptics_per_theme)
+        self.gap = GapEngine(llm, cfg.model_default, cfg.analyst_effort, sources, cfg.gap_searches,
+                             cfg.gap_complaint_solutions, cfg.gap_problem_cut, cfg.gap_solution_cut) if cfg.gap_enabled else None
         self.stats: dict = {}
 
     # ---------------- stages ----------------
@@ -145,12 +148,21 @@ class Pipeline:
             if rep.assessment:
                 rep.opportunity_score = opportunity_score(rep.assessment.scores, len({e["url"] for e in ev}))
             rep.evidence = [{**e, "recent": e["date"] >= recent_cut} for e in ev]
+            if self.gap and rep.assessment and (rep.survives or not self.cfg.gap_only_survivors):
+                known = [s.name for s in rep.assessment.existing_solutions]
+                rep.gap = self.gap.assess(theme, rep.assessment.scores, known,
+                                          now - timedelta(days=self.cfg.lookback_days)).model_dump()
             return rep
 
         with ThreadPoolExecutor(4) as ex:
             reports = list(ex.map(one, themes))
-        reports.sort(key=lambda r: (r.survives, r.opportunity_score), reverse=True)
+        reports.sort(key=lambda r: (r.survives, r.gap.get("gap_score", -1), r.opportunity_score), reverse=True)
         self.stats["themes_surviving"] = sum(r.survives for r in reports)
+        self.stats["quadrants"] = {}
+        for r in reports:
+            q = r.gap.get("quadrant")
+            if q:
+                self.stats["quadrants"][q] = self.stats["quadrants"].get(q, 0) + 1
         return reports
 
     @staticmethod

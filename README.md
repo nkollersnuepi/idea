@@ -12,9 +12,28 @@ A set of AI agents that finds **unsolved problems created by the agentic transit
 | 4 | **Clusterer** | Merges every problem into specific themes that one product could solve | `Theme` |
 | 5 | **Analyst** | Researches each theme on the web: existing solutions and their gaps, more evidence, who pays, why now, exposed companies. Scores six dimensions | `Assessment` |
 | 6 | **Skeptic panel** | 3 independent refuters, each with a different lens (*already solved*, *hype not pain*, *no business*, *evidence quality*). A theme dies if a majority refute it | `SkepticVerdict` |
-| 7 | **Reporter** | Ranked Markdown, HTML and JSON reports, with score changes (Δ) against the previous run | `reports/` |
+| 7 | **Market-gap engine** | For every surviving theme: maps existing solutions (startups, open source, incumbents, platform features) and rates each one's **coverage** of the exact problem (0–5) and **maturity**. Searches HN, Reddit and GitHub for **users complaining about those solutions**. Rates the **risk that a platform ships it for free**. A counter-agent tries to **refute the gap** by finding a solution that already covers it | `GapResult` |
+| 8 | **Reporter** | Ranked Markdown, HTML and JSON reports, with score changes (Δ) against the previous run | `reports/` |
 
 **Opportunity score (0–100):** a weighted sum of the six 1–5 scores — pain 22%, willingness to pay 22%, frequency 18%, solution gap 15%, momentum 13%, market size 10% — rescaled to 0–90. Up to +10 is added for the number of distinct sources behind a theme.
+
+## Market gaps: problem × lack of solution
+
+The headline output is a quadrant: is there a strong problem, and is it still unsolved?
+
+| | Weak current solutions | Strong current solutions |
+|---|---|---|
+| **Strong problem** | **TRUE GAP**: build / invest | **CROWDED**: only with a sharp wedge |
+| **Weak problem** | **UNDERSERVED NICHE**: watch momentum | **SOLVED**: ignore |
+
+```
+problem_strength  = pain 30% + willingness to pay 30% + frequency 25% + momentum 15%     (0–1)
+solution_strength = best over solutions of coverage × maturity factor × (1 − user-complaint penalty)
+                    (raised if the counter-agent finds a covering solution)              (0–1)
+gap_score         = 100 × problem_strength × (1 − solution_strength) × (1 − absorption-risk discount)
+```
+
+Each theme in the report also includes a solution-landscape table, quoted user complaints about the existing tools, the uncovered **whitespace**, and the narrowest **wedge** product. The cut-offs and search budgets are set in the `[gap]` section of `radar.toml`; the math is in `radar/gap.py`.
 
 ## Run it
 
@@ -68,7 +87,7 @@ Claude's server-side refusal fallback (`fallbacks: "default"`) is on for every c
 - a verifier/scorer for each theme
 - a completeness critic
 
-In Claude Code, ask to *run the agentic-radar workflow*.
+In Claude Code, ask to *run the agentic-radar workflow*. `.claude/workflows/market-gap.js` runs the gap engine (solution mapper and gap skeptic) over a themes file.
 
 ## Scheduled
 

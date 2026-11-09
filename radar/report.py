@@ -23,6 +23,50 @@ def _delta(reports: list[ThemeReport], previous: dict | None) -> dict[str, str]:
     return out
 
 
+QUADRANT_ORDER = ["TRUE GAP", "UNDERSERVED NICHE", "CROWDED", "SOLVED"]
+
+
+def gap_section(reports: list[ThemeReport]) -> list[str]:
+    """Problem strength x weakness of current solutions: where a true market gap exists."""
+    rows = [r for r in reports if r.gap.get("quadrant") not in (None, "UNKNOWN")]
+    if not rows:
+        return []
+    rows.sort(key=lambda r: (QUADRANT_ORDER.index(r.gap["quadrant"]), -r.gap["gap_score"]))
+    L = ["", "## Market gaps (strong problem × weak current solutions)", "",
+         "Gap score = 100 × problem strength × (1 − strongest solution) × absorption discount. "
+         "Strongest solution = coverage × maturity, discounted by user complaints, and checked by an adversarial counter-search.", "",
+         "| Quadrant | Theme | Gap | Problem | Best solution | Strongest existing | Absorption risk | Whitespace → wedge |",
+         "|---|---|---|---|---|---|---|---|"]
+    for r in rows:
+        g, sm = r.gap, r.gap.get("solution_map") or {}
+        L.append(f"| **{g['quadrant']}** | {r.theme.title} | {g['gap_score']} | {g['problem_strength']:.2f} | "
+                 f"{g['solution_strength']:.2f} | {g['strongest_solution'] or '—'} | {sm.get('absorption_risk', '-')}/5 | "
+                 f"{(sm.get('whitespace') or '')[:160]} → {(sm.get('wedge') or '')[:160]} |")
+    return L
+
+
+def landscape(r: ThemeReport) -> list[str]:
+    g = r.gap
+    sm = g.get("solution_map")
+    if not sm:
+        return []
+    L = ["", f"**Market gap: {g['quadrant']}** (gap {g['gap_score']}, problem {g['problem_strength']:.2f}, "
+             f"best solution {g['solution_strength']:.2f}, absorption risk {sm['absorption_risk']}/5: {sm['absorption_note']})", "",
+         "| Solution | Kind | Coverage | Maturity | User complaints | Weakness |", "|---|---|---|---|---|---|"]
+    for s in sorted(sm["solutions"], key=lambda s: (s["coverage"], s["maturity"]), reverse=True):
+        n = len(g["complaints"].get(s["name"], []))
+        L.append(f"| [{s['name']}]({s['url']}) | {s['kind']} | {s['coverage']}/5 | {s['maturity']}/5 | {n} | {s['weaknesses'][:140]} |")
+    c = g.get("counter")
+    if c:
+        L += ["", f"**Gap skeptic:** {'gap holds' if c['gap_holds'] else 'GAP REFUTED'}: strongest found {c['strongest_solution']} "
+                  f"({c['coverage']}/5). {c['reason']}"]
+    for name, items in g["complaints"].items():
+        for it in items[:2]:
+            L.append(f"- complaint about {name}: \"{it['quote'][:200]}\" ([link]({it['url']}))")
+    L += [f"", f"**Whitespace:** {sm['whitespace']}  ", f"**Wedge:** {sm['wedge']}"]
+    return L
+
+
 def to_dict(run_id: str, reports: list[ThemeReport], stats: dict) -> dict:
     return {"run_id": run_id, "stats": stats, "themes": [r.model_dump() for r in reports]}
 
@@ -34,7 +78,8 @@ def markdown(run_id: str, reports: list[ThemeReport], stats: dict, previous: dic
     L = [f"# Agentic Transition Problem Radar — {run_id}", ""]
     L.append(f"Sources: {json.dumps(stats.get('sources', {}))}  ")
     L.append(f"Posts read: {stats.get('posts_extracted', 0)} · new problems: {stats.get('problems_new', 0)} · "
-             f"themes: {stats.get('themes', 0)} · survived skeptics: {len(alive)}")
+             f"themes: {stats.get('themes', 0)} · survived skeptics: {len(alive)} · quadrants: {stats.get('quadrants', {})}")
+    L += gap_section(reports)
     L += ["", "## Ranked opportunities", "", "| # | Theme | Score | Δ | Evidence | Recent 30d | Pain | WTP | Gap |", "|---|---|---|---|---|---|---|---|---|"]
     for i, r in enumerate(alive, 1):
         s = r.assessment.scores if r.assessment else None
@@ -49,6 +94,7 @@ def markdown(run_id: str, reports: list[ThemeReport], stats: dict, previous: dic
             L += [f"**Who pays:** {a.who_pays}", f"**Why now:** {a.why_now}", f"**Opportunity:** {a.opportunity}",
                   f"**Investable angle:** {a.investable_angle}", "", "**Existing solutions & gaps:**"]
             L += [f"- {s.name}: {s.what} — *gap:* {s.gap}" for s in a.existing_solutions] or ["- none found"]
+        L += landscape(r)
         if r.verdicts:
             L += ["", "**Skeptic panel:** " + " | ".join(f"{'✓' if v.survives else '✗'} {v.strongest_objection}" for v in r.verdicts)]
         L += ["", "**Voices:**"]
